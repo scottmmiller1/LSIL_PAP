@@ -1,0 +1,469 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/lsilPAP2.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}31 Aug 2018, 13:14:51
+{txt}
+{com}. 
+. ** create merged dataset at HH level **
+. cd "$d3"
+{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline aug 20 2018
+{txt}
+{com}. 
+. 
+. * co-op data with treatment status
+. clear
+{txt}
+{com}. use "r_Baseline_Merged_Str.dta"
+{txt}
+{com}.                 
+. save r_CO_Merged_PAP.dta, replace
+{txt}file r_CO_Merged_PAP.dta saved
+
+{com}. 
+. 
+. ** Household Dataset **
+. clear
+{txt}
+{com}. use "$d3/Household_Merged_Edit.dta"
+{txt}
+{com}. 
+. rename IDX idx
+{res}{txt}
+{com}. 
+. * Merge and save dataset
+. merge m:m idx using "r_CO_Merged_PAP.dta", force
+{res}{txt}{p 0 7 2}
+(note: variable
+___index was double in the using data, but will be
+str12 now)
+{p_end}
+{p 0 7 2}
+(note: variable
+HHR3 was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+HHR5 was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+HHR8 was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+HHR11 was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+HHR12 was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+HHR13 was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+HHR14 was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+HHR15 was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+HHR17 was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+HHR18 was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+HHR19 was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR2 was 
+long, now double to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR3 was 
+long, now double to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR5A was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR5B was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR5C was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR5D was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR5E was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR5F was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR5G was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR5X was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR56A was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR56B was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR56C was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR56D was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR56E was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR56F was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR56G was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR56X was 
+byte, now float to accommodate using data's values)
+{p_end}
+{p 0 7 2}
+(note: variable
+BR7 was 
+byte, now float to accommodate using data's values)
+{p_end}
+(label BR7 already defined)
+(label GP24 already defined)
+(label GP21 already defined)
+(label GP20 already defined)
+(label GP19 already defined)
+(label GP17_3 already defined)
+(label GP17_2 already defined)
+(label GP16 already defined)
+(label GP14 already defined)
+(label GP13 already defined)
+(label GP8 already defined)
+(label GP7 already defined)
+(label GP6 already defined)
+(label GP5 already defined)
+(label GP4_97 already defined)
+(label GP4_3 already defined)
+(label GP4_2 already defined)
+(label GP3_3 already defined)
+(label GP3_2 already defined)
+(label GP3_1 already defined)
+(label GP2 already defined)
+(label LSE5_3 already defined)
+(label LSE4_3 already defined)
+(label LSE5_2 already defined)
+(label LSE4_2 already defined)
+(label LSE5_1 already defined)
+(label LSE4_1 already defined)
+(label LSE1_4 already defined)
+(label LSE1_3 already defined)
+(label LSE1_2 already defined)
+(label LSE1_1 already defined)
+(label EMP13b already defined)
+(label EMP13a already defined)
+(label EMP12a_A already defined)
+(label EMP11a_A already defined)
+(label EMP10a_A already defined)
+(label EMP9a_A already defined)
+(label EMP8a_A already defined)
+(label EMP7a_A already defined)
+(label EMP6a_A already defined)
+(label EMP6X already defined)
+(label EMP6G already defined)
+(label EMP6F already defined)
+(label EMP6E already defined)
+(label EMP6D already defined)
+(label EMP6C already defined)
+(label EMP6B already defined)
+(label EMP6A already defined)
+(label EMP5a_A already defined)
+(label EMP4a_A already defined)
+(label EMP3a_A already defined)
+(label EMP2a_A already defined)
+(label EMP2X already defined)
+(label EMP2G already defined)
+(label EMP2F already defined)
+(label EMP2E already defined)
+(label EMP2D already defined)
+(label EMP2C already defined)
+(label EMP2B already defined)
+(label EMP2A already defined)
+(label FC1H already defined)
+(label FC1G already defined)
+(label FC1F already defined)
+(label FC1E already defined)
+(label FC1D already defined)
+(label FC1C already defined)
+(label FC1B already defined)
+(label FC1A already defined)
+(label BR1 already defined)
+(label SV8 already defined)
+(label SV7 already defined)
+(label SV4 already defined)
+(label SV3 already defined)
+(label TRN13 already defined)
+(label TRN12 already defined)
+(label TRN11 already defined)
+(label TRN10 already defined)
+(label TRN9 already defined)
+(label TRN8 already defined)
+(label TRN7 already defined)
+(label TRN6 already defined)
+(label TRN5 already defined)
+(label TRN4 already defined)
+(label TRN3 already defined)
+(label TRN2 already defined)
+(label TRN1 already defined)
+(label Co_opGoat_transactionsGTT497 already defined)
+(label GTT4_10 already defined)
+(label GTT4_9 already defined)
+(label GTT4_8 already defined)
+(label GTT4_7 already defined)
+(label GTT4_6 already defined)
+(label GTT4_5 already defined)
+(label GTT4_4 already defined)
+(label GTT4_3 already defined)
+(label GTT4_2 already defined)
+(label COM11 already defined)
+(label COM10 already defined)
+(label COM77 already defined)
+(label COM76 already defined)
+(label COM75 already defined)
+(label COM74 already defined)
+(label COM73 already defined)
+(label COM72 already defined)
+(label COM71 already defined)
+(label COM5 already defined)
+(label COM4 already defined)
+(label MGT6 already defined)
+(label MGT5 already defined)
+(label MGT4 already defined)
+(label MGT3_1 already defined)
+(label MGT2 already defined)
+(label MGT1 already defined)
+(label SER32 already defined)
+(label SER31 already defined)
+(label SER30 already defined)
+(label SER29 already defined)
+(label SER28 already defined)
+(label SER27 already defined)
+(label SER26 already defined)
+(label SER25 already defined)
+(label SER24 already defined)
+(label SER22 already defined)
+(label SER21 already defined)
+(label SER19 already defined)
+(label SER18 already defined)
+(label SER17 already defined)
+(label SER16 already defined)
+(label SER15 already defined)
+(label SER14 already defined)
+(label SER13 already defined)
+(label SER12 already defined)
+(label SER11 already defined)
+(label SER10 already defined)
+(label SER9 already defined)
+(label SER8 already defined)
+(label SER7 already defined)
+(label SER6 already defined)
+(label SER4 already defined)
+(label SER3 already defined)
+(label SER2 already defined)
+(label SER1 already defined)
+(label MEM16 already defined)
+(label MEM14 already defined)
+(label MEM13 already defined)
+(label MEM12 already defined)
+(label MEM9 already defined)
+(label MEM8 already defined)
+(label MEM6 already defined)
+(label MEM5 already defined)
+(label MEM4 already defined)
+(label MEM3 already defined)
+(label HSE13 already defined)
+(label HSE12 already defined)
+(label HSE11 already defined)
+(label HSE10 already defined)
+(label HSE9 already defined)
+(label HSE8 already defined)
+(label HSE7 already defined)
+(label HSE6 already defined)
+(label HSE3 already defined)
+(label HSE2 already defined)
+(label HSE1 already defined)
+(label LND3 already defined)
+(label LND2 already defined)
+(label HHR7 already defined)
+(label ID8 already defined)
+(label ID7 already defined)
+(label ID6 already defined)
+(label ID2 already defined)
+(label ID1 already defined)
+(label LS3 already defined)
+(label LS7 already defined)
+(label LS38 already defined)
+(label LS39 already defined)
+(label LS44 already defined)
+(label LS45 already defined)
+
+{col 5}Result{col 38}# of obs.
+{col 5}{hline 41}
+{col 5}not matched{col 30}{res}             136
+{txt}{col 9}from master{col 30}{res}             136{txt}  (_merge==1)
+{col 9}from using{col 30}{res}               0{txt}  (_merge==2)
+
+{col 5}matched{col 30}{res}           8,132{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. 
+. save r_HHmerged_PAP.dta, replace
+{txt}file r_HHmerged_PAP.dta saved
+
+{com}. 
+. 
+. 
+. 
+. 
+. 
+. 
+{txt}end of do-file
+
+{com}. do "/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/lsilPAP3.do"
+{txt}
+{com}. /***********************************************
+> *INVERSE COVARIANCE WEIGHTED INDEX V.0.2
+> *Cyrus Samii, NYU, December 2017
+> *(cds2083@nyu.edu)
+> *
+> *This ado file creates an index using inverse covariance weighting, 
+> *a la Anderson (2008, p. 1485).
+> 
+> ***********************************************/
+. 
+. capture program drop make_index_gr
+{txt}
+{com}. capture mata: mata drop icwxmata()
+{txt}
+{com}. program make_index_gr
+{txt}  1{com}. version 11.1
+{txt}  2{com}.     syntax anything [if]
+{txt}  3{com}.     gettoken newname anything: anything
+{txt}  4{com}.     gettoken wgt anything: anything
+{txt}  5{com}.         gettoken sgroup anything: anything
+{txt}  6{com}.     local Xvars `anything'
+{txt}  7{com}.         marksample touse
+{txt}  8{com}.         mata: icwxmata(("`Xvars'"),"`wgt'","`sgroup'", "index")
+{txt}  9{com}.         rename index index_`newname'
+{txt} 10{com}. end
+{txt}
+{com}.  
+. mata:
+{txt}{hline 49} mata (type {cmd:end} to exit) {hline}
+{com}:         function icwxmata(xvars, wgts, sgroups, indexname)
+>         {c -(}
+>                 st_view(X=0,.,tokens(xvars))
+>                 st_view(wgt=.,.,wgts)
+>                 st_view(sgroup=.,.,sgroups)
+>                 nr = rows(X)
+>                 nc = cols(X)    
+>                 sg_wgt = wgt:*sgroup
+>                 sg_wgtst = sg_wgt/sum(sg_wgt)
+>                 all_wgtst = wgt/sum(wgt)
+>                 sg_wgtstdM = J(1,nc,1) # sg_wgtst
+>                 all_wgtstdM = J(1,nc,1) # all_wgtst
+>                 sg_wgtdmeans = colsum(X:*sg_wgtstdM)
+>                 sgroup2 = sgroup
+>                 sgroupdM = J(1,nc,1) # sgroup2
+>                 sg_meandevs = ((X:*sgroupdM) - (J(nr,1,1) # sg_wgtdmeans):*sgroupdM)
+>                 all_wgtdmeandevs = X - (J(nr,1,1) # sg_wgtdmeans)
+>                 sg_wgtdstds = sqrt(colsum(sg_wgt:*(sg_meandevs:*sg_meandevs)):/(sum(sg_wgt)-1))
+>                 Xs = all_wgtdmeandevs:/(J(nr,1,1) # sg_wgtdstds)
+>                 S = variance(Xs, wgt)
+>                 invS = invsym(S)
+>                 ivec = J(nc,1,1)
+>                 indexout_sc = (invsym(ivec'*invS*ivec)*ivec'*invS*Xs')'
+>                 indexout = indexout_sc/sqrt(variance(indexout_sc, sg_wgt))
+>                 st_addvar("float",indexname)
+>                 st_store(.,indexname,indexout)
+>         {c )-}
+{txt}note: variable all_wgtstdM set but not used
+
+{com}: end
+{txt}{hline}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/lsilPAP4_test.do"
+{txt}
+{com}. clear
+{txt}
+{com}. set more off, perm
+{txt}({cmd:set more} preference recorded)
+
+{com}. 
+. *log
+. cap log close
+{smcl}
+{com}{sf}{ul off}

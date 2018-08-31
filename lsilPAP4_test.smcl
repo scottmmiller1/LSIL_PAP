@@ -1,0 +1,572 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/lsilPAP4_test.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}31 Aug 2018, 13:14:58
+{txt}
+{com}. 
+. cd "$d3" 
+{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline aug 20 2018
+{txt}
+{com}. 
+. 
+. ** co-op dataset **
+. clear
+{txt}
+{com}. use "r_CO_Merged_PAP.dta"
+{txt}
+{com}. 
+. * Drop Banke District & Pilot Co-op
+. drop if district == "Banke"
+{txt}(14 observations deleted)
+
+{com}. drop if r_treat == .
+{txt}(0 observations deleted)
+
+{com}. drop if idx == "" 
+{txt}(0 observations deleted)
+
+{com}. 
+. * Weights = 1 & control group
+. generate wgt = 1
+{txt}
+{com}. generate stdgroup = r_treat
+{txt}
+{com}. 
+. encode region, gen(n_region) // create numerical region variable for regression
+{txt}
+{com}. 
+. ** Communication **
+. 
+. /* Variables 
+> # of times initiated contact with SHG : comm1
+> # of times SHG initiated contact : comm2
+> Factors that limit communication : (not in index - used as control vars)
+> */
+. 
+.         * # of times initiated contact with SHG : comm1
+.         gen comm1 = COMM1a + COMM1b ///
+>         + COMM1c + COMM1d
+{txt}(2 missing values generated)
+
+{com}.         * # of times SHG initiated contact : comm2
+.         gen comm2 = COMM2a + COMM2b ///
+>         + COMM2c + COMM2d
+{txt}(2 missing values generated)
+
+{com}.         ** Total # of times initiated contact
+.         gen contact = comm1 + comm2
+{txt}(2 missing values generated)
+
+{com}.         
+.         ** Factors that limit communication
+.         /*
+>         local vlist a b c d e f
+>         foreach var of local vlist {c -(}
+>                 destring COMM8`var', replace
+>                 {c )-}
+>         */
+.         
+. * co-op comm index
+. local local_CO_comm_full contact COM3 COM8
+{txt}
+{com}. make_index_gr CO_comm_full wgt stdgroup `local_CO_comm_full' 
+{res}  938
+{txt}
+{com}. 
+. * factors that limit communication
+.         * principal components index
+. 
+. 
+. ** Transparency **
+. 
+. /* Variables
+> Mandate : Co_opTransparencyTRN1
+> Annual Report : Co_opTransparencyTRN2
+> Annual Budget : Co_opTransparencyTRN3
+> Financial Report: Co_opTransparencyTRN4 
+> Meeting minutes : Co_opTransparencyTRN5
+> Election Results : Co_opTransparencyTRN6
+> Sale Records : Co_opTransparencyTRN7
+> Evaluations : Co_opTransparencyTRN8
+> */
+. 
+.         /*
+>         forvalues i=1/7 {c -(} 
+>                 destring role_GMtransTRN`i', replace
+>                 replace role_GMtransTRN`i' = 0 if role_GMtransTRN`i' == 2
+>                 replace role_GMtransTRN`i' = . if role_GMtransTRN`i' == 97
+>                 {c )-}
+>         */
+.         
+. ** Co-op Transparency   
+. local local_CO_TRN CO_TRN1 CO_TRN2 ///
+>         CO_TRN3 CO_TRN4 CO_TRN5 ///
+>         CO_TRN6 CO_TRN7
+{txt}
+{com}. make_index_gr CO_TRN wgt stdgroup `local_CO_TRN' 
+{res}  939
+{txt}
+{com}. 
+. 
+. ** Household Awareness
+. local local_HH_TRN HH_TRN1 HH_TRN2 ///
+>         HH_TRN3 HH_TRN4 HH_TRN5 ///
+>         HH_TRN6 HH_TRN7
+{txt}
+{com}. make_index_gr HH_TRN wgt stdgroup `local_HH_TRN' 
+{res}  940
+{txt}
+{com}. 
+. 
+. ** Discrepancy
+.         forvalues i=1/7 {c -(} 
+{txt}  2{com}.                 gen dTRN`i' = -(CO_TRN`i' - HH_TRN`i')^2
+{txt}  3{com}.                 {c )-}
+{txt}(2 missing values generated)
+(2 missing values generated)
+(2 missing values generated)
+(2 missing values generated)
+(2 missing values generated)
+(2 missing values generated)
+(2 missing values generated)
+
+{com}.                 
+. local local_dTRN dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7
+{txt}
+{com}. make_index_gr dTRN wgt stdgroup `local_dTRN' 
+{res}  948
+{txt}
+{com}. 
+. * average discrepancy
+. egen avg_dTRN = rowmean(dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7)
+{txt}(2 missing values generated)
+
+{com}. 
+. 
+. ** Cooperative Finances **
+. 
+. /* Variables 
+> Revenue from all activities : role_GMrevenuandcostREV4
+> Costs from all activities : role_GMrevenuandcostcalc_REC7
+> Assets : role_GMFinLiabiliteisFAL1
+> Liabilities : role_GMFinLiabiliteisFAL2
+> Goat Rev : role_GMrevenuandcostREC4_1
+> Members : role_CPMgt_and_membershi1
+> */
+. 
+. gen revenue = REV4 // names too long for macros
+{txt}(50 missing values generated)
+
+{com}. gen costs = REC7
+{txt}(50 missing values generated)
+
+{com}. gen assets = FAL1
+{txt}(1 missing value generated)
+
+{com}. gen liabilities = FAL2
+{txt}(1 missing value generated)
+
+{com}. gen goatrev = REC4_1
+{txt}(1 missing value generated)
+
+{com}. 
+. gen net_rev = REV4 - REC7
+{txt}(50 missing values generated)
+
+{com}. gen net_finances = (REV4 - REC7) ///
+>                                         + (FAL1 - FAL2)
+{txt}(50 missing values generated)
+
+{com}. 
+. * per member
+. gen rev_member = REV4 / MAN3
+{txt}(51 missing values generated)
+
+{com}. gen cost_member =  REC7 / MAN3
+{txt}(51 missing values generated)
+
+{com}. gen assets_member = FAL1 / MAN3
+{txt}(2 missing values generated)
+
+{com}. gen liab_member = FAL2 / MAN3
+{txt}(2 missing values generated)
+
+{com}. gen net_rev_member = net_rev / MAN3
+{txt}(51 missing values generated)
+
+{com}. gen net_finances_member = net_finances / MAN3
+{txt}(51 missing values generated)
+
+{com}. gen goatrev_member = REC4_1 / MAN3
+{txt}(2 missing values generated)
+
+{com}. 
+. 
+. ** Goat Sales ** 
+. 
+. /* Variables 
+> # of goats sold : role_GMrevenuandcostREC1
+> goat revenue : role_GMrevenuandcostREC4_1
+> # of organized sales at collection points : Co_opGoat_transactionsGTT1
+> Members : role_CPMgt_and_membershi1
+> Goat revenue per member : goatrev_member
+> */
+. 
+. ** co-op level vars
+. gen goats_sold = REC1
+{txt}(1 missing value generated)
+
+{com}. gen goats_sold_member = REC1 / MAN3
+{txt}(2 missing values generated)
+
+{com}. * goatrev
+. * goatrev_member
+. gen goatrev_sold = REC4_1 / REC1
+{txt}(19 missing values generated)
+
+{com}. gen col_points = GTT1
+{txt}
+{com}. 
+. local local_CO_goatsales goats_sold goatrev col_points
+{txt}
+{com}. make_index_gr CO_goatsales wgt stdgroup `local_CO_goatsales' 
+{res}  968
+{txt}
+{com}. 
+. 
+. ** household level vars
+. gen co_opshare = 0
+{txt}
+{com}. replace co_opshare = co_opgoatno / LS8 if LS8 != 0
+{txt}(60 real changes made, 1 to missing)
+
+{com}. gen visits_sale = LS40 / LS_n_sales
+{txt}(1 missing value generated)
+
+{com}. 
+. local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue co_opshare visits_sale
+{txt}
+{com}. make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
+{res}  971
+{txt}
+{com}. 
+. local local_salecost visits_sale LS41 LS42
+{txt}
+{com}. make_index_gr salecost wgt stdgroup `local_salecost' 
+{res}  972
+{txt}
+{com}. 
+. 
+. save "$d3/r_CO_Merged_Ind.dta", replace
+{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline aug 20 2018/r_CO_Merged_Ind.dta saved
+
+{com}. 
+. 
+. 
+. 
+. ****************
+. ** HH dataset **
+. clear
+{txt}
+{com}. use "r_HHmerged_PAP.dta"
+{txt}
+{com}. 
+. * Drop Banke District & Pilot Co-op
+. drop if district == "Banke"
+{txt}(1,023 observations deleted)
+
+{com}. drop if r_treat == .
+{txt}(136 observations deleted)
+
+{com}. drop if idx == "" 
+{txt}(0 observations deleted)
+
+{com}. 
+. * Weights = 1 & control group
+. generate wgt = 1
+{txt}
+{com}. generate stdgroup = r_treat
+{txt}
+{com}. 
+. encode region, gen(n_region) // create numerical region variable for regression
+{txt}
+{com}. 
+. ** Communication **
+. 
+. /* Variables 
+> # of times initiated contact with SHG : comm1
+> # of times SHG initiated contact : comm2
+> Factors that limit communication : (not in index - used as control vars)
+> */
+. 
+.         * # of times initiated contact with SHG : comm1
+.         gen comm1 = COMM1a + COMM1b ///
+>         + COMM1c + COMM1d
+{txt}(136 missing values generated)
+
+{com}.         * # of times SHG initiated contact : comm2
+.         gen comm2 = COMM2a + COMM2b ///
+>         + COMM2c + COMM2d
+{txt}(136 missing values generated)
+
+{com}.         ** Total # of times initiated contact
+.         gen contact = comm1 + comm2
+{txt}(136 missing values generated)
+
+{com}.         
+.         ** Factors that limit communication
+.         /*
+>         local vlist a b c d e f
+>         foreach var of local vlist {c -(}
+>                 destring COMM8`var', replace
+>                 {c )-}
+>         */
+. 
+. * contact
+. * sum contact comm1 comm2, detail
+. 
+. 
+. * HH comm index
+. local local_HH_comm COM3 COM8
+{txt}
+{com}. make_index_gr HH_comm wgt stdgroup `local_HH_comm' 
+{res}  991
+{txt}
+{com}. 
+. * HH full comm index
+. local local_HH_comm_full contact COM3 COM8
+{txt}
+{com}. make_index_gr HH_comm_full wgt stdgroup `local_HH_comm_full' 
+{res}  992
+{txt}
+{com}. 
+. * factors that limit communication
+.         * principal components index
+. 
+. 
+. 
+. ** Transparency **
+. 
+. /* Variables
+> Mandate : Co_opTransparencyTRN1
+> Annual Report : Co_opTransparencyTRN2
+> Annual Budget : Co_opTransparencyTRN3
+> Financial Report: Co_opTransparencyTRN4 
+> Meeting minutes : Co_opTransparencyTRN5
+> Election Results : Co_opTransparencyTRN6
+> Sale Records : Co_opTransparencyTRN7
+> Evaluations : Co_opTransparencyTRN8
+> */
+. 
+.         /*
+>         forvalues i=1/7 {c -(} 
+>                 destring role_GMtransTRN`i', replace
+>                 replace role_GMtransTRN`i' = 0 if role_GMtransTRN`i' == 2
+>                 replace role_GMtransTRN`i' = . if role_GMtransTRN`i' == 97
+>                 {c )-}
+>         */
+.         
+. ** Co-op Transparency   
+. local local_CO_TRN CO_TRN1 CO_TRN2 ///
+>         CO_TRN3 CO_TRN4 CO_TRN5 ///
+>         CO_TRN6 CO_TRN7
+{txt}
+{com}. make_index_gr CO_TRN wgt stdgroup `local_CO_TRN'                
+{res}  993
+{txt}
+{com}. 
+. ** Household Awareness
+. local local_HH_TRN HH_TRN1 HH_TRN2 ///
+>         HH_TRN3 HH_TRN4 HH_TRN5 ///
+>         HH_TRN6 HH_TRN7
+{txt}
+{com}. make_index_gr HH_TRN wgt stdgroup `local_HH_TRN' 
+{res}  994
+{txt}
+{com}. 
+.         
+. ** Transparency Discrepancy index
+.         forvalues i=1/7 {c -(} 
+{txt}  2{com}.                 gen dTRN`i' = 1 if CO_TRN`i' == HH_TRN`i' ///
+>                         &  !missing(CO_TRN`i') & !missing(HH_TRN`i')
+{txt}  3{com}.                 replace dTRN`i' = 0 if CO_TRN`i' != HH_TRN`i' ///
+>                         &  !missing(CO_TRN`i') & !missing(HH_TRN`i')
+{txt}  4{com}.                 {c )-}
+{txt}(4,908 missing values generated)
+(3,408 real changes made)
+(4,761 missing values generated)
+(3,281 real changes made)
+(4,750 missing values generated)
+(3,314 real changes made)
+(4,601 missing values generated)
+(3,116 real changes made)
+(4,464 missing values generated)
+(3,131 real changes made)
+(4,910 missing values generated)
+(3,062 real changes made)
+(4,532 missing values generated)
+(3,006 real changes made)
+
+{com}.                 
+. local local_dTRN dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7
+{txt}
+{com}. make_index_gr dTRN wgt stdgroup `local_dTRN' 
+{res}  1002
+{txt}
+{com}. 
+. * average discrepancy
+. egen avg_dTRN = rowmean(dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7)
+{txt}(909 missing values generated)
+
+{com}. 
+. 
+. ** Finances **
+. 
+. ** co-op vars
+. 
+. /* Variables 
+> Revenue from all activities : role_GMrevenuandcostREV4
+> Costs from all activities : role_GMrevenuandcostcalc_REC7
+> Assets : role_GMFinLiabiliteisFAL1
+> Liabilities : role_GMFinLiabiliteisFAL2
+> Goat Rev : role_GMrevenuandcostREC4_1
+> Members : role_CPMgt_and_membershi1
+> */
+. 
+. gen revenue = REV4 // names too long for macros
+{txt}(3,901 missing values generated)
+
+{com}. gen costs = REC7
+{txt}(3,901 missing values generated)
+
+{com}. gen assets = FAL1
+{txt}(1 missing value generated)
+
+{com}. gen liabilities = FAL2
+{txt}(1 missing value generated)
+
+{com}. gen goatrev = REC4_1
+{txt}(1 missing value generated)
+
+{com}. 
+. gen net_rev = REV4 - REC7
+{txt}(3,901 missing values generated)
+
+{com}. gen net_finances = (REV4 - REC7) ///
+>                                         + (FAL1 - FAL2)
+{txt}(3,901 missing values generated)
+
+{com}. 
+. * per member
+. gen rev_member = REV4 / MAN3
+{txt}(3,961 missing values generated)
+
+{com}. gen cost_member =  REC7 / MAN3
+{txt}(3,961 missing values generated)
+
+{com}. gen assets_member = FAL1 / MAN3
+{txt}(61 missing values generated)
+
+{com}. gen liab_member = FAL2 / MAN3
+{txt}(61 missing values generated)
+
+{com}. gen net_rev_member = net_rev / MAN3
+{txt}(3,961 missing values generated)
+
+{com}. gen net_finances_member = net_finances / MAN3
+{txt}(3,961 missing values generated)
+
+{com}. gen goatrev_member = REC4_1 / MAN3
+{txt}(61 missing values generated)
+
+{com}. 
+. 
+. ** Goat Sales ** 
+. 
+. /* Variables 
+> # of goats sold : Livestock_SalesLS8
+> goat revenue : Livestock_SalesLS9
+> goats sold through co-op : co_opgoatno
+> goat revenue through co-op : co_opsalevalue
+> share through co-op : co_opshare
+> trader visits home : Livestock_SalesLS40
+> time passed before sale : Livestock_SalesLS41
+> transportation cost : Livestock_SalesLS42
+> */
+. 
+. ** co-op level vars
+. gen goats_sold = REC1
+{txt}(1 missing value generated)
+
+{com}. gen goats_sold_member = REC1 / MAN3
+{txt}(61 missing values generated)
+
+{com}. * goatrev
+. * goatrev_member
+. gen goatrev_sold = REC4_1 / REC1
+{txt}(1,294 missing values generated)
+
+{com}. gen col_points = GTT1
+{txt}
+{com}. 
+. local local_CO_goatsales goats_sold goatrev col_points
+{txt}
+{com}. make_index_gr CO_goatsales wgt stdgroup `local_CO_goatsales' 
+{res}  1022
+{txt}
+{com}. 
+. 
+. ** household level vars
+. gen co_opshare = 0
+{txt}
+{com}. replace co_opshare = co_opgoatno / LS8 if LS8 != 0
+{txt}(4,244 real changes made, 3,529 to missing)
+
+{com}. gen visits_sale = LS40 / LS_n_sales
+{txt}(3,529 missing values generated)
+
+{com}. 
+. local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue co_opshare visits_sale
+{txt}
+{com}. make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
+{res}  1025
+{txt}
+{com}. 
+. local local_salecost visits_sale LS41 LS42
+{txt}
+{com}. make_index_gr salecost wgt stdgroup `local_salecost' 
+{res}  1026
+{txt}
+{com}. 
+. save "$d3/r_HH_Merged_Ind.dta", replace
+{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline aug 20 2018/r_HH_Merged_Ind.dta saved
+
+{com}. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+{txt}end of do-file
+
+{com}. 

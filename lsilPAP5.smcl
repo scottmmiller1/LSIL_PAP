@@ -1,0 +1,48 @@
+{smcl}
+{txt}{sf}{ul off}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/lsilPAP5.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}21 Jul 2018, 13:28:44
+{txt}
+{com}. 
+. cd "$d2"
+{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data
+{txt}
+{com}. use "Baseline_Merged_Str_wdistrictnames copy.dta"
+{txt}( )
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/vj/bmv34kqd60j8sb8x04d58nhr0000gn/T//SD06049.000000"
+{txt}
+{com}. encode region, gen(n_region) // create numerical region variable for regression
+{txt}
+{com}. 
+. 
+. ** Minimum Detectable Effects **
+. 
+. * Communication
+. reg index_CO_comm treat n_region role_CPMgt_and_membershi1 role_GMrevenuandcostREC2 ///
+>  Livestock_SalesLS9, cluster(idx_n)
+{err}variable {bf}index_CO_comm{sf} not found
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "/var/folders/vj/bmv34kqd60j8sb8x04d58nhr0000gn/T//SD06049.000000"
+{txt}
+{com}. 
+. clear all
+{res}{txt}
+{com}. set more off, perm
+{txt}({cmd:set more} preference recorded)
+
+{com}. 
+. *log
+. cap log close
+{smcl}
+{com}{sf}{ul off}
