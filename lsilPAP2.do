@@ -25,7 +25,7 @@ rename IDX idx
 * Merge and save dataset
 merge m:m idx using "r_CO_Merged_PAP.dta", force
 
-save r_HHmerged_PAP.dta, replace
+save r_HH_Merged_PAP.dta, replace
 
 
 

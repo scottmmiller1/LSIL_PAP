@@ -263,7 +263,6 @@ save "$d3/Livestocksales_collapse.dta", replace
 ** Merge separate modules into Household
 
 *household
-** Import Excel cleaned dataset with edited varnames // temporary use to create code
 clear
 use"$d3/Household.dta"
 
@@ -402,45 +401,8 @@ drop COM1 COM2 COM6 COM7 ///
 	GTT4 SV2 LSE22 ///
 	GP4 GP12 GP18 GP22 ///
 	GP25 LS48 PQ2 BR5 ///
-	GP3 BR56 
+	GP3 BR56 HHR10_1
 
-
-*create multi-choice dummys for other relevant vars
-
-/*
-foreach v of varlist ID7 ID8 HHR7 HHR7_calc LND2 ///
-		LND3 HSE1 HSE2 HSE3 ///
-		HSE8 HSE9 HSE11 HSE12 ///
-		HSE13 MEM4 MEM5 MEM9 ///
-		MEM13 MGT1 MGT2 MGT6 ///
-		COM4 COM10 COM11 {
-	quietly decode `v', gen(`v'1)
-	quietly tab `v'1, generate(`v'1_)
-    drop `v' `v'1
-}
-*/
-* ________________________________________
-
-drop HHR10_1	
-/*
-foreach v of varlist Goat_Production_SystemGP5 Goat_Production_SystemGP6 ///
-		Goat_Production_SystemGP8 Goat_Production_SystemGP17 Goat_Production_SystemGP20 ///
-		BorrowingBorrowBR7 RosterHHR9 {
-    quietly tab `v', generate(`v'_)
-    drop `v'
-}	
-		
- foreach v of varlist RosterHHR10 RosterHHR16 *LS7* *LS38* {
-    quietly tab `v', generate(`v'_)
-    drop `v'
-}
- 
-foreach v of varlist Goat_Production_SystemGP2 Goat_Production_SystemGP14 Goat_Production_SystemGP24 ///
-		BorrowingBorrowBR4 RosterHHR8 {
-    quietly tab `v', generate(`v'_)
-    drop `v'
-}
-*/
  
  * Destring 1-2 dummys __ format to binary
 	* 2 -> 0  1 -> 1 ______ Most are Y/N __> Y=1 N=0
@@ -473,17 +435,6 @@ foreach v of varlist HHR3 HHR5 HHR11 HHR13 HHR14 ///
 	
 }
 
- * Destring 0-1 dummys
-/*
-foreach v of varlist * {
-	cap local vv = subinstr("`v'", "Livestock_Saleslivestock", "Livestock_Sales", .)
-	if _rc == 0 {
-		rename `v' `vv'
-		local v `vv'
-	}
-}
-*/
-
 quietly {
 	destring *COM1* *COM2* *COM6*, replace 
 	destring *COM7* *GTT* *SV2*, replace 
@@ -491,15 +442,6 @@ quietly {
 	destring *BR5* N0_childcal *HHR8* HHR12 *LS6*, replace 
 	destring *GP* Roster_count Live_Sale_count, replace
 }
-
-/*
-ds *, has(type double)
-local double = "`r(varlist)'"
-foreach v of varlist `double' {
-		tostring `v', gen(`v'_n)
-		}
-*/
- 
 
 save "$d3/Household_Merged_Edit.dta", replace
  
