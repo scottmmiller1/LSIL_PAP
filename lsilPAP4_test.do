@@ -176,7 +176,7 @@ save "$d3/r_CO_Merged_Ind.dta", replace
 ****************
 ** HH dataset **
 clear
-use "r_HHmerged_PAP.dta"
+use "r_HH_Merged_PAP.dta"
 
 * Drop Banke District & Pilot Co-op
 drop if district == "Banke"
