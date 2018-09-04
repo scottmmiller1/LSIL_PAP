@@ -148,6 +148,11 @@ foreach v of varlist TRN* {
 	rename `v' CO_`v'
 	}	
 	
+* Change blank cells in string vars to missing values
+ds, has(type string) 
+quietly foreach v in `r(varlist)' { 
+	replace `v' = trim(`v')
+	}
 	
 ** Collapse to 1-row per co-op
 * strings
@@ -198,6 +203,12 @@ lab var co_opsalevalue "Total revenue, goats sold through co-op"
 
 gen co_opgoatno = LS8 if LS3==1		
 lab var co_opgoatno "Total goats sold through co-op"
+
+* Change blank cells in string vars to missing values
+ds, has(type string) 
+quietly foreach v in `r(varlist)' { 
+	replace `v' = trim(`v')
+	}
 
 destring *, replace
 ds *, has(type numeric)
@@ -395,6 +406,13 @@ drop start end *Note* HH_IDstartHHID HH_IDendHHID end_rooster Number_children_co
 	LSE1 GP22_1 GP22_2 HHR1 HHR2 ///
 	GP22_1 GP22_2
 
+	
+* Change blank cells in string vars to missing values
+ds, has(type string) 
+quietly foreach v in `r(varlist)' { 
+	replace `v' = trim(`v')
+	}
+	
 
 *drop multi-choice vars with individual dummys already created
 drop COM1 COM2 COM6 COM7 ///
@@ -522,6 +540,7 @@ encode idx, gen(idx_n)
  
 cd "$d3/"
 merge 1:1 idx_n using "$d3/Cooperative_collapse.dta", force
+drop if _merge == 2
 drop *merge*
 
 * Create per member measures of revenue and cost

@@ -14,7 +14,7 @@ use "r_CO_Merged_PAP.dta"
 
 * Drop Banke District & Pilot Co-op
 drop if district == "Banke"
-drop if r_treat == .
+drop if r_treat ==.
 drop if idx == "" 
 
 * Weights = 1 & control group
