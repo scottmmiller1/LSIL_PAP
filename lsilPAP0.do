@@ -57,6 +57,12 @@ replace region = "Terai" if district=="Banke" | district =="Bardiya" | district 
 	district=="Mahottari" | district =="Morang" | district =="Nawalparasi" | ///
 	district=="Rautahat" | district =="Rupandehi" | district=="Sarlahi" | district =="Surkhet" | ///
 	district =="Chitwan" | district =="Dang"
+
+
+* Destring REV4 (co-op revenue) & REC7 (co-op costs) for collapse (mean)
+destring REV4, replace
+destring REC7, replace
+
 	
 ** save labels and value labels in macros
 	* role_GMequipmentprinterheader_mob is an invalid name
@@ -139,6 +145,7 @@ foreach v of varlist TRN1 TRN2 TRN3 TRN4 TRN5 TRN6 TRN6a TRN7 TRN14 TRN15 MAN1 M
 		REC8 EQP1_1 EQP2_1* EQP3_1 EQP4_1 EQP5_1 EQP6_1 EQP7_1 EQP8_1 EQP9_1 EQP10_1 EQP11_1 ///
 		EQP12_1 EQP13_1 EQP14_1 EQP15_1 EQP16 EQP17 EQP18 EQP19 FAL3 FAL4 PNG1 EAA1 EAA3  {
 	quietly replace `v'=. if `v'==99
+	quietly replace `v'=. if `v'==98
 	quietly replace `v'=. if `v'==97
 	quietly replace `v'=0 if `v'==2
 	}
@@ -160,7 +167,6 @@ local Co_opnumeric = "`r(varlist)'"
 
 * collapse
 collapse (mean) `Co_opnumeric' (firstnm) `Co_opstrings', by(idx)
-*collapse (firstnm) `Co-opstrings', by(idx)
 
 
 * re-assign labels post-collapse
@@ -209,6 +215,7 @@ foreach v of varlist LS3 ///
 		LS39 LS44 ///
 		LS45 {
 	quietly replace `v'=. if `v'==99
+	quietly replace `v'=. if `v'==98
 	quietly replace `v'=. if `v'==97
 	quietly replace `v'=0 if `v'==2
 }
@@ -422,6 +429,7 @@ drop COM1 COM2 COM6 COM7 ///
 		GP13 GP16 GP19 ///
 		GP21 {
 	quietly replace `v'=. if `v'==99
+	quietly replace `v'=. if `v'==98
 	quietly replace `v'=. if `v'==97
 	quietly replace `v'=0 if `v'==2
 }
@@ -430,6 +438,7 @@ foreach v of varlist HHR3 HHR5 HHR11 HHR13 HHR14 ///
 		HHR15 HHR17 HHR18 HHR19 {
 	quietly destring `v', replace
 	quietly replace `v'=. if `v'==99
+	quietly replace `v'=. if `v'==98
 	quietly replace `v'=. if `v'==97
 	quietly replace `v'=0 if `v'==2
 	
@@ -525,10 +534,8 @@ merge 1:1 idx_n using "$d3/Cooperative_collapse.dta", force
 drop *merge*
 
 * Create per member measures of revenue and cost
-destring REC7, replace
 replace REC7 = REC7/1000
 lab var REC7 "Total co-op cost, 1000 Rs"
-destring REV4, replace
 replace REV4 = REV4/1000
 lab var REV4 "Total co-op revenue, 1000 Rs"
 

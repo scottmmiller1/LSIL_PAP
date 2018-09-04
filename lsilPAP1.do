@@ -25,7 +25,7 @@ set seed 62184  // random seed to generate different treatment assignment
 tab region
 *# of members
 MAN3
-* Co-op Goat Revenue
+* Co-op Revenue
 REV4
 * HH Goat Revenue
 LS9
