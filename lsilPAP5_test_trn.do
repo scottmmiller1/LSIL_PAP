@@ -57,7 +57,7 @@ forv i = 2/`listsize' { // appends into single matrix
 * Table
 frmttable using MDE_trn.doc, statmat(A) sdec(4) title("Co-op Level - Co-op Transparency: Strata - No Interaction") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
-rtitle("Mandate"\"Annual Report"\"Annual Budget"\"Financial Report"\"Meeting Minutes"\"Election Results"\"Sale Records"\"Co-op Index")
+rtitle("Mandate"\"Annual Report"\"Annual Budget"\"Financial Report"\"Meeting Minutes"\"Election Results"\"Sale Records"\"Co-op Index") replace
 
 
 ** HH vars
