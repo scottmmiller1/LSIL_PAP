@@ -535,7 +535,6 @@ save "$d3/Household_Collapsed.dta", replace
  use "$d3/Household_Collapsed.dta"  
  
 sort idx
-drop if idx =="Karmath SEWC 2"
 encode idx, gen(idx_n)
  
 cd "$d3/"
