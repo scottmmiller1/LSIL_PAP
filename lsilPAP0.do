@@ -153,6 +153,13 @@ ds, has(type string)
 quietly foreach v in `r(varlist)' { 
 	replace `v' = trim(`v')
 	}
+
+* Change COMM8 to string -- Match original dataset
+foreach v of varlist COMM8a COMM8b ///
+COMM8c COMM8d COMM8e ///
+COMM8f {
+	tostring `v', replace force
+}	
 	
 ** Collapse to 1-row per co-op
 * strings
