@@ -531,15 +531,11 @@ save "$d3/Household_Collapsed.dta", replace
  
  ** Merge Cooperative_collapse into Household_Collapsed
 
- clear 
- use "$d3/Household_Collapsed.dta"  
- 
-sort idx
-encode idx, gen(idx_n)
- 
-cd "$d3/"
-merge 1:1 idx_n using "$d3/Cooperative_collapse.dta", force
-drop if _merge == 2
+clear 
+use "$d3/Household_Collapsed.dta"  
+
+merge 1:1 idx using "$d3/Cooperative_collapse.dta", force
+
 drop *merge*
 
 * Create per member measures of revenue and cost
