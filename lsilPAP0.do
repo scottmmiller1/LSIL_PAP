@@ -181,9 +181,6 @@ foreach v of var * {
 	cap label val `v' "`ll`v''"
 }
 
-* merge identifier
-encode idx, gen(idx_n)
-
 save "$d3/Cooperative_collapse.dta", replace
 
 
