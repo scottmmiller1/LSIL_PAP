@@ -30,7 +30,7 @@ tokenize $co_goatsales
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata, cluster(idx_n)
+	reg ``i'' r_treat i.strata, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -64,7 +64,7 @@ tokenize $hh_goatsales
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata, cluster(idx_n)
+	reg ``i'' r_treat i.strata, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -100,7 +100,7 @@ tokenize $co_goatsales
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata r_treat#i.strata, cluster(idx_n)
+	reg ``i'' r_treat i.strata r_treat#i.strata, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -134,7 +134,7 @@ tokenize $hh_goatsales
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata r_treat#i.strata, cluster(idx_n)
+	reg ``i'' r_treat i.strata r_treat#i.strata, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -172,7 +172,7 @@ tokenize $co_goatsales
 forv i = 1/`listsize' {
 
 	reg ``i'' r_treat n_region MAN3 REC2 ///
-	LS9, cluster(idx_n)
+	LS9, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -207,7 +207,7 @@ tokenize $hh_goatsales
 forv i = 1/`listsize' {
 
 	reg ``i'' r_treat n_region MAN3 REC2 ///
-	LS9, cluster(idx_n)
+	LS9, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -244,7 +244,7 @@ forv i = 1/`listsize' {
 
 	reg ``i'' r_treat n_region MAN3 REC2 ///
 	LS9 n_region#r_treat c.MAN3#r_treat c.REC2#r_treat ///
-	c.LS9#r_treat, cluster(idx_n)
+	c.LS9#r_treat, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -280,7 +280,7 @@ forv i = 1/`listsize' {
 
 	reg ``i'' r_treat n_region MAN3 REC2 ///
 	LS9 n_region#r_treat c.MAN3#r_treat c.REC2#r_treat ///
-	c.LS9#r_treat, cluster(idx_n)
+	c.LS9#r_treat, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -331,7 +331,7 @@ tokenize $co_goatsales
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata, cluster(idx_n)
+	reg ``i'' r_treat i.strata, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -365,7 +365,7 @@ tokenize $hh_goatsales
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata, cluster(idx_n)
+	reg ``i'' r_treat i.strata, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -400,7 +400,7 @@ tokenize $co_goatsales
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata r_treat#i.strata, cluster(idx_n)
+	reg ``i'' r_treat i.strata r_treat#i.strata, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -434,7 +434,7 @@ tokenize $hh_goatsales
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata r_treat#i.strata, cluster(idx_n)
+	reg ``i'' r_treat i.strata r_treat#i.strata, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -471,7 +471,7 @@ tokenize $co_goatsales
 forv i = 1/`listsize' {
 
 	reg ``i'' r_treat n_region MAN3 REC2 ///
-	LS9, cluster(idx_n)
+	LS9, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -506,7 +506,7 @@ tokenize $hh_goatsales
 forv i = 1/`listsize' {
 
 	reg ``i'' r_treat n_region MAN3 REC2 ///
-	LS9, cluster(idx_n)
+	LS9, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -543,7 +543,7 @@ forv i = 1/`listsize' {
 
 	reg ``i'' r_treat n_region MAN3 REC2 ///
 	LS9 n_region#r_treat c.MAN3#r_treat c.REC2#r_treat ///
-	c.LS9#r_treat, cluster(idx_n)
+	c.LS9#r_treat, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -579,7 +579,7 @@ forv i = 1/`listsize' {
 
 	reg ``i'' r_treat n_region MAN3 REC2 ///
 	LS9 n_region#r_treat c.MAN3#r_treat c.REC2#r_treat ///
-	c.LS9#r_treat, cluster(idx_n)
+	c.LS9#r_treat, cluster(idx)
 	
 	quietly {
 		ereturn list

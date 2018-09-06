@@ -15,6 +15,7 @@ cd "$d2"
 ********************************************* 
 clear
 use "$d3/r_CO_Merged_Ind.dta"
+encode idx, gen(idx_n)
 
 * Communication
 
@@ -180,6 +181,7 @@ quietly scalar r2_n = e(r2)
 * individual controls
 local vlist a b c d e f
 foreach v in `vlist' {
+	destring COMM8`v', replace
 	reg contact COMM8`v' r_treat i.strata, cluster(idx_n)
 	
 	quietly {
@@ -316,6 +318,7 @@ frmttable using MDE_comm.doc, statmat(R) sdec(4) title("Factors that Limit Commu
 ********************************************* 
 clear
 use "$d3/r_HH_Merged_Ind.dta"
+encode idx, gen(idx_n)
 
 * Communication
 
@@ -488,6 +491,7 @@ quietly scalar r2_n = e(r2)
 * individual controls
 local vlist a b c d e f
 foreach v in `vlist' {
+	destring COMM8`v', replace
 	reg contact COMM8`v' r_treat i.strata, cluster(idx_n)
 	
 	quietly {
