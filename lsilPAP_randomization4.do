@@ -161,6 +161,9 @@ scalar c_99 = r(p99)
 
 replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & treat == 0
 
+** Replace Missing values with zero LS9
+replace LS9 = 0 if LS9 ==.
+
 
 collapse (firstnm) LS9 LS8 ///
 		co_opgoatno co_opsalevalue ///
@@ -225,5 +228,5 @@ iebaltab LS9 LS8 ///
 		BR1 BR BR2 ///
 		BR3 GP21, rowvarlabels ///
 		grpvar(treat) vce(cluster idx)  ///
-		save("/Users/scottmiller/Dropbox (UFL)/LSIL/Stata files/Baseline/Randomization/Randomization Summary Stats/iebaltab2_nobanke_clean2.xlsx") replace
+		save("/Users/scottmiller/Dropbox (UFL)/LSIL/Stata files/Baseline/Randomization/Randomization Summary Stats/iebaltab2_nobanke_clean3.xlsx") replace
 
