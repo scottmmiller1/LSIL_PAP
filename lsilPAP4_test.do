@@ -23,6 +23,40 @@ generate stdgroup = r_treat
 
 encode region, gen(n_region) // create numerical region variable for regression
 
+** Winsorize LS9
+* treatment
+sum LS9 if r_treat == 1, d
+scalar t_99 = r(p99)
+
+replace LS9 = t_99 if LS9 > t_99 & !missing(LS9) & r_treat == 1
+
+*control
+sum LS9 if r_treat == 0, d
+scalar c_99 = r(p99)
+
+replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & r_treat == 0
+
+
+** Winsorize LS9
+* treatment
+sum LS9 if r_treat == 1, d
+scalar t_99 = r(p99)
+
+replace LS9 = t_99 if LS9 > t_99 & !missing(LS9) & r_treat == 1
+
+*control
+sum LS9 if r_treat == 0, d
+scalar c_99 = r(p99)
+
+replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & r_treat == 0
+
+
+** Replace Missing values with zero 
+* LS9 , 
+replace LS9 = 0 if LS9 ==.
+replace co_opsalevalue = 0 if co_opsalevalue ==.
+
+
 ** Communication **
 
 /* Variables 
@@ -68,14 +102,6 @@ Election Results : Co_opTransparencyTRN6
 Sale Records : Co_opTransparencyTRN7
 Evaluations : Co_opTransparencyTRN8
 */
-
-	/*
-	forvalues i=1/7 { 
-		destring role_GMtransTRN`i', replace
-		replace role_GMtransTRN`i' = 0 if role_GMtransTRN`i' == 2
-		replace role_GMtransTRN`i' = . if role_GMtransTRN`i' == 97
-		}
-	*/
 	
 ** Co-op Transparency	
 local local_CO_TRN CO_TRN1 CO_TRN2 ///
@@ -188,6 +214,27 @@ generate wgt = 1
 generate stdgroup = r_treat
 
 encode region, gen(n_region) // create numerical region variable for regression
+
+
+** Winsorize LS9
+* treatment
+sum LS9 if r_treat == 1, d
+scalar t_99 = r(p99)
+
+replace LS9 = t_99 if LS9 > t_99 & !missing(LS9) & r_treat == 1
+
+*control
+sum LS9 if r_treat == 0, d
+scalar c_99 = r(p99)
+
+replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & r_treat == 0
+
+
+** Replace Missing values with zero 
+* LS9 , 
+replace LS9 = 0 if LS9 ==.
+replace co_opsalevalue = 0 if co_opsalevalue ==.
+
 
 ** Communication **
 

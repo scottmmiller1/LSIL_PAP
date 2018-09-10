@@ -78,7 +78,14 @@ COMM2a COMM2b COMM2c ///
 COMM2d {
 	cap destring `v', replace
 }
-		
+
+** Replace Missing values with zero 
+*  , 
+replace REV4 = 0 if REV4 ==.
+replace totrev_member = 0 if totrev_member ==.
+replace REC7 = 0 if REC7 ==.
+replace totcost_mem = 0 if totcost_mem ==.		
+
 
 *iebaltable
 
@@ -99,7 +106,7 @@ iebaltab MAN3 REV4 totrev_member ///
 		COMM2a COMM2b COMM2c ///
 		COMM2d ///
 		GTT2 GTT3, rowvarlabels grpvar(treat) ///
-		save("/Users/scottmiller/Dropbox (UFL)/LSIL/Stata files/Baseline/Randomization/Randomization Summary Stats/iebaltab1_nobanke_clean.xlsx") replace
+		save("/Users/scottmiller/Dropbox (UFL)/LSIL/Stata files/Baseline/Randomization/Randomization Summary Stats/iebaltab1_nobanke_clean_zeroes.xlsx") replace
 
 
 clear
@@ -161,8 +168,11 @@ scalar c_99 = r(p99)
 
 replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & treat == 0
 
-** Replace Missing values with zero LS9
+** Replace Missing values with zero 
+* LS9 , 
 replace LS9 = 0 if LS9 ==.
+replace co_opsalevalue = 0 if co_opsalevalue ==.
+
 
 
 collapse (firstnm) LS9 LS8 ///
