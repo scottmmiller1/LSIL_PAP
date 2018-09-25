@@ -43,6 +43,8 @@ replace LS9 = 0 if LS9 ==.
 replace co_opsalevalue = 0 if co_opsalevalue ==.
 
 
+
+
 ** Communication **
 
 /* Variables 
@@ -141,14 +143,18 @@ gen net_finances_member = net_finances / MAN3
 gen goatrev_member = REC4_1 / MAN3
 
 
+
 ** Goat Sales ** 
 
 /* Variables 
-# of goats sold : role_GMrevenuandcostREC1
-goat revenue : role_GMrevenuandcostREC4_1
-# of organized sales at collection points : Co_opGoat_transactionsGTT1
-Members : role_CPMgt_and_membershi1
+# of goats sold : REC1
+goat revenue : REC4_1
+# of organized sales at collection points : GTT1
+Members : MAN3
 Goat revenue per member : goatrev_member
+Trader visits per sale
+Time passed
+Transportation costs
 */
 
 ** co-op level vars
@@ -166,12 +172,14 @@ make_index_gr CO_goatsales wgt stdgroup `local_CO_goatsales'
 ** household level vars
 gen co_opshare = 0
 replace co_opshare = co_opgoatno / LS8 if LS8 != 0
-gen visits_sale = LS40 / LS_n_sales
+gen visits_sale = -1*(LS40 / LS_n_sales)
+gen time_passed = -1*(LS41)
+gen transp_cost = -1*(LS42)
 
 local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue co_opshare visits_sale
 make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
 
-local local_salecost visits_sale LS41 LS42
+local local_salecost visits_sale time_passed transp_cost
 make_index_gr salecost wgt stdgroup `local_salecost' 
 
 
@@ -364,12 +372,14 @@ make_index_gr CO_goatsales wgt stdgroup `local_CO_goatsales'
 ** household level vars
 gen co_opshare = 0
 replace co_opshare = co_opgoatno / LS8 if LS8 != 0
-gen visits_sale = LS40 / LS_n_sales
+gen visits_sale = -1*(LS40 / LS_n_sales)
+gen time_passed = -1*(LS41)
+gen transp_cost = -1*(LS42)
 
 local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue co_opshare visits_sale
 make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
 
-local local_salecost visits_sale LS41 LS42
+local local_salecost visits_sale time_passed transp_cost
 make_index_gr salecost wgt stdgroup `local_salecost' 
 
 save "$d3/r_HH_Merged_Ind.dta", replace
