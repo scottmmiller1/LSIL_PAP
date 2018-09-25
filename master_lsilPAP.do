@@ -33,7 +33,7 @@ clear all
 *ssc install outreg
 
 *pathways
-gl d1 = "/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files" // do files stored here
+gl d1 = "/Users/scottmiller/Documents/GitHub/LSIL_PAP" // do files stored here
 gl d2 = "/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data" // initial data sets stored here
 gl d3 = "$d2/LSIL-DATA_scott/VCC baseline aug 20 2018" // clean data folder - saved separately to preserve original data
 
