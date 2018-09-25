@@ -37,20 +37,6 @@ scalar c_99 = r(p99)
 replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & r_treat == 0
 
 
-** Winsorize LS9
-* treatment
-sum LS9 if r_treat == 1, d
-scalar t_99 = r(p99)
-
-replace LS9 = t_99 if LS9 > t_99 & !missing(LS9) & r_treat == 1
-
-*control
-sum LS9 if r_treat == 0, d
-scalar c_99 = r(p99)
-
-replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & r_treat == 0
-
-
 ** Replace Missing values with zero 
 * LS9 , 
 replace LS9 = 0 if LS9 ==.
@@ -74,13 +60,8 @@ Factors that limit communication : (not in index - used as control vars)
 	** Total # of times initiated contact
 	gen contact = comm1 + comm2
 	
-	** Factors that limit communication
-	/*
-	local vlist a b c d e f
-	foreach var of local vlist {
-		destring COMM8`var', replace
-		}
-	*/
+	* Total # of times HH is contacted
+	gen HHcontact = COM3 + COM8
 	
 * co-op comm index
 local local_CO_comm_full contact COM3 COM8
@@ -252,14 +233,9 @@ Factors that limit communication : (not in index - used as control vars)
 	+ COMM2c + COMM2d
 	** Total # of times initiated contact
 	gen contact = comm1 + comm2
-	
-	** Factors that limit communication
-	/*
-	local vlist a b c d e f
-	foreach var of local vlist {
-		destring COMM8`var', replace
-		}
-	*/
+
+	* Total # of times HH is contacted
+	gen HHcontact = COM3 + COM8
 
 * contact
 * sum contact comm1 comm2, detail
