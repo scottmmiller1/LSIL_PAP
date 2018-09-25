@@ -20,7 +20,7 @@ gl co_goatsales goats_sold goats_sold_member goatrev goatrev_member goatrev_sold
 
 ** HH vars
 gl hh_goatsales LS8 LS9 co_opgoatno co_opsalevalue ///
-				co_opshare visits_sale LS41 LS42 index_salecost
+				co_opshare visits_sale time_passed transp_cost index_salecost
 	
 
 *** Strata dummies - No interaction
@@ -89,7 +89,7 @@ forv i = 2/`listsize' { // appends into single matrix
 * Table
 frmttable using MDE_goatsales.doc, statmat(A) sdec(4) coljust(l;c;l;l) title("Co-op Level - HH Goat Sales: Strata - No Interaction") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
-rtitle("Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"% Sold through Co-op"\"HH Goat Sales Index"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index") addtable replace
+rtitle("Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"% Sold through Co-op"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index") addtable replace
 
 
 
@@ -106,7 +106,7 @@ gl co_goatsales goats_sold goats_sold_member goatrev goatrev_member goatrev_sold
 
 ** HH vars
 gl hh_goatsales LS8 LS9 co_opgoatno co_opsalevalue ///
-				co_opshare index_HH_goatsales visits_sale LS41 LS42 index_salecost
+				co_opshare visits_sale LS41 LS42 index_salecost
 	
 
 *** Strata dummies - No interaction
@@ -175,5 +175,5 @@ forv i = 2/`listsize' { // appends into single matrix
 * Table
 frmttable using MDE_goatsales.doc, statmat(A) sdec(4) coljust(l;c;l;l) title("HH Level - HH Goat Sales: Strata - No Interaction") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
-rtitle("Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"% Sold through Co-op"\"HH Goat Sales Index"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index") addtable replace
+rtitle("Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"% Sold through Co-op"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index") addtable replace
 
