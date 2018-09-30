@@ -10,6 +10,8 @@ lsilPAP1:
 
 lsilPAP2: 
 	Generates a merged dataset at the HH level
+	Saves respective datasets as r_CO_Merged_PAP.dta
+	and r_HH_Merged_PAP.dta
 	
 lsilPAP3:
 	Creates command for ICW Summary Indices
@@ -17,11 +19,11 @@ lsilPAP3:
 	
 lsilPAP4: 
 	Creates indicator variables & ICW Summary Indices from
-	r_Baseline_Merged_Str.dta (co-op level dataset)
-	and r_HHmerged_PAP.dta (HH level dataset)
+	r_CO_Merged_PAP.dta (co-op level dataset)
+	and r_HH_Merged_PAP.dta (HH level dataset)
 	Saves new datasets respectively as: 
-	r_Baseline_Merged_Ind.dta
-	r_HHmerged_PAP_Ind.dta
+	r_CO_Merged_Ind.dta
+	r_HH_Merged_Ind.dta
 
 lsilPAP5: 
 	Calculates MDEs for each indicator
