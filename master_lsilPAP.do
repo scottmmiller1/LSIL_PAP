@@ -10,6 +10,7 @@ lsilPAP1:
 
 lsilPAP2: 
 	Generates a merged dataset at the HH level
+	Collapses HH data from ind. level to HH level
 	Saves respective datasets as r_CO_Merged_PAP.dta
 	and r_HH_Merged_PAP.dta
 	
