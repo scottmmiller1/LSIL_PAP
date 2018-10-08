@@ -103,7 +103,7 @@ encode idx, gen(idx_n)
 * Communication
 
 *** Strata dummies - No interaction
-local varlist comm1 comm2 contact COM3 COM8 index_HH_comm index_HH_comm_full HHcontact
+local varlist COM3 COM8 index_HH_comm HHcontact
 foreach v in `varlist' {
 	
 	reg `v' r_treat i.strata, cluster(idx_n)
@@ -125,59 +125,18 @@ foreach v in `varlist' {
 } 
 
 quietly {
-	matrix A = (mde_comm1, mean_comm1, sd_comm1\ ///
-			mde_comm2, mean_comm2, sd_comm2\ ///
-			mde_contact, mean_contact, sd_contact\ ///
-			mde_COM3, mean_COM3, sd_COM3\ ///
+	matrix A = (mde_COM3, mean_COM3, sd_COM3\ ///
 			mde_COM8, mean_COM8, sd_COM8\ ///
 			mde_index_HH_comm, ., sd_index_HH_comm\ ///
-			mde_index_HH_comm_full, ., sd_index_HH_comm_full\ ///
 			mde_HHcontact, mean_HHcontact, sd_HHcontact)
 	}
 
 * Strata table
 frmttable using MDE_comm.doc, statmat(A) sdec(4) title("HH Level Communication: Strata - No Interaction") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
-rtitle("Contacted SHG"\"Contacted by SHG"\"Total Co-op Contact"\"HH info sales"\"HH info activities"\"HH level index"\"HH index full"\"Total HH Contact") addtable replace
+rtitle("HH info sales"\"HH info activities"\"HH level index"\"Total HH Contact") addtable replace
 
 
-
-************************
-* factors that limit comminication
-
-** Strata - No interaction
-* no control
-reg contact r_treat i.strata, cluster(idx_n)
-
-quietly scalar r2_n = e(r2)
-* individual controls
-local vlist a b c d e f
-foreach v in `vlist' {
-	destring COMM8`v', replace
-	reg contact COMM8`v' r_treat i.strata, cluster(idx_n)
-	
-	quietly {
-		scalar r2_`v' = e(r2)
-	}
-}
-* all controls
-reg contact COMM8a COMM8b COMM8c ///
-COMM8d COMM8e COMM8f ///
-r_treat i.strata, cluster(idx_n)
-
-quietly scalar r2_all = e(r2)
-
-quietly {
-	matrix R = (r2_n\r2_a\r2_b\r2_c\r2_d\r2_e\r2_f\r2_all)
-	matrix rownames R = . Internet Mobile-Network SMS-Cost Distance Roads Transportation All
-	matrix colnames R = r2
-}	
-
-matrix list R
-
-frmttable using MDE_comm.doc, statmat(R) sdec(4) title("Factors that Limit Communication: Strata - No interaction") addtable replace
-
-***********************************************
 
 
 

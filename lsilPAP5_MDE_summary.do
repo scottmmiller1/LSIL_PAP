@@ -1,7 +1,7 @@
 
 clear
 set more off, perm
-
+cd "$d2"
 
 ** Co-op level dataset
 ********************************************* 
@@ -240,7 +240,7 @@ use "$d3/r_HH_Merged_Ind.dta"
 
 
 ** communication **
-gl hh_comm comm1 comm2 contact COM3 COM8 index_HH_comm index_HH_comm_full HHcontact
+gl hh_comm COM3 COM8 index_HH_comm HHcontact
 	
 ** Co-op vars
 local listsize : list sizeof global(hh_comm)
@@ -269,7 +269,7 @@ forv i = 2/`listsize' { // appends into single matrix
 * Table
 frmttable using MDE_summary.doc, statmat(A) sdec(2) coljust(l;c;l;l) title("HH Level - Communication: Summmary Stats") ///
 ctitle("","N","Mean","sd","Min","Max") ///
-rtitle("Contacted SHG"\"Contacted by SHG"\"Total Co-op Contact"\"HH info sales"\"HH info activities"\"HH level index"\"HH index full"\"Total HH Contact") addtable replace
+rtitle("HH info sales"\"HH info activities"\"HH level index"\"Total HH Contact") addtable replace
  
  
 * ------------------------------------------- 
@@ -283,37 +283,7 @@ gl co_goatsales goats_sold goats_sold_member goatrev goatrev_member goatrev_sold
 ** HH vars
 gl hh_goatsales LS8 LS9 co_opgoatno co_opsalevalue ///
 				co_opshare visits_sale LS41 LS42 index_salecost
-	
-	
-** Co-op vars
-local listsize : list sizeof global(co_goatsales)
-tokenize $co_goatsales
 
-forv i = 1/`listsize' {
-		
-	quietly {
-		sum ``i''
-		return list
-		scalar N_``i'' = r(N) // N
-		scalar mean_``i'' = r(mean) // mean
-		scalar sd_``i'' = r(sd)  // sd
-		scalar min_``i'' = r(min)  // sd
-		scalar max_``i'' = r(max)  // sd
-		
-	* matrix for table
-		matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
-		}
-}
-matrix A = mat_1
-forv i = 2/`listsize' { // appends into single matrix
-	matrix A = A \ mat_`i'
-}
-
-* Table
-frmttable using MDE_summary.doc, statmat(A) sdec(2) coljust(l;c;l;l) title("HH Level - Co-op Goat Sales: Summmary Stats") ///
-ctitle("","N","Mean","sd","Min","Max") ///
-rtitle("Goats Sold"\"Goats Sold per Mem."\"Goat Revenue"\"Goat Rev. per Mem."\"Rev. per Goat Sold"\"Collection Points"\"CO Goat Sales Index") addtable replace
- 
  
 ** HH vars
 local listsize : list sizeof global(hh_goatsales)
