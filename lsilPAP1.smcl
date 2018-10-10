@@ -1,9 +1,9 @@
 {smcl}
 {com}{sf}{ul off}{txt}{.-}
       name:  {res}<unnamed>
-       {txt}log:  {res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/lsilPAP1.smcl
+       {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP1.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}30 Aug 2018, 14:10:49
+ {txt}opened on:  {res}10 Oct 2018, 11:00:23
 {txt}
 {com}. 
 . use "$d3/Baseline_Merged.dta", clear
@@ -18,6 +18,9 @@
 > */
 . 
 . drop if idx == "Lekhbesi SEWC 1" // Pilot co-op
+{txt}(1 observation deleted)
+
+{com}. drop if idx =="Karmath SEWC 2"
 {txt}(1 observation deleted)
 
 {com}. 
@@ -38,7 +41,7 @@
 . 
 . * Region - HH Goat Rev
 . gen bin=. 
-{txt}(107 missing values generated)
+{txt}(106 missing values generated)
 
 {com}. bysort region LS9 : gen random = uniform()
 {txt}
@@ -61,7 +64,7 @@
 
 {com}. 
 . count if region=="Mid-Hills"
-  {res}52
+  {res}51
 {txt}
 {com}. replace bin=4 if n <= (r(N)/3) & region=="Mid-Hills"
 {txt}(17 real changes made)
@@ -70,7 +73,7 @@
 {txt}(17 real changes made)
 
 {com}. replace bin=6 if n <= r(N) & n > r(N)*(2/3) & region=="Mid-Hills"
-{txt}(18 real changes made)
+{txt}(17 real changes made)
 
 {com}. 
 . tab region bin
@@ -78,10 +81,10 @@
            {txt}{c |}                                bin
     region {c |}         1          2          3          4          5          6 {c |}     Total
 {hline 11}{c +}{hline 66}{c +}{hline 10}
- Mid-Hills {c |}{res}         0          0          0         17         17         18 {txt}{c |}{res}        52 
+ Mid-Hills {c |}{res}         0          0          0         17         17         17 {txt}{c |}{res}        51 
 {txt}     Terai {c |}{res}        18         18         19          0          0          0 {txt}{c |}{res}        55 
 {txt}{hline 11}{c +}{hline 66}{c +}{hline 10}
-     Total {c |}{res}        18         18         19         17         17         18 {txt}{c |}{res}       107 
+     Total {c |}{res}        18         18         19         17         17         17 {txt}{c |}{res}       106 
 {txt}
 {com}. 
 . drop n random
@@ -95,42 +98,42 @@
       Percentiles      Smallest
  1%    {res}       87             11
 {txt} 5%    {res}      132             87
-{txt}10%    {res}      203            104       {txt}Obs         {res}        106
+{txt}10%    {res}      195            104       {txt}Obs         {res}        106
 {txt}25%    {res}      311            118       {txt}Sum of Wgt. {res}        106
 
-{txt}50%    {res}    496.5                      {txt}Mean          {res} 572.1667
-                        {txt}Largest       Std. Dev.     {res} 375.7774
-{txt}75%    {res}      775           1226
-{txt}90%    {res}     1061           1320       {txt}Variance      {res} 141208.6
-{txt}95%    {res}     1200           1629       {txt}Skewness      {res} 1.882266
-{txt}99%    {res}     1629           2600       {txt}Kurtosis      {res} 9.749408
+{txt}50%    {res}    483.5                      {txt}Mean          {res} 558.6384
+                        {txt}Largest       Std. Dev.     {res} 362.9622
+{txt}75%    {res}      711           1226
+{txt}90%    {res}     1042           1226       {txt}Variance      {res} 131741.6
+{txt}95%    {res}     1123           1320       {txt}Skewness      {res}  1.95421
+{txt}99%    {res}     1320           2600       {txt}Kurtosis      {res} 10.80543
 {txt}
 {com}. return list
 
 {txt}scalars:
                   r(N) =  {res}106
               {txt}r(sum_w) =  {res}106
-               {txt}r(mean) =  {res}572.1666666666666
-                {txt}r(Var) =  {res}141208.6439153439
-                 {txt}r(sd) =  {res}375.7773861148964
-           {txt}r(skewness) =  {res}1.882265931722146
-           {txt}r(kurtosis) =  {res}9.749408014344759
-                {txt}r(sum) =  {res}60649.66666666666
+               {txt}r(mean) =  {res}558.6383647798742
+                {txt}r(Var) =  {res}131741.5812019567
+                 {txt}r(sd) =  {res}362.9622310956839
+           {txt}r(skewness) =  {res}1.954209511053203
+           {txt}r(kurtosis) =  {res}10.80543487936791
+                {txt}r(sum) =  {res}59215.66666666666
                 {txt}r(min) =  {res}11
                 {txt}r(max) =  {res}2600
                  {txt}r(p1) =  {res}87
                  {txt}r(p5) =  {res}132
-                {txt}r(p10) =  {res}203
+                {txt}r(p10) =  {res}195
                 {txt}r(p25) =  {res}311
-                {txt}r(p50) =  {res}496.5
-                {txt}r(p75) =  {res}775
-                {txt}r(p90) =  {res}1061
-                {txt}r(p95) =  {res}1200
-                {txt}r(p99) =  {res}1629
+                {txt}r(p50) =  {res}483.5
+                {txt}r(p75) =  {res}711
+                {txt}r(p90) =  {res}1042
+                {txt}r(p95) =  {res}1123
+                {txt}r(p99) =  {res}1320
 {txt}
 {com}. 
 . gen sub_bin=.
-{txt}(107 missing values generated)
+{txt}(106 missing values generated)
 
 {com}. bysort bin MAN3 : gen random = uniform()
 {txt}
@@ -159,8 +162,8 @@
   {res}17
 {txt}(8 real changes made)
 (9 real changes made)
-  {res}18
-{txt}(9 real changes made)
+  {res}17
+{txt}(8 real changes made)
 (9 real changes made)
 
 {com}. 
@@ -179,17 +182,17 @@
 {txt}        42 {c |}{res}         9          0 {txt}{c |}{res}         9 
 {txt}        51 {c |}{res}         8          0 {txt}{c |}{res}         8 
 {txt}        52 {c |}{res}         9          0 {txt}{c |}{res}         9 
-{txt}        61 {c |}{res}         9          0 {txt}{c |}{res}         9 
+{txt}        61 {c |}{res}         8          0 {txt}{c |}{res}         8 
 {txt}        62 {c |}{res}         9          0 {txt}{c |}{res}         9 
 {txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
-     Total {c |}{res}        52         55 {txt}{c |}{res}       107 
+     Total {c |}{res}        51         55 {txt}{c |}{res}       106 
 {txt}
 {com}. drop random  n
 {txt}
 {com}. 
 . * Co-op rev
 . gen sub_sub_bin=.
-{txt}(107 missing values generated)
+{txt}(106 missing values generated)
 
 {com}. bysort sub_bin REV4 : gen random = uniform()
 {txt}
@@ -237,9 +240,9 @@
   {res}9
 {txt}(4 real changes made)
 (5 real changes made)
-  {res}9
+  {res}8
 {txt}(4 real changes made)
-(5 real changes made)
+(4 real changes made)
   {res}9
 {txt}(4 real changes made)
 (5 real changes made)
@@ -271,11 +274,11 @@
 {txt}       521 {c |}{res}         4          0 {txt}{c |}{res}         4 
 {txt}       522 {c |}{res}         5          0 {txt}{c |}{res}         5 
 {txt}       611 {c |}{res}         4          0 {txt}{c |}{res}         4 
-{txt}       612 {c |}{res}         5          0 {txt}{c |}{res}         5 
+{txt}       612 {c |}{res}         4          0 {txt}{c |}{res}         4 
 {txt}       621 {c |}{res}         4          0 {txt}{c |}{res}         4 
 {txt}       622 {c |}{res}         5          0 {txt}{c |}{res}         5 
 {txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
-     Total {c |}{res}        52         55 {txt}{c |}{res}       107 
+     Total {c |}{res}        51         55 {txt}{c |}{res}       106 
 {txt}
 {com}. 
 . drop random n
@@ -357,7 +360,7 @@ no observations
 
 {txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
 {hline 13}{c +}{hline 57}
-{space 5}random2 {c |}{res}          5    .5890991    .1499138   .3907403   .7701694
+{space 5}random2 {c |}{res}          5    .7538656    .0581404   .6647599   .8253012
 {txt}(2 real changes made)
   {res}4
 
@@ -380,7 +383,7 @@ no observations
 
 {txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
 {hline 13}{c +}{hline 57}
-{space 5}random2 {c |}{res}          5    .3750493     .099499     .26238   .4856232
+{space 5}random2 {c |}{res}          5    .1968688    .1683402   .0011485    .432662
 {txt}(3 real changes made)
   {res}4
 
@@ -403,7 +406,7 @@ no observations
 
 {txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
 {hline 13}{c +}{hline 57}
-{space 5}random2 {c |}{res}          5    .5592324    .2859336   .1390273   .8202583
+{space 5}random2 {c |}{res}          5    .6286619    .3379346   .2400697   .9023743
 {txt}(2 real changes made)
   {res}4
 
@@ -426,7 +429,7 @@ no observations
 
 {txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
 {hline 13}{c +}{hline 57}
-{space 5}random2 {c |}{res}          5    .5848727    .4153124    .063788   .9939312
+{space 5}random2 {c |}{res}          5    .6711302    .1980631   .3736396   .8665261
 {txt}(2 real changes made)
   {res}4
 
@@ -449,133 +452,19 @@ no observations
 
 {txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
 {hline 13}{c +}{hline 57}
-{space 5}random2 {c |}{res}          5    .4144703    .2361713   .0851936    .705187
+{space 5}random2 {c |}{res}          5    .3817144    .3256976   .0037105   .7420436
 {txt}(3 real changes made)
   {res}5
 
 {txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
 {hline 13}{c +}{hline 57}
-{space 5}random2 {c |}{res}          5    .3872582    .3814272   .0178389   .9271225
+{space 5}random2 {c |}{res}          5    .2770007    .2243983   .0178389   .5474106
 {txt}(3 real changes made)
   {res}5
 
 {txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
 {hline 13}{c +}{hline 57}
-{space 5}random2 {c |}{res}          5    .4212657    .3229165   .0575784   .7977874
-{txt}(3 real changes made)
-  {res}4
-
-                              {txt}n
-{hline 61}
-      Percentiles      Smallest
- 1%    {res}        1              1
-{txt} 5%    {res}        1              2
-{txt}10%    {res}        1              3       {txt}Obs         {res}          4
-{txt}25%    {res}      1.5              4       {txt}Sum of Wgt. {res}          4
-
-{txt}50%    {res}      2.5                      {txt}Mean          {res}      2.5
-                        {txt}Largest       Std. Dev.     {res} 1.290994
-{txt}75%    {res}      3.5              1
-{txt}90%    {res}        4              2       {txt}Variance      {res} 1.666667
-{txt}95%    {res}        4              3       {txt}Skewness      {res}        0
-{txt}99%    {res}        4              4       {txt}Kurtosis      {res}     1.64
-{txt}(2 real changes made)
-  {res}4
-
-                              {txt}n
-{hline 61}
-      Percentiles      Smallest
- 1%    {res}        1              1
-{txt} 5%    {res}        1              2
-{txt}10%    {res}        1              3       {txt}Obs         {res}          4
-{txt}25%    {res}      1.5              4       {txt}Sum of Wgt. {res}          4
-
-{txt}50%    {res}      2.5                      {txt}Mean          {res}      2.5
-                        {txt}Largest       Std. Dev.     {res} 1.290994
-{txt}75%    {res}      3.5              1
-{txt}90%    {res}        4              2       {txt}Variance      {res} 1.666667
-{txt}95%    {res}        4              3       {txt}Skewness      {res}        0
-{txt}99%    {res}        4              4       {txt}Kurtosis      {res}     1.64
-{txt}(2 real changes made)
-  {res}4
-
-                              {txt}n
-{hline 61}
-      Percentiles      Smallest
- 1%    {res}        1              1
-{txt} 5%    {res}        1              2
-{txt}10%    {res}        1              3       {txt}Obs         {res}          4
-{txt}25%    {res}      1.5              4       {txt}Sum of Wgt. {res}          4
-
-{txt}50%    {res}      2.5                      {txt}Mean          {res}      2.5
-                        {txt}Largest       Std. Dev.     {res} 1.290994
-{txt}75%    {res}      3.5              1
-{txt}90%    {res}        4              2       {txt}Variance      {res} 1.666667
-{txt}95%    {res}        4              3       {txt}Skewness      {res}        0
-{txt}99%    {res}        4              4       {txt}Kurtosis      {res}     1.64
-{txt}(2 real changes made)
-  {res}5
-
-{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
-{hline 13}{c +}{hline 57}
-{space 5}random2 {c |}{res}          5    .7041388    .2229417   .3235304   .8634575
-{txt}(2 real changes made)
-  {res}4
-
-                              {txt}n
-{hline 61}
-      Percentiles      Smallest
- 1%    {res}        1              1
-{txt} 5%    {res}        1              2
-{txt}10%    {res}        1              3       {txt}Obs         {res}          4
-{txt}25%    {res}      1.5              4       {txt}Sum of Wgt. {res}          4
-
-{txt}50%    {res}      2.5                      {txt}Mean          {res}      2.5
-                        {txt}Largest       Std. Dev.     {res} 1.290994
-{txt}75%    {res}      3.5              1
-{txt}90%    {res}        4              2       {txt}Variance      {res} 1.666667
-{txt}95%    {res}        4              3       {txt}Skewness      {res}        0
-{txt}99%    {res}        4              4       {txt}Kurtosis      {res}     1.64
-{txt}(2 real changes made)
-  {res}4
-
-                              {txt}n
-{hline 61}
-      Percentiles      Smallest
- 1%    {res}        1              1
-{txt} 5%    {res}        1              2
-{txt}10%    {res}        1              3       {txt}Obs         {res}          4
-{txt}25%    {res}      1.5              4       {txt}Sum of Wgt. {res}          4
-
-{txt}50%    {res}      2.5                      {txt}Mean          {res}      2.5
-                        {txt}Largest       Std. Dev.     {res} 1.290994
-{txt}75%    {res}      3.5              1
-{txt}90%    {res}        4              2       {txt}Variance      {res} 1.666667
-{txt}95%    {res}        4              3       {txt}Skewness      {res}        0
-{txt}99%    {res}        4              4       {txt}Kurtosis      {res}     1.64
-{txt}(2 real changes made)
-  {res}4
-
-                              {txt}n
-{hline 61}
-      Percentiles      Smallest
- 1%    {res}        1              1
-{txt} 5%    {res}        1              2
-{txt}10%    {res}        1              3       {txt}Obs         {res}          4
-{txt}25%    {res}      1.5              4       {txt}Sum of Wgt. {res}          4
-
-{txt}50%    {res}      2.5                      {txt}Mean          {res}      2.5
-                        {txt}Largest       Std. Dev.     {res} 1.290994
-{txt}75%    {res}      3.5              1
-{txt}90%    {res}        4              2       {txt}Variance      {res} 1.666667
-{txt}95%    {res}        4              3       {txt}Skewness      {res}        0
-{txt}99%    {res}        4              4       {txt}Kurtosis      {res}     1.64
-{txt}(2 real changes made)
-  {res}5
-
-{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
-{hline 13}{c +}{hline 57}
-{space 5}random2 {c |}{res}          5    .4601037    .2997484   .1613508   .8545987
+{space 5}random2 {c |}{res}          5    .4680416    .3217284   .0771139   .9271225
 {txt}(3 real changes made)
   {res}4
 
@@ -594,11 +483,22 @@ no observations
 {txt}95%    {res}        4              3       {txt}Skewness      {res}        0
 {txt}99%    {res}        4              4       {txt}Kurtosis      {res}     1.64
 {txt}(2 real changes made)
-  {res}5
+  {res}4
 
-{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
-{hline 13}{c +}{hline 57}
-{space 5}random2 {c |}{res}          5    .7081304    .1511514   .5430179   .9423448
+                              {txt}n
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        1              1
+{txt} 5%    {res}        1              2
+{txt}10%    {res}        1              3       {txt}Obs         {res}          4
+{txt}25%    {res}      1.5              4       {txt}Sum of Wgt. {res}          4
+
+{txt}50%    {res}      2.5                      {txt}Mean          {res}      2.5
+                        {txt}Largest       Std. Dev.     {res} 1.290994
+{txt}75%    {res}      3.5              1
+{txt}90%    {res}        4              2       {txt}Variance      {res} 1.666667
+{txt}95%    {res}        4              3       {txt}Skewness      {res}        0
+{txt}99%    {res}        4              4       {txt}Kurtosis      {res}     1.64
 {txt}(2 real changes made)
   {res}4
 
@@ -621,8 +521,122 @@ no observations
 
 {txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
 {hline 13}{c +}{hline 57}
-{space 5}random2 {c |}{res}          5     .731637    .2549032   .3369251   .9505401
+{space 5}random2 {c |}{res}          5    .6118145    .2683048   .2498281   .9936814
 {txt}(2 real changes made)
+  {res}4
+
+                              {txt}n
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        1              1
+{txt} 5%    {res}        1              2
+{txt}10%    {res}        1              3       {txt}Obs         {res}          4
+{txt}25%    {res}      1.5              4       {txt}Sum of Wgt. {res}          4
+
+{txt}50%    {res}      2.5                      {txt}Mean          {res}      2.5
+                        {txt}Largest       Std. Dev.     {res} 1.290994
+{txt}75%    {res}      3.5              1
+{txt}90%    {res}        4              2       {txt}Variance      {res} 1.666667
+{txt}95%    {res}        4              3       {txt}Skewness      {res}        0
+{txt}99%    {res}        4              4       {txt}Kurtosis      {res}     1.64
+{txt}(2 real changes made)
+  {res}4
+
+                              {txt}n
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        1              1
+{txt} 5%    {res}        1              2
+{txt}10%    {res}        1              3       {txt}Obs         {res}          4
+{txt}25%    {res}      1.5              4       {txt}Sum of Wgt. {res}          4
+
+{txt}50%    {res}      2.5                      {txt}Mean          {res}      2.5
+                        {txt}Largest       Std. Dev.     {res} 1.290994
+{txt}75%    {res}      3.5              1
+{txt}90%    {res}        4              2       {txt}Variance      {res} 1.666667
+{txt}95%    {res}        4              3       {txt}Skewness      {res}        0
+{txt}99%    {res}        4              4       {txt}Kurtosis      {res}     1.64
+{txt}(2 real changes made)
+  {res}4
+
+                              {txt}n
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        1              1
+{txt} 5%    {res}        1              2
+{txt}10%    {res}        1              3       {txt}Obs         {res}          4
+{txt}25%    {res}      1.5              4       {txt}Sum of Wgt. {res}          4
+
+{txt}50%    {res}      2.5                      {txt}Mean          {res}      2.5
+                        {txt}Largest       Std. Dev.     {res} 1.290994
+{txt}75%    {res}      3.5              1
+{txt}90%    {res}        4              2       {txt}Variance      {res} 1.666667
+{txt}95%    {res}        4              3       {txt}Skewness      {res}        0
+{txt}99%    {res}        4              4       {txt}Kurtosis      {res}     1.64
+{txt}(2 real changes made)
+  {res}5
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 5}random2 {c |}{res}          5    .6705355    .2757974   .2536116    .887508
+{txt}(2 real changes made)
+  {res}4
+
+                              {txt}n
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        1              1
+{txt} 5%    {res}        1              2
+{txt}10%    {res}        1              3       {txt}Obs         {res}          4
+{txt}25%    {res}      1.5              4       {txt}Sum of Wgt. {res}          4
+
+{txt}50%    {res}      2.5                      {txt}Mean          {res}      2.5
+                        {txt}Largest       Std. Dev.     {res} 1.290994
+{txt}75%    {res}      3.5              1
+{txt}90%    {res}        4              2       {txt}Variance      {res} 1.666667
+{txt}95%    {res}        4              3       {txt}Skewness      {res}        0
+{txt}99%    {res}        4              4       {txt}Kurtosis      {res}     1.64
+{txt}(2 real changes made)
+  {res}4
+
+                              {txt}n
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        1              1
+{txt} 5%    {res}        1              2
+{txt}10%    {res}        1              3       {txt}Obs         {res}          4
+{txt}25%    {res}      1.5              4       {txt}Sum of Wgt. {res}          4
+
+{txt}50%    {res}      2.5                      {txt}Mean          {res}      2.5
+                        {txt}Largest       Std. Dev.     {res} 1.290994
+{txt}75%    {res}      3.5              1
+{txt}90%    {res}        4              2       {txt}Variance      {res} 1.666667
+{txt}95%    {res}        4              3       {txt}Skewness      {res}        0
+{txt}99%    {res}        4              4       {txt}Kurtosis      {res}     1.64
+{txt}(2 real changes made)
+  {res}4
+
+                              {txt}n
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        1              1
+{txt} 5%    {res}        1              2
+{txt}10%    {res}        1              3       {txt}Obs         {res}          4
+{txt}25%    {res}      1.5              4       {txt}Sum of Wgt. {res}          4
+
+{txt}50%    {res}      2.5                      {txt}Mean          {res}      2.5
+                        {txt}Largest       Std. Dev.     {res} 1.290994
+{txt}75%    {res}      3.5              1
+{txt}90%    {res}        4              2       {txt}Variance      {res} 1.666667
+{txt}95%    {res}        4              3       {txt}Skewness      {res}        0
+{txt}99%    {res}        4              4       {txt}Kurtosis      {res}     1.64
+{txt}(2 real changes made)
+  {res}5
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 5}random2 {c |}{res}          5    .4516535    .2447186   .1533264   .7298853
+{txt}(3 real changes made)
 
 {com}. 
 . tab strata r_treat
@@ -649,13 +663,13 @@ no observations
 {txt}       511 {c |}{res}         2          2 {txt}{c |}{res}         4 
 {txt}       512 {c |}{res}         2          2 {txt}{c |}{res}         4 
 {txt}       521 {c |}{res}         2          2 {txt}{c |}{res}         4 
-{txt}       522 {c |}{res}         2          3 {txt}{c |}{res}         5 
+{txt}       522 {c |}{res}         3          2 {txt}{c |}{res}         5 
 {txt}       611 {c |}{res}         2          2 {txt}{c |}{res}         4 
-{txt}       612 {c |}{res}         3          2 {txt}{c |}{res}         5 
+{txt}       612 {c |}{res}         2          2 {txt}{c |}{res}         4 
 {txt}       621 {c |}{res}         2          2 {txt}{c |}{res}         4 
-{txt}       622 {c |}{res}         3          2 {txt}{c |}{res}         5 
+{txt}       622 {c |}{res}         2          3 {txt}{c |}{res}         5 
 {txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
-     Total {c |}{res}        54         53 {txt}{c |}{res}       107 
+     Total {c |}{res}        53         53 {txt}{c |}{res}       106 
 {txt}
 {com}. 
 . bysort region: tab strata r_treat
@@ -673,13 +687,13 @@ no observations
 {txt}       511 {c |}{res}         2          2 {txt}{c |}{res}         4 
 {txt}       512 {c |}{res}         2          2 {txt}{c |}{res}         4 
 {txt}       521 {c |}{res}         2          2 {txt}{c |}{res}         4 
-{txt}       522 {c |}{res}         2          3 {txt}{c |}{res}         5 
+{txt}       522 {c |}{res}         3          2 {txt}{c |}{res}         5 
 {txt}       611 {c |}{res}         2          2 {txt}{c |}{res}         4 
-{txt}       612 {c |}{res}         3          2 {txt}{c |}{res}         5 
+{txt}       612 {c |}{res}         2          2 {txt}{c |}{res}         4 
 {txt}       621 {c |}{res}         2          2 {txt}{c |}{res}         4 
-{txt}       622 {c |}{res}         3          2 {txt}{c |}{res}         5 
+{txt}       622 {c |}{res}         2          3 {txt}{c |}{res}         5 
 {txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
-     Total {c |}{res}        27         25 {txt}{c |}{res}        52 
+     Total {c |}{res}        26         25 {txt}{c |}{res}        51 
 
 {txt}{hline}
 -> region = Terai
@@ -711,7 +725,7 @@ no observations
 . 
 {txt}end of do-file
 
-{com}. do "/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/lsilPAP2.do"
+{com}. do "/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP2.do"
 {txt}
 {com}. clear all
 {res}{txt}

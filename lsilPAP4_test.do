@@ -184,9 +184,26 @@ local local_salecost visits_sale time_passed transp_cost
 make_index_gr salecost wgt stdgroup `local_salecost' 
 
 
+** Decision-Making **
+
+/* Variables 
+Setting interest rate (loans) : MAN18a 
+Setting interest rate (savings) : MAN18b
+Setting prices (traders) : MAN18c
+Buying equipment : MAN18d
+General assembly dates: MAN18e
+*/
+
+* destring
+foreach v of varlist MAN18a MAN18b ///
+MAN18c MAN18d MAN18e {
+	destring `v', replace
+}	
+
+local local_decision MAN18a MAN18b MAN18c MAN18d MAN18e 
+make_index_gr decision wgt stdgroup `local_decision'
+
 save "$d3/r_CO_Merged_Ind.dta", replace
-
-
 
 
 ****************

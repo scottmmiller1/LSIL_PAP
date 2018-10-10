@@ -160,6 +160,13 @@ COMM8c COMM8d COMM8e ///
 COMM8f {
 	tostring `v', replace force
 }	
+
+* Change MAN18 to string
+foreach v of varlist MAN18a MAN18b ///
+MAN18c MAN18d MAN18e {
+	tostring `v', replace force
+	replace `v' ="." if `v' == "97" 
+}	
 	
 ** Collapse to 1-row per co-op
 * strings
