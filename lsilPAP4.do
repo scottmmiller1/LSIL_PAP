@@ -9,14 +9,6 @@ log using "$d1/lsilPAP4.smcl", replace
 cd "$d2" 
 ssc install nmissing
 
-
-***********************************************
-** 				Single variables			 **
-***********************************************
-
-* Gross Margin
-
- 
  
 ***********************************************
 ** 				co-op indicators			 **
@@ -149,11 +141,6 @@ npresent index_CO_goatsales
 
 ** Management Quality **
 
-/* Variables
-Education : HHR13
-*/
-
-*---- Need to fix collapsed dataset to include IND variables ----*
 
 
 ** Planning and Goals **
@@ -213,6 +200,9 @@ make_index_gr CO_trans wgt stdgroup `local_CO_trans'
 * # missing observations
 nmissing index_CO_trans
 npresent index_CO_trans
+
+
+
 
 
 ***********************************************
@@ -320,11 +310,6 @@ local local_HH_TRN Co_opTransparencyTRN1 Co_opTransparencyTRN2 ///
 	Co_opTransparencyTRN6 Co_opTransparencyTRN7
 make_index_gr HH_TRN wgt stdgroup `local_HH_TRN' 
 
-* # missing observations
-nmissing index_HH_TRN
-npresent index_HH_TRN
-
-
 
 	
 ** Transparency Discrepancy index
@@ -344,9 +329,7 @@ npresent index_HH_TRN
 local local_dTRN dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7
 make_index_gr dTRN wgt stdgroup `local_dTRN' 
 	
-* # missing observations
-nmissing index_dTRN
-npresent index_dTRN
+
 	
 	
 	

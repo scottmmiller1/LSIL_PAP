@@ -1,0 +1,479 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP5_test_other.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}10 Oct 2018, 16:50:33
+{txt}
+{com}. 
+. cd "$d2"
+{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data
+{txt}
+{com}. 
+. ** Co-op level dataset
+. ********************************************* 
+. clear
+{txt}
+{com}. use "$d3/r_CO_Merged_Ind.dta"
+{txt}
+{com}. 
+. 
+. * Descision-Making
+. 
+. ** Co-op vars
+. gl co_decision MAN18a MAN18b ///
+> MAN18c MAN18d MAN18e index_decision
+{txt}
+{com}. 
+. *** Strata dummies - No interaction
+. ** Co-op vars
+. local listsize : list sizeof global(co_decision)
+{txt}
+{com}. tokenize $co_decision
+{txt}
+{com}. 
+. forv i = 1/`listsize' {c -(}
+{txt}  2{com}. 
+.         reg ``i'' r_treat i.strata, cluster(idx)
+{txt}  3{com}.         
+.         quietly {c -(}
+{txt}  4{com}.                 ereturn list
+{txt}  5{com}.                 scalar t_a = invttail(`e(df_r)',0.025) // alpha t-value
+{txt}  6{com}.                 scalar t_b = invttail(`e(df_r)',0.2) // beta t-value
+{txt}  7{com}.                 scalar mde_``i'' = (t_a + t_b)*_se[r_treat]
+{txt}  8{com}.                 
+.         * Calculate MDE as % of mean & # of standard deviations
+.                 sum ``i''
+{txt}  9{com}.                 scalar mean_``i'' = mde_``i'' / r(mean) // % of treatment mean
+{txt} 10{com}.                 scalar sd_``i'' = mde_``i'' / r(sd)  // # of treatment sd's
+{txt} 11{com}. 
+.         * matrix for table
+.                 matrix mat_`i' = (mde_``i'',mean_``i'',sd_``i'')
+{txt} 12{com}.                 {c )-}
+{txt} 13{com}. {c )-}
+
+{txt}Linear regression                               Number of obs     = {res}        27
+                                                {txt}{help j_robustsingular:F(7, 26) }         =  {res}        .
+                                                {txt}Prob > F          = {res}         .
+                                                {txt}R-squared         = {res}    0.6551
+                                                {txt}Root MSE          =    {res} 1.4835
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:27} clusters in idx)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      MAN18a{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}r_treat {c |}{col 14}{res}{space 2}   -.3125{col 26}{space 2} 1.174801{col 37}{space 1}   -0.27{col 46}{space 3}0.792{col 54}{space 4}-2.727338{col 67}{space 3} 2.102338
+{txt}{space 12} {c |}
+{space 6}strata {c |}
+{space 8}122  {c |}{col 14}{res}{space 2}-2.75e-15{col 26}{space 2} 8.41e-08{col 37}{space 1}   -0.00{col 46}{space 3}1.000{col 54}{space 4}-1.73e-07{col 67}{space 3} 1.73e-07
+{txt}{space 8}211  {c |}{col 14}{res}{space 2}   1.6875{col 26}{space 2} 1.174801{col 37}{space 1}    1.44{col 46}{space 3}0.163{col 54}{space 4}-.7273381{col 67}{space 3} 4.102338
+{txt}{space 8}212  {c |}{col 14}{res}{space 2}-2.51e-15{col 26}{space 2} 8.41e-08{col 37}{space 1}   -0.00{col 46}{space 3}1.000{col 54}{space 4}-1.73e-07{col 67}{space 3} 1.73e-07
+{txt}{space 8}221  {c |}{col 14}{res}{space 2}        3{col 26}{space 2} 4.21e-08{col 37}{space 1} 7.1e+07{col 46}{space 3}0.000{col 54}{space 4}        3{col 67}{space 3}        3
+{txt}{space 8}222  {c |}{col 14}{res}{space 2}   2.6875{col 26}{space 2} 1.174801{col 37}{space 1}    2.29{col 46}{space 3}0.031{col 54}{space 4} .2726619{col 67}{space 3} 5.102338
+{txt}{space 8}311  {c |}{col 14}{res}{space 2}   .84375{col 26}{space 2} 1.310731{col 37}{space 1}    0.64{col 46}{space 3}0.525{col 54}{space 4}-1.850497{col 67}{space 3} 3.537997
+{txt}{space 8}312  {c |}{col 14}{res}{space 2}        3{col 26}{space 2} 9.86e-08{col 37}{space 1} 3.0e+07{col 46}{space 3}0.000{col 54}{space 4}        3{col 67}{space 3}        3
+{txt}{space 8}321  {c |}{col 14}{res}{space 2}      1.5{col 26}{space 2} 2.083095{col 37}{space 1}    0.72{col 46}{space 3}0.478{col 54}{space 4}-2.781864{col 67}{space 3} 5.781864
+{txt}{space 8}322  {c |}{col 14}{res}{space 2}        3{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}411  {c |}{col 14}{res}{space 2}   -.3125{col 26}{space 2} 1.174801{col 37}{space 1}   -0.27{col 46}{space 3}0.792{col 54}{space 4}-2.727338{col 67}{space 3} 2.102338
+{txt}{space 8}412  {c |}{col 14}{res}{space 2}-2.62e-15{col 26}{space 2} 6.62e-08{col 37}{space 1}   -0.00{col 46}{space 3}1.000{col 54}{space 4}-1.36e-07{col 67}{space 3} 1.36e-07
+{txt}{space 8}421  {c |}{col 14}{res}{space 2}  1.34375{col 26}{space 2} 1.956372{col 37}{space 1}    0.69{col 46}{space 3}0.498{col 54}{space 4} -2.67763{col 67}{space 3}  5.36513
+{txt}{space 8}511  {c |}{col 14}{res}{space 2}   1.6875{col 26}{space 2} 1.174801{col 37}{space 1}    1.44{col 46}{space 3}0.163{col 54}{space 4}-.7273381{col 67}{space 3} 4.102338
+{txt}{space 8}512  {c |}{col 14}{res}{space 2}   1.6875{col 26}{space 2} 1.174801{col 37}{space 1}    1.44{col 46}{space 3}0.163{col 54}{space 4}-.7273381{col 67}{space 3} 4.102338
+{txt}{space 8}611  {c |}{col 14}{res}{space 2}-2.34e-15{col 26}{space 2} 6.62e-08{col 37}{space 1}   -0.00{col 46}{space 3}1.000{col 54}{space 4}-1.36e-07{col 67}{space 3} 1.36e-07
+{txt}{space 8}612  {c |}{col 14}{res}{space 2}   .84375{col 26}{space 2} 1.709788{col 37}{space 1}    0.49{col 46}{space 3}0.626{col 54}{space 4}-2.670769{col 67}{space 3} 4.358269
+{txt}{space 8}621  {c |}{col 14}{res}{space 2}  -.15625{col 26}{space 2} .6261978{col 37}{space 1}   -0.25{col 46}{space 3}0.805{col 54}{space 4}-1.443418{col 67}{space 3} 1.130918
+{txt}{space 8}622  {c |}{col 14}{res}{space 2}    .5625{col 26}{space 2} 1.262505{col 37}{space 1}    0.45{col 46}{space 3}0.660{col 54}{space 4}-2.032617{col 67}{space 3} 3.157617
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}   1.3125{col 26}{space 2} 1.174801{col 37}{space 1}    1.12{col 46}{space 3}0.274{col 54}{space 4}-1.102338{col 67}{space 3} 3.727338
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{txt}Linear regression                               Number of obs     = {res}        27
+                                                {txt}{help j_robustsingular:F(6, 26) }         =  {res}        .
+                                                {txt}Prob > F          = {res}         .
+                                                {txt}R-squared         = {res}    0.6319
+                                                {txt}Root MSE          =    {res} 1.4835
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:27} clusters in idx)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      MAN18b{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}r_treat {c |}{col 14}{res}{space 2}   -.3125{col 26}{space 2} 1.174801{col 37}{space 1}   -0.27{col 46}{space 3}0.792{col 54}{space 4}-2.727338{col 67}{space 3} 2.102338
+{txt}{space 12} {c |}
+{space 6}strata {c |}
+{space 8}122  {c |}{col 14}{res}{space 2}        2{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}211  {c |}{col 14}{res}{space 2}   1.6875{col 26}{space 2} 1.174801{col 37}{space 1}    1.44{col 46}{space 3}0.163{col 54}{space 4}-.7273381{col 67}{space 3} 4.102338
+{txt}{space 8}212  {c |}{col 14}{res}{space 2} 4.82e-16{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}221  {c |}{col 14}{res}{space 2}        3{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}222  {c |}{col 14}{res}{space 2}   2.6875{col 26}{space 2} 1.174801{col 37}{space 1}    2.29{col 46}{space 3}0.031{col 54}{space 4} .2726619{col 67}{space 3} 5.102338
+{txt}{space 8}311  {c |}{col 14}{res}{space 2}   .84375{col 26}{space 2} 1.310731{col 37}{space 1}    0.64{col 46}{space 3}0.525{col 54}{space 4}-1.850497{col 67}{space 3} 3.537997
+{txt}{space 8}312  {c |}{col 14}{res}{space 2} 4.62e-16{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}321  {c |}{col 14}{res}{space 2}      1.5{col 26}{space 2} 2.083095{col 37}{space 1}    0.72{col 46}{space 3}0.478{col 54}{space 4}-2.781864{col 67}{space 3} 5.781864
+{txt}{space 8}322  {c |}{col 14}{res}{space 2}        3{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}411  {c |}{col 14}{res}{space 2}   -.3125{col 26}{space 2} 1.174801{col 37}{space 1}   -0.27{col 46}{space 3}0.792{col 54}{space 4}-2.727338{col 67}{space 3} 2.102338
+{txt}{space 8}412  {c |}{col 14}{res}{space 2} 4.64e-16{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}421  {c |}{col 14}{res}{space 2}  1.34375{col 26}{space 2} 1.956372{col 37}{space 1}    0.69{col 46}{space 3}0.498{col 54}{space 4} -2.67763{col 67}{space 3}  5.36513
+{txt}{space 8}511  {c |}{col 14}{res}{space 2}   1.6875{col 26}{space 2} 1.174801{col 37}{space 1}    1.44{col 46}{space 3}0.163{col 54}{space 4}-.7273381{col 67}{space 3} 4.102338
+{txt}{space 8}512  {c |}{col 14}{res}{space 2}   1.6875{col 26}{space 2} 1.174801{col 37}{space 1}    1.44{col 46}{space 3}0.163{col 54}{space 4}-.7273381{col 67}{space 3} 4.102338
+{txt}{space 8}611  {c |}{col 14}{res}{space 2} 7.46e-16{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}612  {c |}{col 14}{res}{space 2}   .84375{col 26}{space 2} 1.709788{col 37}{space 1}    0.49{col 46}{space 3}0.626{col 54}{space 4}-2.670769{col 67}{space 3} 4.358269
+{txt}{space 8}621  {c |}{col 14}{res}{space 2}  -.15625{col 26}{space 2} .6261978{col 37}{space 1}   -0.25{col 46}{space 3}0.805{col 54}{space 4}-1.443418{col 67}{space 3} 1.130918
+{txt}{space 8}622  {c |}{col 14}{res}{space 2}    .5625{col 26}{space 2} 1.262505{col 37}{space 1}    0.45{col 46}{space 3}0.660{col 54}{space 4}-2.032617{col 67}{space 3} 3.157617
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}   1.3125{col 26}{space 2} 1.174801{col 37}{space 1}    1.12{col 46}{space 3}0.274{col 54}{space 4}-1.102338{col 67}{space 3} 3.727338
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{txt}Linear regression                               Number of obs     = {res}        24
+                                                {txt}{help j_robustsingular:F(5, 23) }         =  {res}        .
+                                                {txt}Prob > F          = {res}         .
+                                                {txt}R-squared         = {res}    0.7011
+                                                {txt}Root MSE          =    {res} 1.3751
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:24} clusters in idx)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      MAN18c{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}r_treat {c |}{col 14}{res}{space 2}-.3846154{col 26}{space 2} 1.145609{col 37}{space 1}   -0.34{col 46}{space 3}0.740{col 54}{space 4}-2.754487{col 67}{space 3} 1.985257
+{txt}{space 12} {c |}
+{space 6}strata {c |}
+{space 8}122  {c |}{col 14}{res}{space 2} 3.52e-15{col 26}{space 2} 1.54e-15{col 37}{space 1}    2.29{col 46}{space 3}0.032{col 54}{space 4} 3.37e-16{col 67}{space 3} 6.70e-15
+{txt}{space 8}211  {c |}{col 14}{res}{space 2}-.3846154{col 26}{space 2} 1.145609{col 37}{space 1}   -0.34{col 46}{space 3}0.740{col 54}{space 4}-2.754487{col 67}{space 3} 1.985257
+{txt}{space 8}212  {c |}{col 14}{res}{space 2}       -3{col 26}{space 2} 1.54e-15{col 37}{space 1}-2.0e+15{col 46}{space 3}0.000{col 54}{space 4}       -3{col 67}{space 3}       -3
+{txt}{space 8}221  {c |}{col 14}{res}{space 2}       -3{col 26}{space 2} 1.54e-15{col 37}{space 1}-2.0e+15{col 46}{space 3}0.000{col 54}{space 4}       -3{col 67}{space 3}       -3
+{txt}{space 8}222  {c |}{col 14}{res}{space 2}-3.384615{col 26}{space 2} 1.145609{col 37}{space 1}   -2.95{col 46}{space 3}0.007{col 54}{space 4}-5.754487{col 67}{space 3}-1.014743
+{txt}{space 8}311  {c |}{col 14}{res}{space 2}-3.192308{col 26}{space 2} .6340893{col 37}{space 1}   -5.03{col 46}{space 3}0.000{col 54}{space 4}-4.504021{col 67}{space 3}-1.880594
+{txt}{space 8}312  {c |}{col 14}{res}{space 2}       -3{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}321  {c |}{col 14}{res}{space 2}     -1.5{col 26}{space 2}  2.12132{col 37}{space 1}   -0.71{col 46}{space 3}0.487{col 54}{space 4}-5.888285{col 67}{space 3} 2.888285
+{txt}{space 8}322  {c |}{col 14}{res}{space 2}       -3{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}411  {c |}{col 14}{res}{space 2}-3.384615{col 26}{space 2} 1.145609{col 37}{space 1}   -2.95{col 46}{space 3}0.007{col 54}{space 4}-5.754487{col 67}{space 3}-1.014743
+{txt}{space 8}421  {c |}{col 14}{res}{space 2}-1.692308{col 26}{space 2} 1.936033{col 37}{space 1}   -0.87{col 46}{space 3}0.391{col 54}{space 4}-5.697297{col 67}{space 3} 2.312681
+{txt}{space 8}511  {c |}{col 14}{res}{space 2}-1.384615{col 26}{space 2} 1.145609{col 37}{space 1}   -1.21{col 46}{space 3}0.239{col 54}{space 4}-3.754487{col 67}{space 3} .9852565
+{txt}{space 8}611  {c |}{col 14}{res}{space 2}       -3{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}612  {c |}{col 14}{res}{space 2}-3.384615{col 26}{space 2} 1.145609{col 37}{space 1}   -2.95{col 46}{space 3}0.007{col 54}{space 4}-5.754487{col 67}{space 3}-1.014743
+{txt}{space 8}621  {c |}{col 14}{res}{space 2}-3.192308{col 26}{space 2} .6340893{col 37}{space 1}   -5.03{col 46}{space 3}0.000{col 54}{space 4}-4.504021{col 67}{space 3}-1.880594
+{txt}{space 8}622  {c |}{col 14}{res}{space 2}-2.461538{col 26}{space 2} 1.304408{col 37}{space 1}   -1.89{col 46}{space 3}0.072{col 54}{space 4}-5.159913{col 67}{space 3} .2368357
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} 4.384615{col 26}{space 2} 1.145609{col 37}{space 1}    3.83{col 46}{space 3}0.001{col 54}{space 4} 2.014743{col 67}{space 3} 6.754487
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{txt}Linear regression                               Number of obs     = {res}        27
+                                                {txt}{help j_robustsingular:F(6, 26) }         =  {res}        .
+                                                {txt}Prob > F          = {res}         .
+                                                {txt}R-squared         = {res}    0.8233
+                                                {txt}Root MSE          =    {res} .71962
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:27} clusters in idx)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      MAN18d{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}r_treat {c |}{col 14}{res}{space 2}     .625{col 26}{space 2} .5874757{col 37}{space 1}    1.06{col 46}{space 3}0.297{col 54}{space 4}-.5825735{col 67}{space 3} 1.832574
+{txt}{space 12} {c |}
+{space 6}strata {c |}
+{space 8}122  {c |}{col 14}{res}{space 2}-4.89e-16{col 26}{space 2} 4.34e-08{col 37}{space 1}   -0.00{col 46}{space 3}1.000{col 54}{space 4}-8.93e-08{col 67}{space 3} 8.93e-08
+{txt}{space 8}211  {c |}{col 14}{res}{space 2}    2.625{col 26}{space 2} .5874757{col 37}{space 1}    4.47{col 46}{space 3}0.000{col 54}{space 4} 1.417426{col 67}{space 3} 3.832574
+{txt}{space 8}212  {c |}{col 14}{res}{space 2}-4.65e-16{col 26}{space 2} 4.34e-08{col 37}{space 1}   -0.00{col 46}{space 3}1.000{col 54}{space 4}-8.93e-08{col 67}{space 3} 8.93e-08
+{txt}{space 8}221  {c |}{col 14}{res}{space 2}-4.07e-16{col 26}{space 2} 5.05e-08{col 37}{space 1}   -0.00{col 46}{space 3}1.000{col 54}{space 4}-1.04e-07{col 67}{space 3} 1.04e-07
+{txt}{space 8}222  {c |}{col 14}{res}{space 2}     .625{col 26}{space 2} .5874757{col 37}{space 1}    1.06{col 46}{space 3}0.297{col 54}{space 4}-.5825735{col 67}{space 3} 1.832574
+{txt}{space 8}311  {c |}{col 14}{res}{space 2}    .3125{col 26}{space 2}  .524041{col 37}{space 1}    0.60{col 46}{space 3}0.556{col 54}{space 4}-.7646817{col 67}{space 3} 1.389682
+{txt}{space 8}312  {c |}{col 14}{res}{space 2}-4.36e-16{col 26}{space 2} 5.77e-08{col 37}{space 1}   -0.00{col 46}{space 3}1.000{col 54}{space 4}-1.19e-07{col 67}{space 3} 1.19e-07
+{txt}{space 8}321  {c |}{col 14}{res}{space 2}-3.91e-16{col 26}{space 2} 5.05e-08{col 37}{space 1}   -0.00{col 46}{space 3}1.000{col 54}{space 4}-1.04e-07{col 67}{space 3} 1.04e-07
+{txt}{space 8}322  {c |}{col 14}{res}{space 2}        3{col 26}{space 2} 4.83e-08{col 37}{space 1} 6.2e+07{col 46}{space 3}0.000{col 54}{space 4}        3{col 67}{space 3}        3
+{txt}{space 8}411  {c |}{col 14}{res}{space 2}     .625{col 26}{space 2} .5874757{col 37}{space 1}    1.06{col 46}{space 3}0.297{col 54}{space 4}-.5825735{col 67}{space 3} 1.832574
+{txt}{space 8}412  {c |}{col 14}{res}{space 2}-5.50e-16{col 26}{space 2} 3.94e-08{col 37}{space 1}   -0.00{col 46}{space 3}1.000{col 54}{space 4}-8.10e-08{col 67}{space 3} 8.10e-08
+{txt}{space 8}421  {c |}{col 14}{res}{space 2}    .3125{col 26}{space 2}  .524041{col 37}{space 1}    0.60{col 46}{space 3}0.556{col 54}{space 4}-.7646817{col 67}{space 3} 1.389682
+{txt}{space 8}511  {c |}{col 14}{res}{space 2}    2.625{col 26}{space 2} .5874757{col 37}{space 1}    4.47{col 46}{space 3}0.000{col 54}{space 4} 1.417426{col 67}{space 3} 3.832574
+{txt}{space 8}512  {c |}{col 14}{res}{space 2}     .625{col 26}{space 2} .5874757{col 37}{space 1}    1.06{col 46}{space 3}0.297{col 54}{space 4}-.5825735{col 67}{space 3} 1.832574
+{txt}{space 8}611  {c |}{col 14}{res}{space 2}-3.30e-16{col 26}{space 2} 3.94e-08{col 37}{space 1}   -0.00{col 46}{space 3}1.000{col 54}{space 4}-8.10e-08{col 67}{space 3} 8.10e-08
+{txt}{space 8}612  {c |}{col 14}{res}{space 2}   1.3125{col 26}{space 2}  .998916{col 37}{space 1}    1.31{col 46}{space 3}0.200{col 54}{space 4}-.7408013{col 67}{space 3} 3.365801
+{txt}{space 8}621  {c |}{col 14}{res}{space 2}    .3125{col 26}{space 2}  .524041{col 37}{space 1}    0.60{col 46}{space 3}0.556{col 54}{space 4}-.7646817{col 67}{space 3} 1.389682
+{txt}{space 8}622  {c |}{col 14}{res}{space 2}     .875{col 26}{space 2} 1.067666{col 37}{space 1}    0.82{col 46}{space 3}0.420{col 54}{space 4}-1.319618{col 67}{space 3} 3.069618
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}     .375{col 26}{space 2} .5874757{col 37}{space 1}    0.64{col 46}{space 3}0.529{col 54}{space 4}-.8325735{col 67}{space 3} 1.582574
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{txt}Linear regression                               Number of obs     = {res}        27
+                                                {txt}{help j_robustsingular:F(5, 26) }         =  {res}        .
+                                                {txt}Prob > F          = {res}         .
+                                                {txt}R-squared         = {res}    0.6163
+                                                {txt}Root MSE          =    {res} .99328
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:27} clusters in idx)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      MAN18e{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}r_treat {c |}{col 14}{res}{space 2}   -.3125{col 26}{space 2} .9152851{col 37}{space 1}   -0.34{col 46}{space 3}0.736{col 54}{space 4}-2.193895{col 67}{space 3} 1.568895
+{txt}{space 12} {c |}
+{space 6}strata {c |}
+{space 8}122  {c |}{col 14}{res}{space 2} 2.40e-15{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}211  {c |}{col 14}{res}{space 2}   1.6875{col 26}{space 2} .9152851{col 37}{space 1}    1.84{col 46}{space 3}0.077{col 54}{space 4}-.1938954{col 67}{space 3} 3.568895
+{txt}{space 8}212  {c |}{col 14}{res}{space 2} 2.42e-15{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}221  {c |}{col 14}{res}{space 2} 2.42e-15{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}222  {c |}{col 14}{res}{space 2}   -.3125{col 26}{space 2} .9152851{col 37}{space 1}   -0.34{col 46}{space 3}0.736{col 54}{space 4}-2.193895{col 67}{space 3} 1.568895
+{txt}{space 8}311  {c |}{col 14}{res}{space 2}  1.34375{col 26}{space 2} 1.921403{col 37}{space 1}    0.70{col 46}{space 3}0.491{col 54}{space 4} -2.60575{col 67}{space 3}  5.29325
+{txt}{space 8}312  {c |}{col 14}{res}{space 2} 2.41e-15{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}321  {c |}{col 14}{res}{space 2} 2.42e-15{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}322  {c |}{col 14}{res}{space 2} 2.39e-15{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}411  {c |}{col 14}{res}{space 2}   -.3125{col 26}{space 2} .9152851{col 37}{space 1}   -0.34{col 46}{space 3}0.736{col 54}{space 4}-2.193895{col 67}{space 3} 1.568895
+{txt}{space 8}412  {c |}{col 14}{res}{space 2} 2.44e-15{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}421  {c |}{col 14}{res}{space 2}  -.15625{col 26}{space 2}  .506479{col 37}{space 1}   -0.31{col 46}{space 3}0.760{col 54}{space 4}-1.197332{col 67}{space 3} .8848324
+{txt}{space 8}511  {c |}{col 14}{res}{space 2}   1.6875{col 26}{space 2} .9152851{col 37}{space 1}    1.84{col 46}{space 3}0.077{col 54}{space 4}-.1938954{col 67}{space 3} 3.568895
+{txt}{space 8}512  {c |}{col 14}{res}{space 2}   -.3125{col 26}{space 2} .9152851{col 37}{space 1}   -0.34{col 46}{space 3}0.736{col 54}{space 4}-2.193895{col 67}{space 3} 1.568895
+{txt}{space 8}611  {c |}{col 14}{res}{space 2} 2.44e-15{col 26}{space 2}        .{col 37}{space 1}       .{col 46}{space 3}    .{col 54}{space 4}        .{col 67}{space 3}        .
+{txt}{space 8}612  {c |}{col 14}{res}{space 2}  -.15625{col 26}{space 2}  .506479{col 37}{space 1}   -0.31{col 46}{space 3}0.760{col 54}{space 4}-1.197332{col 67}{space 3} .8848324
+{txt}{space 8}621  {c |}{col 14}{res}{space 2}  -.15625{col 26}{space 2}  .506479{col 37}{space 1}   -0.31{col 46}{space 3}0.760{col 54}{space 4}-1.197332{col 67}{space 3} .8848324
+{txt}{space 8}622  {c |}{col 14}{res}{space 2}    .5625{col 26}{space 2} 1.238407{col 37}{space 1}    0.45{col 46}{space 3}0.653{col 54}{space 4}-1.983082{col 67}{space 3} 3.108082
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}   1.3125{col 26}{space 2} .9152851{col 37}{space 1}    1.43{col 46}{space 3}0.163{col 54}{space 4}-.5688954{col 67}{space 3} 3.193895
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{txt}Linear regression                               Number of obs     = {res}        24
+                                                {txt}{help j_robustsingular:F(6, 23) }         =  {res}        .
+                                                {txt}Prob > F          = {res}         .
+                                                {txt}R-squared         = {res}    0.6658
+                                                {txt}Root MSE          =    {res} 1.2229
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:24} clusters in idx)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}index_deci~n{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}r_treat {c |}{col 14}{res}{space 2}-.2075374{col 26}{space 2} 1.085618{col 37}{space 1}   -0.19{col 46}{space 3}0.850{col 54}{space 4} -2.45331{col 67}{space 3} 2.038235
+{txt}{space 12} {c |}
+{space 6}strata {c |}
+{space 8}122  {c |}{col 14}{res}{space 2}-.2976191{col 26}{space 2} 7.29e-08{col 37}{space 1}-4.1e+06{col 46}{space 3}0.000{col 54}{space 4}-.2976193{col 67}{space 3} -.297619
+{txt}{space 8}211  {c |}{col 14}{res}{space 2} 1.722986{col 26}{space 2} 1.085618{col 37}{space 1}    1.59{col 46}{space 3}0.126{col 54}{space 4}-.5227864{col 67}{space 3} 3.968759
+{txt}{space 8}212  {c |}{col 14}{res}{space 2}-1.179241{col 26}{space 2} 7.29e-08{col 37}{space 1}-1.6e+07{col 46}{space 3}0.000{col 54}{space 4}-1.179241{col 67}{space 3}-1.179241
+{txt}{space 8}221  {c |}{col 14}{res}{space 2}-.3913941{col 26}{space 2} 7.29e-08{col 37}{space 1}-5.4e+06{col 46}{space 3}0.000{col 54}{space 4}-.3913943{col 67}{space 3} -.391394
+{txt}{space 8}222  {c |}{col 14}{res}{space 2}-.5989315{col 26}{space 2} 1.085618{col 37}{space 1}   -0.55{col 46}{space 3}0.586{col 54}{space 4}-2.844704{col 67}{space 3} 1.646841
+{txt}{space 8}311  {c |}{col 14}{res}{space 2}-.9113274{col 26}{space 2} .6619644{col 37}{space 1}   -1.38{col 46}{space 3}0.182{col 54}{space 4}-2.280705{col 67}{space 3} .4580503
+{txt}{space 8}312  {c |}{col 14}{res}{space 2} .0550344{col 26}{space 2} 9.93e-08{col 37}{space 1} 5.5e+05{col 46}{space 3}0.000{col 54}{space 4} .0550342{col 67}{space 3} .0550346
+{txt}{space 8}321  {c |}{col 14}{res}{space 2}-.1956971{col 26}{space 2} 1.390941{col 37}{space 1}   -0.14{col 46}{space 3}0.889{col 54}{space 4}-3.073077{col 67}{space 3} 2.681683
+{txt}{space 8}322  {c |}{col 14}{res}{space 2} 1.498412{col 26}{space 2} 9.93e-08{col 37}{space 1} 1.5e+07{col 46}{space 3}0.000{col 54}{space 4} 1.498412{col 67}{space 3} 1.498412
+{txt}{space 8}411  {c |}{col 14}{res}{space 2}-1.386778{col 26}{space 2} 1.085618{col 37}{space 1}   -1.28{col 46}{space 3}0.214{col 54}{space 4}-3.632551{col 67}{space 3} .8589945
+{txt}{space 8}421  {c |}{col 14}{res}{space 2}-.2994658{col 26}{space 2} 1.357442{col 37}{space 1}   -0.22{col 46}{space 3}0.827{col 54}{space 4}-3.107549{col 67}{space 3} 2.508618
+{txt}{space 8}511  {c |}{col 14}{res}{space 2} 1.329906{col 26}{space 2} 1.085618{col 37}{space 1}    1.23{col 46}{space 3}0.233{col 54}{space 4}-.9158666{col 67}{space 3} 3.575679
+{txt}{space 8}611  {c |}{col 14}{res}{space 2}-1.179241{col 26}{space 2} 4.06e-08{col 37}{space 1}-2.9e+07{col 46}{space 3}0.000{col 54}{space 4}-1.179241{col 67}{space 3}-1.179241
+{txt}{space 8}612  {c |}{col 14}{res}{space 2}-1.386778{col 26}{space 2} 1.085618{col 37}{space 1}   -1.28{col 46}{space 3}0.214{col 54}{space 4}-3.632551{col 67}{space 3} .8589945
+{txt}{space 8}621  {c |}{col 14}{res}{space 2}-1.283009{col 26}{space 2} .5622968{col 37}{space 1}   -2.28{col 46}{space 3}0.032{col 54}{space 4}-2.446209{col 67}{space 3}-.1198099
+{txt}{space 8}622  {c |}{col 14}{res}{space 2}-.3428585{col 26}{space 2} 1.666927{col 37}{space 1}   -0.21{col 46}{space 3}0.839{col 54}{space 4} -3.79116{col 67}{space 3} 3.105443
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} 1.972617{col 26}{space 2} 1.085618{col 37}{space 1}    1.82{col 46}{space 3}0.082{col 54}{space 4} -.273156{col 67}{space 3} 4.218389
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. matrix A = mat_1
+{txt}
+{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
+{txt}  2{com}.         matrix A = A \ mat_`i'
+{txt}  3{com}. {c )-}
+{txt}
+{com}. 
+. * Table
+. frmttable using MDE_other.doc, statmat(A) sdec(4) title("Co-op Level - Decision-Making") ///
+> ctitle("","MDE","% of mean","# of sd's.") ///
+> rtitle("Loans"\"Savings"\"Traders"\"Buying Eq."\"Gen. Assembly"\"Decision Index") replace
+{res}
+{txt}{center:Co-op Level - Decision-Making}
+{txt}{center:{hline 49}}
+{center:{txt}{lalign 16:}{txt}{center 8:MDE}{txt}{center 11:% of mean}{txt}{center 12:# of sd's.}}
+{txt}{center:{hline 49}}
+{center:{txt}{lalign 16:Loans}{res}{center 8:3.4201}{res}{center 11:1.6200}{res}{center 12:2.6093}}
+{center:{txt}{lalign 16:Savings}{res}{center 8:3.4201}{res}{center 11:1.6490}{res}{center 12:2.6957}}
+{center:{txt}{lalign 16:Traders}{res}{center 8:3.3523}{res}{center 11:1.8710}{res}{center 12:2.6094}}
+{center:{txt}{lalign 16:Buying Eq.}{res}{center 8:1.7103}{res}{center 11:1.2152}{res}{center 12:1.9252}}
+{center:{txt}{lalign 16:Gen. Assembly}{res}{center 8:2.6646}{res}{center 11:1.9984}{res}{center 12:3.2024}}
+{center:{txt}{lalign 16:Decision Index}{res}{center 8:3.1767}{res}{center 11:2.1890}{res}{center 12:2.9400}}
+{txt}{center:{hline 49}}
+
+
+{com}. 
+. 
+. 
+. * Evaluation & Assessment
+. 
+. ** Co-op vars
+. gl co_EAA EAA1 EAA3 avg_EAA
+{txt}
+{com}. 
+. *** Strata dummies - No interaction
+. ** Co-op vars
+. local listsize : list sizeof global(co_EAA)
+{txt}
+{com}. tokenize $co_EAA
+{txt}
+{com}. 
+. forv i = 1/`listsize' {c -(}
+{txt}  2{com}. 
+.         reg ``i'' r_treat i.strata, cluster(idx)
+{txt}  3{com}.         
+.         quietly {c -(}
+{txt}  4{com}.                 ereturn list
+{txt}  5{com}.                 scalar t_a = invttail(`e(df_r)',0.025) // alpha t-value
+{txt}  6{com}.                 scalar t_b = invttail(`e(df_r)',0.2) // beta t-value
+{txt}  7{com}.                 scalar mde_``i'' = (t_a + t_b)*_se[r_treat]
+{txt}  8{com}.                 
+.         * Calculate MDE as % of mean & # of standard deviations
+.                 sum ``i''
+{txt}  9{com}.                 scalar mean_``i'' = mde_``i'' / r(mean) // % of treatment mean
+{txt} 10{com}.                 scalar sd_``i'' = mde_``i'' / r(sd)  // # of treatment sd's
+{txt} 11{com}. 
+.         * matrix for table
+.                 matrix mat_`i' = (mde_``i'',mean_``i'',sd_``i'')
+{txt} 12{com}.                 {c )-}
+{txt} 13{com}. {c )-}
+
+{txt}Linear regression                               Number of obs     = {res}        90
+                                                {txt}{help j_robustsingular:F(23, 89) }        =  {res}        .
+                                                {txt}Prob > F          = {res}         .
+                                                {txt}R-squared         = {res}    0.3719
+                                                {txt}Root MSE          =    {res} .23273
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:90} clusters in idx)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}        EAA1{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}r_treat {c |}{col 14}{res}{space 2} .0037994{col 26}{space 2} .0503308{col 37}{space 1}    0.08{col 46}{space 3}0.940{col 54}{space 4}-.0962069{col 67}{space 3} .1038056
+{txt}{space 12} {c |}
+{space 6}strata {c |}
+{space 8}112  {c |}{col 14}{res}{space 2} .0018997{col 26}{space 2} .0251902{col 37}{space 1}    0.08{col 46}{space 3}0.940{col 54}{space 4}-.0481527{col 67}{space 3} .0519521
+{txt}{space 8}121  {c |}{col 14}{res}{space 2} 3.51e-16{col 26}{space 2} .0019359{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.0038466{col 67}{space 3} .0038466
+{txt}{space 8}122  {c |}{col 14}{res}{space 2} 3.37e-16{col 26}{space 2} .0015806{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.0031407{col 67}{space 3} .0031407
+{txt}{space 8}211  {c |}{col 14}{res}{space 2} .0006332{col 26}{space 2} .0085509{col 37}{space 1}    0.07{col 46}{space 3}0.941{col 54}{space 4}-.0163573{col 67}{space 3} .0176238
+{txt}{space 8}212  {c |}{col 14}{res}{space 2} 3.45e-16{col 26}{space 2} .0015806{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.0031407{col 67}{space 3} .0031407
+{txt}{space 8}221  {c |}{col 14}{res}{space 2} 3.48e-16{col 26}{space 2} .0015806{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.0031407{col 67}{space 3} .0031407
+{txt}{space 8}222  {c |}{col 14}{res}{space 2} 3.33e-16{col 26}{space 2} .0015806{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.0031407{col 67}{space 3} .0031407
+{txt}{space 8}311  {c |}{col 14}{res}{space 2} 3.48e-16{col 26}{space 2} .0015806{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.0031407{col 67}{space 3} .0031407
+{txt}{space 8}312  {c |}{col 14}{res}{space 2}-.0006332{col 26}{space 2} .0085509{col 37}{space 1}   -0.07{col 46}{space 3}0.941{col 54}{space 4}-.0176238{col 67}{space 3} .0163573
+{txt}{space 8}321  {c |}{col 14}{res}{space 2}-.0416667{col 26}{space 2}   .04184{col 37}{space 1}   -1.00{col 46}{space 3}0.322{col 54}{space 4}-.1248018{col 67}{space 3} .0414685
+{txt}{space 8}322  {c |}{col 14}{res}{space 2} 3.39e-16{col 26}{space 2} .0019359{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.0038466{col 67}{space 3} .0038466
+{txt}{space 8}411  {c |}{col 14}{res}{space 2} 3.36e-16{col 26}{space 2} .0015806{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.0031407{col 67}{space 3} .0031407
+{txt}{space 8}412  {c |}{col 14}{res}{space 2}     -.25{col 26}{space 2} .2541211{col 37}{space 1}   -0.98{col 46}{space 3}0.328{col 54}{space 4}-.7549333{col 67}{space 3} .2549333
+{txt}{space 8}421  {c |}{col 14}{res}{space 2} 3.33e-16{col 26}{space 2} .0015806{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.0031407{col 67}{space 3} .0031407
+{txt}{space 8}422  {c |}{col 14}{res}{space 2} .0003799{col 26}{space 2} .0052487{col 37}{space 1}    0.07{col 46}{space 3}0.942{col 54}{space 4}-.0100492{col 67}{space 3} .0108091
+{txt}{space 8}511  {c |}{col 14}{res}{space 2}     -.25{col 26}{space 2} .2554117{col 37}{space 1}   -0.98{col 46}{space 3}0.330{col 54}{space 4}-.7574976{col 67}{space 3} .2574976
+{txt}{space 8}512  {c |}{col 14}{res}{space 2} 3.52e-16{col 26}{space 2} .0015806{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.0031407{col 67}{space 3} .0031407
+{txt}{space 8}521  {c |}{col 14}{res}{space 2} 3.33e-16{col 26}{space 2} .0015806{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.0031407{col 67}{space 3} .0031407
+{txt}{space 8}522  {c |}{col 14}{res}{space 2} .0003799{col 26}{space 2} .0052487{col 37}{space 1}    0.07{col 46}{space 3}0.942{col 54}{space 4}-.0100492{col 67}{space 3} .0108091
+{txt}{space 8}611  {c |}{col 14}{res}{space 2}      -.5{col 26}{space 2} .2941784{col 37}{space 1}   -1.70{col 46}{space 3}0.093{col 54}{space 4}-1.084526{col 67}{space 3} .0845263
+{txt}{space 8}612  {c |}{col 14}{res}{space 2}      -.5{col 26}{space 2} .2941784{col 37}{space 1}   -1.70{col 46}{space 3}0.093{col 54}{space 4}-1.084526{col 67}{space 3} .0845263
+{txt}{space 8}621  {c |}{col 14}{res}{space 2} 3.58e-16{col 26}{space 2} .0015806{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.0031407{col 67}{space 3} .0031407
+{txt}{space 8}622  {c |}{col 14}{res}{space 2}-.0003799{col 26}{space 2} .0052487{col 37}{space 1}   -0.07{col 46}{space 3}0.942{col 54}{space 4}-.0108091{col 67}{space 3} .0100492
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} .9981003{col 26}{space 2} .0251902{col 37}{space 1}   39.62{col 46}{space 3}0.000{col 54}{space 4} .9480479{col 67}{space 3} 1.048153
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{txt}Linear regression                               Number of obs     = {res}        90
+                                                {txt}{help j_robustsingular:F(23, 89) }        =  {res}        .
+                                                {txt}Prob > F          = {res}         .
+                                                {txt}R-squared         = {res}    0.3438
+                                                {txt}Root MSE          =    {res}  .4187
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:90} clusters in idx)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}        EAA3{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}r_treat {c |}{col 14}{res}{space 2} .1504559{col 26}{space 2} .0900763{col 37}{space 1}    1.67{col 46}{space 3}0.098{col 54}{space 4}-.0285238{col 67}{space 3} .3294357
+{txt}{space 12} {c |}
+{space 6}strata {c |}
+{space 8}112  {c |}{col 14}{res}{space 2} -.674772{col 26}{space 2} .2792238{col 37}{space 1}   -2.42{col 46}{space 3}0.018{col 54}{space 4}-1.229584{col 67}{space 3}-.1199602
+{txt}{space 8}121  {c |}{col 14}{res}{space 2}      .25{col 26}{space 2}  .289484{col 37}{space 1}    0.86{col 46}{space 3}0.390{col 54}{space 4}-.3251985{col 67}{space 3} .8251985
+{txt}{space 8}122  {c |}{col 14}{res}{space 2}     .125{col 26}{space 2} .3025853{col 37}{space 1}    0.41{col 46}{space 3}0.681{col 54}{space 4}-.4762305{col 67}{space 3} .7262305
+{txt}{space 8}211  {c |}{col 14}{res}{space 2}  .275076{col 26}{space 2} .2848689{col 37}{space 1}    0.97{col 46}{space 3}0.337{col 54}{space 4}-.2909524{col 67}{space 3} .8411044
+{txt}{space 8}212  {c |}{col 14}{res}{space 2} .1666667{col 26}{space 2} .3056037{col 37}{space 1}    0.55{col 46}{space 3}0.587{col 54}{space 4}-.4405614{col 67}{space 3} .7738947
+{txt}{space 8}221  {c |}{col 14}{res}{space 2} 6.02e-17{col 26}{space 2} .3997075{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.7942103{col 67}{space 3} .7942103
+{txt}{space 8}222  {c |}{col 14}{res}{space 2}     .125{col 26}{space 2} .3233853{col 37}{space 1}    0.39{col 46}{space 3}0.700{col 54}{space 4}-.5175598{col 67}{space 3} .7675598
+{txt}{space 8}311  {c |}{col 14}{res}{space 2}      .25{col 26}{space 2} .2860804{col 37}{space 1}    0.87{col 46}{space 3}0.385{col 54}{space 4}-.3184357{col 67}{space 3} .8184357
+{txt}{space 8}312  {c |}{col 14}{res}{space 2}  .224924{col 26}{space 2} .2894488{col 37}{space 1}    0.78{col 46}{space 3}0.439{col 54}{space 4}-.3502046{col 67}{space 3} .8000527
+{txt}{space 8}321  {c |}{col 14}{res}{space 2} .1666667{col 26}{space 2} .2910558{col 37}{space 1}    0.57{col 46}{space 3}0.568{col 54}{space 4} -.411655{col 67}{space 3} .7449883
+{txt}{space 8}322  {c |}{col 14}{res}{space 2}     -.25{col 26}{space 2}  .452545{col 37}{space 1}   -0.55{col 46}{space 3}0.582{col 54}{space 4}-1.149197{col 67}{space 3} .6491973
+{txt}{space 8}411  {c |}{col 14}{res}{space 2}     -.25{col 26}{space 2} .3772798{col 37}{space 1}   -0.66{col 46}{space 3}0.509{col 54}{space 4}-.9996469{col 67}{space 3} .4996469
+{txt}{space 8}412  {c |}{col 14}{res}{space 2}     -.25{col 26}{space 2} .3772798{col 37}{space 1}   -0.66{col 46}{space 3}0.509{col 54}{space 4}-.9996469{col 67}{space 3} .4996469
+{txt}{space 8}421  {c |}{col 14}{res}{space 2}      .25{col 26}{space 2} .2860804{col 37}{space 1}    0.87{col 46}{space 3}0.385{col 54}{space 4}-.3184357{col 67}{space 3} .8184357
+{txt}{space 8}422  {c |}{col 14}{res}{space 2}-.1349544{col 26}{space 2} .3880971{col 37}{space 1}   -0.35{col 46}{space 3}0.729{col 54}{space 4}-.9060952{col 67}{space 3} .6361864
+{txt}{space 8}511  {c |}{col 14}{res}{space 2} 7.04e-17{col 26}{space 2} .3997075{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.7942103{col 67}{space 3} .7942103
+{txt}{space 8}512  {c |}{col 14}{res}{space 2}     -.25{col 26}{space 2} .3772798{col 37}{space 1}   -0.66{col 46}{space 3}0.509{col 54}{space 4}-.9996469{col 67}{space 3} .4996469
+{txt}{space 8}521  {c |}{col 14}{res}{space 2} 3.26e-17{col 26}{space 2} .3656852{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.7266086{col 67}{space 3} .7266086
+{txt}{space 8}522  {c |}{col 14}{res}{space 2} .1650456{col 26}{space 2}  .311517{col 37}{space 1}    0.53{col 46}{space 3}0.598{col 54}{space 4} -.453932{col 67}{space 3} .7840232
+{txt}{space 8}611  {c |}{col 14}{res}{space 2}      -.5{col 26}{space 2} .3656852{col 37}{space 1}   -1.37{col 46}{space 3}0.175{col 54}{space 4}-1.226609{col 67}{space 3} .2266086
+{txt}{space 8}612  {c |}{col 14}{res}{space 2}      -.5{col 26}{space 2} .3656852{col 37}{space 1}   -1.37{col 46}{space 3}0.175{col 54}{space 4}-1.226609{col 67}{space 3} .2266086
+{txt}{space 8}621  {c |}{col 14}{res}{space 2} 6.67e-17{col 26}{space 2} .3997075{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.7942103{col 67}{space 3} .7942103
+{txt}{space 8}622  {c |}{col 14}{res}{space 2}-.3650456{col 26}{space 2} .3672529{col 37}{space 1}   -0.99{col 46}{space 3}0.323{col 54}{space 4}-1.094769{col 67}{space 3} .3646782
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}  .674772{col 26}{space 2} .2792238{col 37}{space 1}    2.42{col 46}{space 3}0.018{col 54}{space 4} .1199602{col 67}{space 3} 1.229584
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{txt}Linear regression                               Number of obs     = {res}        90
+                                                {txt}{help j_robustsingular:F(23, 89) }        =  {res}        .
+                                                {txt}Prob > F          = {res}         .
+                                                {txt}R-squared         = {res}    0.4076
+                                                {txt}Root MSE          =    {res} .25924
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:90} clusters in idx)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}     avg_EAA{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}r_treat {c |}{col 14}{res}{space 2} .0771277{col 26}{space 2} .0558754{col 37}{space 1}    1.38{col 46}{space 3}0.171{col 54}{space 4}-.0338956{col 67}{space 3} .1881509
+{txt}{space 12} {c |}
+{space 6}strata {c |}
+{space 8}112  {c |}{col 14}{res}{space 2}-.3364362{col 26}{space 2} .1409686{col 37}{space 1}   -2.39{col 46}{space 3}0.019{col 54}{space 4}-.6165377{col 67}{space 3}-.0563346
+{txt}{space 8}121  {c |}{col 14}{res}{space 2}     .125{col 26}{space 2} .1452845{col 37}{space 1}    0.86{col 46}{space 3}0.392{col 54}{space 4}-.1636772{col 67}{space 3} .4136772
+{txt}{space 8}122  {c |}{col 14}{res}{space 2}    .0625{col 26}{space 2} .1515937{col 37}{space 1}    0.41{col 46}{space 3}0.681{col 54}{space 4}-.2387135{col 67}{space 3} .3637135
+{txt}{space 8}211  {c |}{col 14}{res}{space 2} .1378546{col 26}{space 2} .1430221{col 37}{space 1}    0.96{col 46}{space 3}0.338{col 54}{space 4}-.1463273{col 67}{space 3} .4220365
+{txt}{space 8}212  {c |}{col 14}{res}{space 2} .0833333{col 26}{space 2} .1533235{col 37}{space 1}    0.54{col 46}{space 3}0.588{col 54}{space 4}-.2213172{col 67}{space 3} .3879839
+{txt}{space 8}221  {c |}{col 14}{res}{space 2}-6.33e-16{col 26}{space 2} .2003896{col 37}{space 1}   -0.00{col 46}{space 3}1.000{col 54}{space 4}  -.39817{col 67}{space 3}   .39817
+{txt}{space 8}222  {c |}{col 14}{res}{space 2}    .0625{col 26}{space 2}  .162228{col 37}{space 1}    0.39{col 46}{space 3}0.701{col 54}{space 4}-.2598435{col 67}{space 3} .3848435
+{txt}{space 8}311  {c |}{col 14}{res}{space 2}     .125{col 26}{space 2} .1435019{col 37}{space 1}    0.87{col 46}{space 3}0.386{col 54}{space 4}-.1601352{col 67}{space 3} .4101352
+{txt}{space 8}312  {c |}{col 14}{res}{space 2} .1121454{col 26}{space 2} .1453028{col 37}{space 1}    0.77{col 46}{space 3}0.442{col 54}{space 4}-.1765683{col 67}{space 3}  .400859
+{txt}{space 8}321  {c |}{col 14}{res}{space 2}    .0625{col 26}{space 2} .1515937{col 37}{space 1}    0.41{col 46}{space 3}0.681{col 54}{space 4}-.2387135{col 67}{space 3} .3637135
+{txt}{space 8}322  {c |}{col 14}{res}{space 2}    -.125{col 26}{space 2} .2258933{col 37}{space 1}   -0.55{col 46}{space 3}0.581{col 54}{space 4}-.5738452{col 67}{space 3} .3238452
+{txt}{space 8}411  {c |}{col 14}{res}{space 2}    -.125{col 26}{space 2} .1885548{col 37}{space 1}   -0.66{col 46}{space 3}0.509{col 54}{space 4}-.4996543{col 67}{space 3} .2496543
+{txt}{space 8}412  {c |}{col 14}{res}{space 2}     -.25{col 26}{space 2} .2647191{col 37}{space 1}   -0.94{col 46}{space 3}0.348{col 54}{space 4}-.7759913{col 67}{space 3} .2759913
+{txt}{space 8}421  {c |}{col 14}{res}{space 2}     .125{col 26}{space 2} .1435019{col 37}{space 1}    0.87{col 46}{space 3}0.386{col 54}{space 4}-.1601352{col 67}{space 3} .4101352
+{txt}{space 8}422  {c |}{col 14}{res}{space 2}-.0672872{col 26}{space 2} .1944574{col 37}{space 1}   -0.35{col 46}{space 3}0.730{col 54}{space 4}-.4536699{col 67}{space 3} .3190955
+{txt}{space 8}511  {c |}{col 14}{res}{space 2}    -.125{col 26}{space 2}  .303597{col 37}{space 1}   -0.41{col 46}{space 3}0.682{col 54}{space 4}-.7282408{col 67}{space 3} .4782408
+{txt}{space 8}512  {c |}{col 14}{res}{space 2}    -.125{col 26}{space 2} .1885548{col 37}{space 1}   -0.66{col 46}{space 3}0.509{col 54}{space 4}-.4996543{col 67}{space 3} .2496543
+{txt}{space 8}521  {c |}{col 14}{res}{space 2}-6.23e-16{col 26}{space 2} .1829795{col 37}{space 1}   -0.00{col 46}{space 3}1.000{col 54}{space 4}-.3635764{col 67}{space 3} .3635764
+{txt}{space 8}522  {c |}{col 14}{res}{space 2} .0827128{col 26}{space 2} .1563015{col 37}{space 1}    0.53{col 46}{space 3}0.598{col 54}{space 4}-.2278549{col 67}{space 3} .3932805
+{txt}{space 8}611  {c |}{col 14}{res}{space 2}      -.5{col 26}{space 2} .1829795{col 37}{space 1}   -2.73{col 46}{space 3}0.008{col 54}{space 4}-.8635764{col 67}{space 3}-.1364236
+{txt}{space 8}612  {c |}{col 14}{res}{space 2}      -.5{col 26}{space 2} .2770392{col 37}{space 1}   -1.80{col 46}{space 3}0.074{col 54}{space 4}-1.050471{col 67}{space 3}  .050471
+{txt}{space 8}621  {c |}{col 14}{res}{space 2}-6.34e-16{col 26}{space 2} .2003896{col 37}{space 1}   -0.00{col 46}{space 3}1.000{col 54}{space 4}  -.39817{col 67}{space 3}   .39817
+{txt}{space 8}622  {c |}{col 14}{res}{space 2}-.1827128{col 26}{space 2} .1837698{col 37}{space 1}   -0.99{col 46}{space 3}0.323{col 54}{space 4}-.5478594{col 67}{space 3} .1824339
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} .8364362{col 26}{space 2} .1409686{col 37}{space 1}    5.93{col 46}{space 3}0.000{col 54}{space 4} .5563346{col 67}{space 3} 1.116538
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. matrix A = mat_1
+{txt}
+{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
+{txt}  2{com}.         matrix A = A \ mat_`i'
+{txt}  3{com}. {c )-}
+{txt}
+{com}. 
+. * Table
+. frmttable using MDE_other.doc, statmat(A) sdec(4) title("Co-op Level - Evaluation & Assessment") ///
+> ctitle("","MDE","% of mean","# of sd's.") ///
+> rtitle("External Evals"\"Makes Available"\"EAA Avg.") addtable replace
+{res}
+{txt}{center:Co-op Level - Evaluation & Assessment}
+{txt}{center:{hline 50}}
+{center:{txt}{lalign 17:}{txt}{center 8:MDE}{txt}{center 11:% of mean}{txt}{center 12:# of sd's.}}
+{txt}{center:{hline 50}}
+{center:{txt}{lalign 17:External Evals}{res}{center 8:0.1426}{res}{center 11:0.1531}{res}{center 12:0.5681}}
+{center:{txt}{lalign 17:Makes Available}{res}{center 8:0.2552}{res}{center 11:0.3597}{res}{center 12:0.5777}}
+{center:{txt}{lalign 17:EAA Avg.}{res}{center 8:0.1583}{res}{center 11:0.1929}{res}{center 12:0.5499}}
+{txt}{center:{hline 50}}
+
+
+{com}. 
+. 
+. 
+. 
+{txt}end of do-file
+
+{com}. 

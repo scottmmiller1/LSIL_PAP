@@ -203,8 +203,25 @@ MAN18c MAN18d MAN18e {
 local local_decision MAN18a MAN18b MAN18c MAN18d MAN18e 
 make_index_gr decision wgt stdgroup `local_decision'
 
-save "$d3/r_CO_Merged_Ind.dta", replace
 
+
+** Evaluation & Assessment **
+
+/* Variables 
+External Evaluation : EAA1
+Available to Co-op : EAA3
+*/
+
+egen avg_EAA = rowmean(EAA1 EAA3)
+
+
+** Management Quality **
+
+
+
+
+
+save "$d3/r_CO_Merged_Ind.dta", replace
 
 ****************
 ** HH dataset **
