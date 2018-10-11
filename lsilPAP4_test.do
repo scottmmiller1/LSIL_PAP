@@ -184,6 +184,22 @@ local local_salecost visits_sale time_passed transp_cost
 make_index_gr salecost wgt stdgroup `local_salecost' 
 
 
+* Gross margin -- Net rev. per goat
+
+/* Costs
+Amount spent purchasing goats: LSE12
+Amount spent on feed/fodder : LSE15
+Amount spent on vet care : LSE16
+Amount spent on breeding fees : LSE17a * LSE17b
+Amount spent on shelters : LSE18
+*/
+
+gen goat_costs = LSE12 + LSE15 + LSE16 + LSE17a*LSE17b + LSE18
+gen net_goat_income = LS9 - goat_costs
+gen netincome_goat = net_goat_income / LS8
+
+
+
 ** Decision-Making **
 
 /* Variables 
@@ -223,10 +239,12 @@ egen avg_EAA = rowmean(EAA1 EAA3)
 
 save "$d3/r_CO_Merged_Ind.dta", replace
 
+
+
 ****************
 ** HH dataset **
 clear
-use "r_HH_Merged_PAP.dta"
+use "$d3/r_HH_Merged_PAP.dta"
 
 * Drop Banke District & Pilot Co-op
 drop if district == "Banke"
@@ -352,6 +370,22 @@ make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales'
 
 local local_salecost visits_sale time_passed transp_cost
 make_index_gr salecost wgt stdgroup `local_salecost' 
+
+
+* Gross margin -- Net rev. per goat
+
+/* Costs
+Amount spent purchasing goats: LSE12
+Amount spent on feed/fodder : LSE15
+Amount spent on vet care : LSE16
+Amount spent on breeding fees : LSE17a * LSE17b
+Amount spent on shelters : LSE18
+*/
+
+gen goat_costs = LSE12 + LSE15 + LSE16 + LSE17a*LSE17b + LSE18
+gen net_goat_income = LS9 - goat_costs
+gen netincome_goat = net_goat_income / LS8
+
 
 save "$d3/r_HH_Merged_Ind.dta", replace
 

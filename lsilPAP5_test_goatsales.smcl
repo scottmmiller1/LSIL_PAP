@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP5_test_goatsales.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 8 Oct 2018, 15:21:24
+ {txt}opened on:  {res}11 Oct 2018, 16:03:45
 {txt}
 {com}. 
 . cd "$d2"
@@ -26,7 +26,8 @@
 {com}. 
 . ** HH vars
 . gl hh_goatsales LS8 LS9 co_opgoatno co_opsalevalue ///
->                                 co_opshare visits_sale time_passed transp_cost index_salecost
+>                                 co_opshare visits_sale time_passed transp_cost index_salecost ///
+>                                 net_goat_income netincome_goat
 {txt}
 {com}.         
 . 
@@ -354,7 +355,7 @@
 . frmttable using MDE_goatsales.doc, statmat(A) sdec(4) coljust(l;c;l;l) title("Co-op Level - Co-op Goat Sales: Strata - No Interaction") ///
 > ctitle("","MDE","% of mean","# of sd's.") ///
 > rtitle("Goats Sold"\"Goats Sold per Mem."\"Goat Revenue"\"Goat Rev. per Mem."\"Rev. per Goat Sold"\"Collection Points"\"CO Goat Sales Index") replace
-{res}{txt:(note: file MDE_goatsales.doc not found)}
+{res}
 {txt}{center:Co-op Level - Co-op Goat Sales: Strata - No Interaction}
 {txt}{center:{hline 59}}
 {center:{txt}{lalign 21:}{txt}{center 13:MDE}{txt}{center 11:% of mean}{txt}{center 12:# of sd's.}}
@@ -765,6 +766,84 @@
 {txt}{space 12} {c |}
 {space 7}_cons {c |}{col 14}{res}{space 2}-.3859065{col 26}{space 2} .3518368{col 37}{space 1}   -1.10{col 46}{space 3}0.276{col 54}{space 4}-1.084787{col 67}{space 3} .3129741
 {txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{txt}Linear regression                               Number of obs     = {res}        76
+                                                {txt}F(22, 75)         =  {res}     4.94
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.4590
+                                                {txt}Root MSE          =    {res} 8708.7
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:76} clusters in idx)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}net_goat_i~e{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}r_treat {c |}{col 14}{res}{space 2} 2993.098{col 26}{space 2} 2048.837{col 37}{space 1}    1.46{col 46}{space 3}0.148{col 54}{space 4}-1088.395{col 67}{space 3} 7074.592
+{txt}{space 12} {c |}
+{space 6}strata {c |}
+{space 8}122  {c |}{col 14}{res}{space 2}-1689.283{col 26}{space 2} 2591.636{col 37}{space 1}   -0.65{col 46}{space 3}0.517{col 54}{space 4}-6852.086{col 67}{space 3} 3473.521
+{txt}{space 8}211  {c |}{col 14}{res}{space 2} 5082.572{col 26}{space 2}  4262.02{col 37}{space 1}    1.19{col 46}{space 3}0.237{col 54}{space 4}-3407.807{col 67}{space 3} 13572.95
+{txt}{space 8}212  {c |}{col 14}{res}{space 2}-1122.677{col 26}{space 2} 7708.948{col 37}{space 1}   -0.15{col 46}{space 3}0.885{col 54}{space 4}-16479.69{col 67}{space 3} 14234.33
+{txt}{space 8}221  {c |}{col 14}{res}{space 2} 5750.152{col 26}{space 2} 2178.566{col 37}{space 1}    2.64{col 46}{space 3}0.010{col 54}{space 4} 1410.227{col 67}{space 3} 10090.08
+{txt}{space 8}222  {c |}{col 14}{res}{space 2} 6056.568{col 26}{space 2} 5721.291{col 37}{space 1}    1.06{col 46}{space 3}0.293{col 54}{space 4}-5340.829{col 67}{space 3} 17453.97
+{txt}{space 8}311  {c |}{col 14}{res}{space 2} 22432.09{col 26}{space 2} 10646.95{col 37}{space 1}    2.11{col 46}{space 3}0.038{col 54}{space 4} 1222.271{col 67}{space 3} 43641.91
+{txt}{space 8}312  {c |}{col 14}{res}{space 2} 7175.726{col 26}{space 2} 1899.407{col 37}{space 1}    3.78{col 46}{space 3}0.000{col 54}{space 4} 3391.913{col 67}{space 3} 10959.54
+{txt}{space 8}321  {c |}{col 14}{res}{space 2} 11407.16{col 26}{space 2} 8401.956{col 37}{space 1}    1.36{col 46}{space 3}0.179{col 54}{space 4}-5330.394{col 67}{space 3} 28144.71
+{txt}{space 8}322  {c |}{col 14}{res}{space 2} 11118.64{col 26}{space 2} 2706.171{col 37}{space 1}    4.11{col 46}{space 3}0.000{col 54}{space 4} 5727.667{col 67}{space 3} 16509.61
+{txt}{space 8}411  {c |}{col 14}{res}{space 2}-227.5862{col 26}{space 2} 2771.898{col 37}{space 1}   -0.08{col 46}{space 3}0.935{col 54}{space 4}-5749.491{col 67}{space 3} 5294.319
+{txt}{space 8}412  {c |}{col 14}{res}{space 2}-5690.467{col 26}{space 2} 7384.042{col 37}{space 1}   -0.77{col 46}{space 3}0.443{col 54}{space 4}-20400.23{col 67}{space 3} 9019.299
+{txt}{space 8}421  {c |}{col 14}{res}{space 2}-2606.255{col 26}{space 2} 3023.333{col 37}{space 1}   -0.86{col 46}{space 3}0.391{col 54}{space 4}-8629.042{col 67}{space 3} 3416.533
+{txt}{space 8}422  {c |}{col 14}{res}{space 2}-2424.532{col 26}{space 2} 2444.665{col 37}{space 1}   -0.99{col 46}{space 3}0.325{col 54}{space 4}-7294.555{col 67}{space 3}  2445.49
+{txt}{space 8}511  {c |}{col 14}{res}{space 2} 200.2487{col 26}{space 2} 2810.755{col 37}{space 1}    0.07{col 46}{space 3}0.943{col 54}{space 4}-5399.062{col 67}{space 3} 5799.559
+{txt}{space 8}512  {c |}{col 14}{res}{space 2} 1129.346{col 26}{space 2} 3832.865{col 37}{space 1}    0.29{col 46}{space 3}0.769{col 54}{space 4}-6506.113{col 67}{space 3} 8764.804
+{txt}{space 8}521  {c |}{col 14}{res}{space 2} 527.0033{col 26}{space 2} 7102.798{col 37}{space 1}    0.07{col 46}{space 3}0.941{col 54}{space 4} -13622.5{col 67}{space 3}  14676.5
+{txt}{space 8}522  {c |}{col 14}{res}{space 2} 4093.267{col 26}{space 2} 3872.569{col 37}{space 1}    1.06{col 46}{space 3}0.294{col 54}{space 4}-3621.285{col 67}{space 3} 11807.82
+{txt}{space 8}611  {c |}{col 14}{res}{space 2} 17599.99{col 26}{space 2} 8536.851{col 37}{space 1}    2.06{col 46}{space 3}0.043{col 54}{space 4} 593.7054{col 67}{space 3} 34606.26
+{txt}{space 8}612  {c |}{col 14}{res}{space 2} 9115.632{col 26}{space 2} 4680.636{col 37}{space 1}    1.95{col 46}{space 3}0.055{col 54}{space 4}-208.6729{col 67}{space 3} 18439.94
+{txt}{space 8}621  {c |}{col 14}{res}{space 2} 5868.908{col 26}{space 2} 3750.702{col 37}{space 1}    1.56{col 46}{space 3}0.122{col 54}{space 4}-1602.873{col 67}{space 3} 13340.69
+{txt}{space 8}622  {c |}{col 14}{res}{space 2} 9779.436{col 26}{space 2} 3141.574{col 37}{space 1}    3.11{col 46}{space 3}0.003{col 54}{space 4}   3521.1{col 67}{space 3} 16037.77
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}  468.292{col 26}{space 2} 2067.986{col 37}{space 1}    0.23{col 46}{space 3}0.821{col 54}{space 4}-3651.347{col 67}{space 3} 4587.931
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{txt}Linear regression                               Number of obs     = {res}        76
+                                                {txt}F(22, 75)         =  {res}     2.72
+                                                {txt}Prob > F          = {res}    0.0007
+                                                {txt}R-squared         = {res}    0.3562
+                                                {txt}Root MSE          =    {res} 4021.8
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:76} clusters in idx)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}netincome_~t{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}r_treat {c |}{col 14}{res}{space 2} 1996.159{col 26}{space 2}  964.311{col 37}{space 1}    2.07{col 46}{space 3}0.042{col 54}{space 4}  75.1525{col 67}{space 3} 3917.165
+{txt}{space 12} {c |}
+{space 6}strata {c |}
+{space 8}122  {c |}{col 14}{res}{space 2} -1532.11{col 26}{space 2} 2246.942{col 37}{space 1}   -0.68{col 46}{space 3}0.497{col 54}{space 4}-6008.247{col 67}{space 3} 2944.027
+{txt}{space 8}211  {c |}{col 14}{res}{space 2} 2477.961{col 26}{space 2} 2570.563{col 37}{space 1}    0.96{col 46}{space 3}0.338{col 54}{space 4}-2642.863{col 67}{space 3} 7598.785
+{txt}{space 8}212  {c |}{col 14}{res}{space 2}-482.8654{col 26}{space 2} 4480.217{col 37}{space 1}   -0.11{col 46}{space 3}0.914{col 54}{space 4}-9407.916{col 67}{space 3} 8442.185
+{txt}{space 8}221  {c |}{col 14}{res}{space 2} 3113.238{col 26}{space 2} 1530.289{col 37}{space 1}    2.03{col 46}{space 3}0.045{col 54}{space 4} 64.74576{col 67}{space 3}  6161.73
+{txt}{space 8}222  {c |}{col 14}{res}{space 2} 2433.144{col 26}{space 2} 2858.316{col 37}{space 1}    0.85{col 46}{space 3}0.397{col 54}{space 4}-3260.913{col 67}{space 3} 8127.201
+{txt}{space 8}311  {c |}{col 14}{res}{space 2} 6115.959{col 26}{space 2} 1559.654{col 37}{space 1}    3.92{col 46}{space 3}0.000{col 54}{space 4}  3008.97{col 67}{space 3} 9222.948
+{txt}{space 8}312  {c |}{col 14}{res}{space 2} 1991.928{col 26}{space 2} 1820.161{col 37}{space 1}    1.09{col 46}{space 3}0.277{col 54}{space 4}-1634.018{col 67}{space 3} 5617.875
+{txt}{space 8}321  {c |}{col 14}{res}{space 2} 2478.721{col 26}{space 2} 2511.162{col 37}{space 1}    0.99{col 46}{space 3}0.327{col 54}{space 4} -2523.77{col 67}{space 3} 7481.212
+{txt}{space 8}322  {c |}{col 14}{res}{space 2} 3313.245{col 26}{space 2} 1453.002{col 37}{space 1}    2.28{col 46}{space 3}0.025{col 54}{space 4} 418.7172{col 67}{space 3} 6207.773
+{txt}{space 8}411  {c |}{col 14}{res}{space 2}-692.9537{col 26}{space 2}  1939.37{col 37}{space 1}   -0.36{col 46}{space 3}0.722{col 54}{space 4}-4556.377{col 67}{space 3}  3170.47
+{txt}{space 8}412  {c |}{col 14}{res}{space 2}-4452.945{col 26}{space 2} 5846.362{col 37}{space 1}   -0.76{col 46}{space 3}0.449{col 54}{space 4} -16099.5{col 67}{space 3} 7193.605
+{txt}{space 8}421  {c |}{col 14}{res}{space 2} -1344.23{col 26}{space 2} 1787.654{col 37}{space 1}   -0.75{col 46}{space 3}0.454{col 54}{space 4} -4905.42{col 67}{space 3} 2216.959
+{txt}{space 8}422  {c |}{col 14}{res}{space 2}-2674.775{col 26}{space 2} 2321.059{col 37}{space 1}   -1.15{col 46}{space 3}0.253{col 54}{space 4}-7298.562{col 67}{space 3} 1949.013
+{txt}{space 8}511  {c |}{col 14}{res}{space 2}-122.6123{col 26}{space 2} 1657.833{col 37}{space 1}   -0.07{col 46}{space 3}0.941{col 54}{space 4}-3425.186{col 67}{space 3} 3179.961
+{txt}{space 8}512  {c |}{col 14}{res}{space 2}  294.881{col 26}{space 2}   2215.7{col 37}{space 1}    0.13{col 46}{space 3}0.894{col 54}{space 4}-4119.019{col 67}{space 3} 4708.781
+{txt}{space 8}521  {c |}{col 14}{res}{space 2}-734.5985{col 26}{space 2} 4222.236{col 37}{space 1}   -0.17{col 46}{space 3}0.862{col 54}{space 4}-9145.723{col 67}{space 3} 7676.526
+{txt}{space 8}522  {c |}{col 14}{res}{space 2} 1733.714{col 26}{space 2} 2278.406{col 37}{space 1}    0.76{col 46}{space 3}0.449{col 54}{space 4}-2805.103{col 67}{space 3} 6272.531
+{txt}{space 8}611  {c |}{col 14}{res}{space 2} 3978.568{col 26}{space 2}  1551.39{col 37}{space 1}    2.56{col 46}{space 3}0.012{col 54}{space 4} 888.0408{col 67}{space 3} 7069.095
+{txt}{space 8}612  {c |}{col 14}{res}{space 2} 3110.495{col 26}{space 2} 2256.379{col 37}{space 1}    1.38{col 46}{space 3}0.172{col 54}{space 4}-1384.443{col 67}{space 3} 7605.433
+{txt}{space 8}621  {c |}{col 14}{res}{space 2} 2445.859{col 26}{space 2} 2182.023{col 37}{space 1}    1.12{col 46}{space 3}0.266{col 54}{space 4}-1900.953{col 67}{space 3} 6792.671
+{txt}{space 8}622  {c |}{col 14}{res}{space 2} 2475.938{col 26}{space 2} 1473.381{col 37}{space 1}    1.68{col 46}{space 3}0.097{col 54}{space 4}-459.1881{col 67}{space 3} 5411.064
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} 261.3393{col 26}{space 2} 1347.746{col 37}{space 1}    0.19{col 46}{space 3}0.847{col 54}{space 4}-2423.509{col 67}{space 3} 2946.187
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
 {com}. matrix A = mat_1
 {txt}
@@ -776,7 +855,7 @@
 . * Table
 . frmttable using MDE_goatsales.doc, statmat(A) sdec(4) coljust(l;c;l;l) title("Co-op Level - HH Goat Sales: Strata - No Interaction") ///
 > ctitle("","MDE","% of mean","# of sd's.") ///
-> rtitle("Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"% Sold through Co-op"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index") addtable replace
+> rtitle("Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"% Sold through Co-op"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index"\"Net Goat Income"\"Net Income per Goat") addtable replace
 {res}
 {txt}{center:Co-op Level - HH Goat Sales: Strata - No Interaction}
 {txt}{center:{hline 61}}
@@ -791,6 +870,8 @@
 {center:{txt}{lalign 24:Time Passed}{res}{center 12:0.5188}{res}{center 11:-0.6423}{res}{center 12:0.5750}}
 {center:{txt}{lalign 24:Transportation Costs}{res}{center 12:24.6648}{res}{center 11:-3.6128}{res}{center 12:0.6062}}
 {center:{txt}{lalign 24:Sale Costs Index}{res}{center 12:0.4428}{res}{center 11:15.1593}{res}{center 12:0.5660}}
+{center:{txt}{lalign 24:Net Goat Income}{res}{center 12:5,815.7112}{res}{center 11:0.9177}{res}{center 12:0.5843}}
+{center:{txt}{lalign 24:Net Income per Goat}{res}{center 12:2,737.2375}{res}{center 11:1.2293}{res}{center 12:0.6496}}
 {txt}{center:{hline 61}}
 
 
@@ -808,7 +889,8 @@
 . 
 . ** HH vars
 . gl hh_goatsales LS8 LS9 co_opgoatno co_opsalevalue ///
->                                 co_opshare visits_sale LS41 LS42 index_salecost
+>                                 co_opshare visits_sale LS41 LS42 index_salecost ///
+>                                 net_goat_income netincome_goat
 {txt}
 {com}. 
 . 
@@ -1206,6 +1288,83 @@
 {txt}{space 12} {c |}
 {space 7}_cons {c |}{col 14}{res}{space 2}-.1841203{col 26}{space 2} .0771425{col 37}{space 1}   -2.39{col 46}{space 3}0.019{col 54}{space 4}-.3373544{col 67}{space 3}-.0308862
 {txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{txt}Linear regression                               Number of obs     = {res}       175
+                                                {txt}F(22, 67)         =  {res}     4.92
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.1206
+                                                {txt}Root MSE          =    {res}  17929
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:68} clusters in idx)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}net_goat_i~e{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}r_treat {c |}{col 14}{res}{space 2}-264.7914{col 26}{space 2} 2990.184{col 37}{space 1}   -0.09{col 46}{space 3}0.930{col 54}{space 4}-6233.223{col 67}{space 3}  5703.64
+{txt}{space 12} {c |}
+{space 6}strata {c |}
+{space 8}122  {c |}{col 14}{res}{space 2}-3114.784{col 26}{space 2} 3508.775{col 37}{space 1}   -0.89{col 46}{space 3}0.378{col 54}{space 4}-10118.33{col 67}{space 3}  3888.76
+{txt}{space 8}211  {c |}{col 14}{res}{space 2} -7263.53{col 26}{space 2} 4335.465{col 37}{space 1}   -1.68{col 46}{space 3}0.099{col 54}{space 4}-15917.15{col 67}{space 3} 1390.093
+{txt}{space 8}212  {c |}{col 14}{res}{space 2}-9699.468{col 26}{space 2} 9433.506{col 37}{space 1}   -1.03{col 46}{space 3}0.308{col 54}{space 4}-28528.82{col 67}{space 3}  9129.89
+{txt}{space 8}221  {c |}{col 14}{res}{space 2}  5085.87{col 26}{space 2} 2821.346{col 37}{space 1}    1.80{col 46}{space 3}0.076{col 54}{space 4}-545.5596{col 67}{space 3}  10717.3
+{txt}{space 8}222  {c |}{col 14}{res}{space 2} 1925.731{col 26}{space 2} 5713.674{col 37}{space 1}    0.34{col 46}{space 3}0.737{col 54}{space 4} -9478.81{col 67}{space 3} 13330.27
+{txt}{space 8}311  {c |}{col 14}{res}{space 2} 3882.933{col 26}{space 2} 6570.136{col 37}{space 1}    0.59{col 46}{space 3}0.557{col 54}{space 4}-9231.113{col 67}{space 3} 16996.98
+{txt}{space 8}312  {c |}{col 14}{res}{space 2}-1428.787{col 26}{space 2}  4062.46{col 37}{space 1}   -0.35{col 46}{space 3}0.726{col 54}{space 4}-9537.491{col 67}{space 3} 6679.917
+{txt}{space 8}321  {c |}{col 14}{res}{space 2} 2294.459{col 26}{space 2} 5683.039{col 37}{space 1}    0.40{col 46}{space 3}0.688{col 54}{space 4}-9048.934{col 67}{space 3} 13637.85
+{txt}{space 8}322  {c |}{col 14}{res}{space 2}-1386.745{col 26}{space 2} 7970.381{col 37}{space 1}   -0.17{col 46}{space 3}0.862{col 54}{space 4}-17295.69{col 67}{space 3}  14522.2
+{txt}{space 8}411  {c |}{col 14}{res}{space 2}-1712.801{col 26}{space 2} 2177.907{col 37}{space 1}   -0.79{col 46}{space 3}0.434{col 54}{space 4}-6059.921{col 67}{space 3} 2634.319
+{txt}{space 8}412  {c |}{col 14}{res}{space 2} 1378.432{col 26}{space 2} 9405.483{col 37}{space 1}    0.15{col 46}{space 3}0.884{col 54}{space 4}-17394.99{col 67}{space 3} 20151.85
+{txt}{space 8}421  {c |}{col 14}{res}{space 2}-6316.745{col 26}{space 2} 2453.103{col 37}{space 1}   -2.58{col 46}{space 3}0.012{col 54}{space 4}-11213.16{col 67}{space 3} -1420.33
+{txt}{space 8}422  {c |}{col 14}{res}{space 2}-3041.287{col 26}{space 2} 1679.441{col 37}{space 1}   -1.81{col 46}{space 3}0.075{col 54}{space 4}-6393.466{col 67}{space 3} 310.8918
+{txt}{space 8}511  {c |}{col 14}{res}{space 2} 13408.41{col 26}{space 2} 2068.561{col 37}{space 1}    6.48{col 46}{space 3}0.000{col 54}{space 4} 9279.541{col 67}{space 3} 17537.27
+{txt}{space 8}512  {c |}{col 14}{res}{space 2} 2222.269{col 26}{space 2} 3504.964{col 37}{space 1}    0.63{col 46}{space 3}0.528{col 54}{space 4}-4773.668{col 67}{space 3} 9218.205
+{txt}{space 8}521  {c |}{col 14}{res}{space 2} 3180.296{col 26}{space 2} 3814.927{col 37}{space 1}    0.83{col 46}{space 3}0.407{col 54}{space 4}-4434.329{col 67}{space 3} 10794.92
+{txt}{space 8}522  {c |}{col 14}{res}{space 2}-1964.468{col 26}{space 2} 2326.199{col 37}{space 1}   -0.84{col 46}{space 3}0.401{col 54}{space 4} -6607.58{col 67}{space 3} 2678.645
+{txt}{space 8}611  {c |}{col 14}{res}{space 2}-1300.266{col 26}{space 2} 2796.008{col 37}{space 1}   -0.47{col 46}{space 3}0.643{col 54}{space 4}-6881.122{col 67}{space 3} 4280.589
+{txt}{space 8}612  {c |}{col 14}{res}{space 2} 7443.114{col 26}{space 2} 2683.812{col 37}{space 1}    2.77{col 46}{space 3}0.007{col 54}{space 4} 2086.202{col 67}{space 3} 12800.03
+{txt}{space 8}621  {c |}{col 14}{res}{space 2} -13144.4{col 26}{space 2}  18487.8{col 37}{space 1}   -0.71{col 46}{space 3}0.480{col 54}{space 4}-50046.19{col 67}{space 3}  23757.4
+{txt}{space 8}622  {c |}{col 14}{res}{space 2} 8906.869{col 26}{space 2} 3024.124{col 37}{space 1}    2.95{col 46}{space 3}0.004{col 54}{space 4} 2870.692{col 67}{space 3} 14943.05
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-3517.338{col 26}{space 2} 1879.386{col 37}{space 1}   -1.87{col 46}{space 3}0.066{col 54}{space 4}-7268.609{col 67}{space 3} 233.9326
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{txt}Linear regression                               Number of obs     = {res}        87
+                                                {txt}{help j_robustsingular:F(16, 47) }        =  {res}        .
+                                                {txt}Prob > F          = {res}         .
+                                                {txt}R-squared         = {res}    0.2628
+                                                {txt}Root MSE          =    {res} 7702.2
+
+{txt}{ralign 78:(Std. Err. adjusted for {res:48} clusters in idx)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}netincome_~t{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}r_treat {c |}{col 14}{res}{space 2} 2200.488{col 26}{space 2} 1741.245{col 37}{space 1}    1.26{col 46}{space 3}0.213{col 54}{space 4}-1302.445{col 67}{space 3} 5703.421
+{txt}{space 12} {c |}
+{space 6}strata {c |}
+{space 8}122  {c |}{col 14}{res}{space 2}-2861.351{col 26}{space 2} 1509.327{col 37}{space 1}   -1.90{col 46}{space 3}0.064{col 54}{space 4}-5897.726{col 67}{space 3}  175.024
+{txt}{space 8}211  {c |}{col 14}{res}{space 2}-1737.256{col 26}{space 2} 958.4926{col 37}{space 1}   -1.81{col 46}{space 3}0.076{col 54}{space 4}-3665.494{col 67}{space 3} 190.9824
+{txt}{space 8}212  {c |}{col 14}{res}{space 2}-7107.744{col 26}{space 2}  4811.19{col 37}{space 1}   -1.48{col 46}{space 3}0.146{col 54}{space 4}-16786.61{col 67}{space 3} 2571.121
+{txt}{space 8}221  {c |}{col 14}{res}{space 2}-966.3373{col 26}{space 2} 1325.311{col 37}{space 1}   -0.73{col 46}{space 3}0.470{col 54}{space 4} -3632.52{col 67}{space 3} 1699.845
+{txt}{space 8}222  {c |}{col 14}{res}{space 2}-5494.329{col 26}{space 2} 3946.136{col 37}{space 1}   -1.39{col 46}{space 3}0.170{col 54}{space 4}-13432.93{col 67}{space 3} 2444.273
+{txt}{space 8}311  {c |}{col 14}{res}{space 2}-1205.196{col 26}{space 2} 3442.732{col 37}{space 1}   -0.35{col 46}{space 3}0.728{col 54}{space 4} -8131.08{col 67}{space 3} 5720.687
+{txt}{space 8}312  {c |}{col 14}{res}{space 2} -187.744{col 26}{space 2} 958.4926{col 37}{space 1}   -0.20{col 46}{space 3}0.846{col 54}{space 4}-2115.982{col 67}{space 3} 1740.494
+{txt}{space 8}321  {c |}{col 14}{res}{space 2}-872.4074{col 26}{space 2} 1180.885{col 37}{space 1}   -0.74{col 46}{space 3}0.464{col 54}{space 4}-3248.042{col 67}{space 3} 1503.227
+{txt}{space 8}322  {c |}{col 14}{res}{space 2}   -19025{col 26}{space 2} 15344.81{col 37}{space 1}   -1.24{col 46}{space 3}0.221{col 54}{space 4}-49894.79{col 67}{space 3} 11844.79
+{txt}{space 8}411  {c |}{col 14}{res}{space 2}-6307.744{col 26}{space 2} 958.4926{col 37}{space 1}   -6.58{col 46}{space 3}0.000{col 54}{space 4}-8235.982{col 67}{space 3}-4379.506
+{txt}{space 8}412  {c |}{col 14}{res}{space 2} -152.744{col 26}{space 2} 973.4291{col 37}{space 1}   -0.16{col 46}{space 3}0.876{col 54}{space 4}-2111.031{col 67}{space 3} 1805.543
+{txt}{space 8}421  {c |}{col 14}{res}{space 2}-8959.641{col 26}{space 2} 2575.497{col 37}{space 1}   -3.48{col 46}{space 3}0.001{col 54}{space 4}-14140.87{col 67}{space 3}-3778.409
+{txt}{space 8}422  {c |}{col 14}{res}{space 2} -9850.56{col 26}{space 2} 2123.546{col 37}{space 1}   -4.64{col 46}{space 3}0.000{col 54}{space 4}-14122.58{col 67}{space 3}-5578.538
+{txt}{space 8}511  {c |}{col 14}{res}{space 2} 93.18698{col 26}{space 2} 992.0052{col 37}{space 1}    0.09{col 46}{space 3}0.926{col 54}{space 4} -1902.47{col 67}{space 3} 2088.844
+{txt}{space 8}512  {c |}{col 14}{res}{space 2}-3070.915{col 26}{space 2} 1999.931{col 37}{space 1}   -1.54{col 46}{space 3}0.131{col 54}{space 4}-7094.256{col 67}{space 3}  952.427
+{txt}{space 8}521  {c |}{col 14}{res}{space 2} -345.752{col 26}{space 2} 495.4599{col 37}{space 1}   -0.70{col 46}{space 3}0.489{col 54}{space 4}-1342.489{col 67}{space 3} 650.9847
+{txt}{space 8}522  {c |}{col 14}{res}{space 2}-5362.744{col 26}{space 2} 958.4926{col 37}{space 1}   -5.59{col 46}{space 3}0.000{col 54}{space 4}-7290.982{col 67}{space 3}-3434.506
+{txt}{space 8}612  {c |}{col 14}{res}{space 2}-2181.519{col 26}{space 2} 3152.348{col 37}{space 1}   -0.69{col 46}{space 3}0.492{col 54}{space 4}-8523.226{col 67}{space 3} 4160.188
+{txt}{space 8}621  {c |}{col 14}{res}{space 2} 2412.744{col 26}{space 2} 958.4926{col 37}{space 1}    2.52{col 46}{space 3}0.015{col 54}{space 4} 484.5057{col 67}{space 3} 4340.982
+{txt}{space 8}622  {c |}{col 14}{res}{space 2}-2824.546{col 26}{space 2} 1746.172{col 37}{space 1}   -1.62{col 46}{space 3}0.112{col 54}{space 4}-6337.391{col 67}{space 3} 688.2988
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} 3087.256{col 26}{space 2} 958.4926{col 37}{space 1}    3.22{col 46}{space 3}0.002{col 54}{space 4} 1159.018{col 67}{space 3} 5015.494
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
 {com}. matrix A = mat_1
 {txt}
@@ -1217,7 +1376,7 @@
 . * Table
 . frmttable using MDE_goatsales.doc, statmat(A) sdec(4) coljust(l;c;l;l) title("HH Level - HH Goat Sales: Strata - No Interaction") ///
 > ctitle("","MDE","% of mean","# of sd's.") ///
-> rtitle("Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"% Sold through Co-op"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index") addtable replace
+> rtitle("Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"% Sold through Co-op"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index"\"Net Goat Income"\"Net Income per Goat") addtable replace
 {res}
 {txt}{center:HH Level - HH Goat Sales: Strata - No Interaction}
 {txt}{center:{hline 61}}
@@ -1232,6 +1391,8 @@
 {center:{txt}{lalign 24:Time Passed}{res}{center 12:0.3957}{res}{center 11:0.5015}{res}{center 12:0.1829}}
 {center:{txt}{lalign 24:Transportation Costs}{res}{center 12:58.6713}{res}{center 11:2.5356}{res}{center 12:0.0837}}
 {center:{txt}{lalign 24:Sale Costs Index}{res}{center 12:0.1104}{res}{center 11:-1.3333}{res}{center 12:0.1387}}
+{center:{txt}{lalign 24:Net Goat Income}{res}{center 12:8,501.1743}{res}{center 11:-2.9116}{res}{center 12:0.4757}}
+{center:{txt}{lalign 24:Net Income per Goat}{res}{center 12:4,981.8347}{res}{center 11:5.9269}{res}{center 12:0.6388}}
 {txt}{center:{hline 61}}
 
 
@@ -1239,15 +1400,689 @@
 . 
 {txt}end of do-file
 
-{com}. do "/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/lsilPAP5_test_trn.do"
+{com}. do "/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP5_MDE_summary.do"
 {txt}
-{com}. clear
+{com}. 
+. clear
 {txt}
 {com}. set more off, perm
 {txt}({cmd:set more} preference recorded)
 
+{com}. cd "$d2"
+{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data
+{txt}
 {com}. 
-. *log
-. cap log close
-{smcl}
-{com}{sf}{ul off}
+. ** Co-op level dataset
+. ********************************************* 
+. clear
+{txt}
+{com}. use "$d3/r_CO_Merged_Ind.dta"
+{txt}
+{com}. 
+. 
+. ** communication **
+. gl co_comm comm1 comm2 contact COM3 COM8 index_CO_comm HHcontact
+{txt}
+{com}.         
+. ** Co-op vars
+. local listsize : list sizeof global(co_comm)
+{txt}
+{com}. tokenize $co_comm
+{txt}
+{com}. 
+. forv i = 1/`listsize' {c -(}
+{txt}  2{com}.                 
+.         quietly {c -(}
+{txt}  3{com}.                 sum ``i''
+{txt}  4{com}.                 return list
+{txt}  5{com}.                 scalar N_``i'' = r(N) // N
+{txt}  6{com}.                 scalar mean_``i'' = r(mean) // mean
+{txt}  7{com}.                 scalar sd_``i'' = r(sd)  // sd
+{txt}  8{com}.                 scalar min_``i'' = r(min)  // sd
+{txt}  9{com}.                 scalar max_``i'' = r(max)  // sd
+{txt} 10{com}.                 
+.         * matrix for table
+.                 matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
+{txt} 11{com}.                 {c )-}
+{txt} 12{com}. {c )-}
+{txt}
+{com}. matrix A = mat_1
+{txt}
+{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
+{txt}  2{com}.         matrix A = A \ mat_`i'
+{txt}  3{com}. {c )-}
+{txt}
+{com}. 
+. * Table
+. frmttable using MDE_summary.doc, statmat(A) sdec(2) coljust(l;c;l;l) title("Co-op Level - Communication: Summmary Stats") ///
+> ctitle("","N","Mean","sd","Min","Max") ///
+> rtitle("Contacted SHG"\"Contacted by SHG"\"Total Co-op Contact"\"HH info sales"\"HH info activities"\"co-op level index"\"Total HH Contact") replace
+{res}
+{txt}{center:Co-op Level - Communication: Summmary Stats}
+{txt}{center:{hline 59}}
+{center:{txt}{lalign 21:}{txt}{center 7:N}{txt}{center 7:Mean}{txt}{center 7:sd}{txt}{center 7:Min}{txt}{center 8:Max}}
+{txt}{center:{hline 59}}
+{center:{txt}{lalign 21:Contacted SHG}{res}{center 7:90.00}{res}{center 7:9.54}{res}{center 7:12.90}{res}{center 7:0.00}{res}{center 8:90.00}}
+{center:{txt}{lalign 21:Contacted by SHG}{res}{center 7:90.00}{res}{center 7:7.45}{res}{center 7:13.66}{res}{center 7:0.00}{res}{center 8:100.00}}
+{center:{txt}{lalign 21:Total Co-op Contact}{res}{center 7:90.00}{res}{center 7:16.99}{res}{center 7:25.46}{res}{center 7:0.00}{res}{center 8:190.00}}
+{center:{txt}{lalign 21:HH info sales}{res}{center 7:78.00}{res}{center 7:1.11}{res}{center 7:0.90}{res}{center 7:0.00}{res}{center 8:3.50}}
+{center:{txt}{lalign 21:HH info activities}{res}{center 7:92.00}{res}{center 7:1.04}{res}{center 7:1.16}{res}{center 7:0.00}{res}{center 8:8.10}}
+{center:{txt}{lalign 21:co-op level index}{res}{center 7:76.00}{res}{center 7:-0.08}{res}{center 7:0.78}{res}{center 7:-1.16}{res}{center 8:3.64}}
+{center:{txt}{lalign 21:Total HH Contact}{res}{center 7:78.00}{res}{center 7:2.18}{res}{center 7:1.65}{res}{center 7:0.00}{res}{center 8:9.58}}
+{txt}{center:{hline 59}}
+
+
+{com}.  
+.  
+. * ------------------------------------------- 
+.  
+.  
+. ** finance **
+. gl co_finance revenue rev_member costs cost_member ///
+>         assets assets_member liabilities liab_member goatrev goatrev_member ///
+>         net_rev net_rev_member net_finances net_finances_member
+{txt}
+{com}.         
+. ** Co-op vars
+. local listsize : list sizeof global(co_finance)
+{txt}
+{com}. tokenize $co_finance
+{txt}
+{com}. 
+. forv i = 1/`listsize' {c -(}
+{txt}  2{com}.                 
+.         quietly {c -(}
+{txt}  3{com}.                 sum ``i''
+{txt}  4{com}.                 return list
+{txt}  5{com}.                 scalar N_``i'' = r(N) // N
+{txt}  6{com}.                 scalar mean_``i'' = r(mean) // mean
+{txt}  7{com}.                 scalar sd_``i'' = r(sd)  // sd
+{txt}  8{com}.                 scalar min_``i'' = r(min)  // sd
+{txt}  9{com}.                 scalar max_``i'' = r(max)  // sd
+{txt} 10{com}.                 
+.         * matrix for table
+.                 matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
+{txt} 11{com}.                 {c )-}
+{txt} 12{com}. {c )-}
+{txt}
+{com}. matrix A = mat_1
+{txt}
+{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
+{txt}  2{com}.         matrix A = A \ mat_`i'
+{txt}  3{com}. {c )-}
+{txt}
+{com}. 
+. * Table
+. frmttable using MDE_summary.doc, statmat(A) sdec(2) coljust(l;c;l;l) title("Co-op Level - Finances: Summmary Stats") ///
+> ctitle("","N","Mean","sd","Min","Max") ///
+> rtitle("Revenue"\"Rev. per Member"\"Costs"\"Costs per Mem."\"Assets"\"Assets per Mem."\"Liabilities"\"Liabilities per Mem."\"Goat Revenue"\"Goat Rev. per Mem."\"Net Revenue"\"Net Rev. per Mem."\"Net Finances"\"Net Fin. per Mem.") addtable replace
+{res}
+{txt}{center:Co-op Level - Finances: Summmary Stats}
+{txt}{center:{hline 89}}
+{center:{txt}{lalign 22:}{txt}{center 7:N}{txt}{center 14:Mean}{txt}{center 14:sd}{txt}{center 15:Min}{txt}{center 15:Max}}
+{txt}{center:{hline 89}}
+{center:{txt}{lalign 22:Revenue}{res}{center 7:90.00}{res}{center 14:389.81}{res}{center 14:816.55}{res}{center 15:0.00}{res}{center 15:6,637.32}}
+{center:{txt}{lalign 22:Rev. per Member}{res}{center 7:90.00}{res}{center 14:0.74}{res}{center 14:1.07}{res}{center 15:0.00}{res}{center 15:6.42}}
+{center:{txt}{lalign 22:Costs}{res}{center 7:90.00}{res}{center 14:38.98}{res}{center 14:167.31}{res}{center 15:0.00}{res}{center 15:1,107.50}}
+{center:{txt}{lalign 22:Costs per Mem.}{res}{center 7:90.00}{res}{center 14:0.06}{res}{center 14:0.24}{res}{center 15:0.00}{res}{center 15:1.85}}
+{center:{txt}{lalign 22:Assets}{res}{center 7:90.00}{res}{center 14:3,335,409.60}{res}{center 14:4,080,549.43}{res}{center 15:0.00}{res}{center 15:26,059,152.00}}
+{center:{txt}{lalign 22:Assets per Mem.}{res}{center 7:90.00}{res}{center 14:10,861.93}{res}{center 14:38,328.66}{res}{center 15:0.00}{res}{center 15:363,636.38}}
+{center:{txt}{lalign 22:Liabilities}{res}{center 7:90.00}{res}{center 14:711,215.52}{res}{center 14:1,824,757.62}{res}{center 15:0.00}{res}{center 15:8,775,500.00}}
+{center:{txt}{lalign 22:Liabilities per Mem.}{res}{center 7:90.00}{res}{center 14:1,392.17}{res}{center 14:3,653.36}{res}{center 15:0.00}{res}{center 15:21,938.75}}
+{center:{txt}{lalign 22:Goat Revenue}{res}{center 7:90.00}{res}{center 14:11,299.03}{res}{center 14:20,579.21}{res}{center 15:0.00}{res}{center 15:103,980.00}}
+{center:{txt}{lalign 22:Goat Rev. per Mem.}{res}{center 7:90.00}{res}{center 14:21.92}{res}{center 14:46.21}{res}{center 15:0.00}{res}{center 15:304.67}}
+{center:{txt}{lalign 22:Net Revenue}{res}{center 7:90.00}{res}{center 14:350.83}{res}{center 14:832.91}{res}{center 15:-801.52}{res}{center 15:6,621.64}}
+{center:{txt}{lalign 22:Net Rev. per Mem.}{res}{center 7:90.00}{res}{center 14:0.69}{res}{center 14:1.11}{res}{center 15:-1.34}{res}{center 15:6.42}}
+{center:{txt}{lalign 22:Net Finances}{res}{center 7:90.00}{res}{center 14:2,624,544.93}{res}{center 14:4,692,426.01}{res}{center 15:-7,823,954.00}{res}{center 15:26,059,884.00}}
+{center:{txt}{lalign 22:Net Fin. per Mem.}{res}{center 7:90.00}{res}{center 14:9,470.44}{res}{center 14:38,818.88}{res}{center 15:-19,559.88}{res}{center 15:363,636.38}}
+{txt}{center:{hline 89}}
+
+
+{com}.         
+.         
+. * ------------------------------------------- 
+. 
+. 
+. ** goat sales **
+. 
+. ** Co-op vars
+. gl co_goatsales goats_sold goats_sold_member goatrev goatrev_member goatrev_sold ///
+>                                 col_points index_CO_goatsales
+{txt}
+{com}. 
+. ** HH vars
+. gl hh_goatsales LS8 LS9 co_opgoatno co_opsalevalue ///
+>                                 co_opshare visits_sale time_passed transp_cost index_salecost ///
+>                                 net_goat_income netincome_goat
+{txt}
+{com}.         
+. ** Co-op vars
+. local listsize : list sizeof global(co_goatsales)
+{txt}
+{com}. tokenize $co_goatsales
+{txt}
+{com}. 
+. forv i = 1/`listsize' {c -(}
+{txt}  2{com}.                 
+.         quietly {c -(}
+{txt}  3{com}.                 sum ``i''
+{txt}  4{com}.                 return list
+{txt}  5{com}.                 scalar N_``i'' = r(N) // N
+{txt}  6{com}.                 scalar mean_``i'' = r(mean) // mean
+{txt}  7{com}.                 scalar sd_``i'' = r(sd)  // sd
+{txt}  8{com}.                 scalar min_``i'' = r(min)  // sd
+{txt}  9{com}.                 scalar max_``i'' = r(max)  // sd
+{txt} 10{com}.                 
+.         * matrix for table
+.                 matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
+{txt} 11{com}.                 {c )-}
+{txt} 12{com}. {c )-}
+{txt}
+{com}. matrix A = mat_1
+{txt}
+{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
+{txt}  2{com}.         matrix A = A \ mat_`i'
+{txt}  3{com}. {c )-}
+{txt}
+{com}. 
+. * Table
+. frmttable using MDE_summary.doc, statmat(A) sdec(2) coljust(l;c;l;l) title("Co-op Level - Co-op Goat Sales: Summmary Stats") ///
+> ctitle("","N","Mean","sd","Min","Max") ///
+> rtitle("Goats Sold"\"Goats Sold per Mem."\"Goat Revenue"\"Goat Rev. per Mem."\"Rev. per Goat Sold"\"Collection Points"\"CO Goat Sales Index") addtable replace
+{res}
+{txt}{center:Co-op Level - Co-op Goat Sales: Summmary Stats}
+{txt}{center:{hline 71}}
+{center:{txt}{lalign 21:}{txt}{center 7:N}{txt}{center 11:Mean}{txt}{center 11:sd}{txt}{center 7:Min}{txt}{center 12:Max}}
+{txt}{center:{hline 71}}
+{center:{txt}{lalign 21:Goats Sold}{res}{center 7:90.00}{res}{center 11:189.82}{res}{center 11:244.66}{res}{center 7:0.00}{res}{center 12:1,129.00}}
+{center:{txt}{lalign 21:Goats Sold per Mem.}{res}{center 7:90.00}{res}{center 11:0.77}{res}{center 11:3.83}{res}{center 7:0.00}{res}{center 12:36.36}}
+{center:{txt}{lalign 21:Goat Revenue}{res}{center 7:90.00}{res}{center 11:11,299.03}{res}{center 11:20,579.21}{res}{center 7:0.00}{res}{center 12:103,980.00}}
+{center:{txt}{lalign 21:Goat Rev. per Mem.}{res}{center 7:90.00}{res}{center 11:21.92}{res}{center 11:46.21}{res}{center 7:0.00}{res}{center 12:304.67}}
+{center:{txt}{lalign 21:Rev. per Goat Sold}{res}{center 7:70.00}{res}{center 11:81.65}{res}{center 11:62.52}{res}{center 7:0.00}{res}{center 12:266.67}}
+{center:{txt}{lalign 21:Collection Points}{res}{center 7:92.00}{res}{center 11:61.94}{res}{center 11:27.88}{res}{center 7:1.11}{res}{center 12:100.00}}
+{center:{txt}{lalign 21:CO Goat Sales Index}{res}{center 7:90.00}{res}{center 11:-0.01}{res}{center 11:0.92}{res}{center 7:-1.75}{res}{center 12:2.19}}
+{txt}{center:{hline 71}}
+
+
+{com}.  
+.  
+. ** HH vars
+. local listsize : list sizeof global(hh_goatsales)
+{txt}
+{com}. tokenize $hh_goatsales
+{txt}
+{com}. 
+. forv i = 1/`listsize' {c -(} 
+{txt}  2{com}.  
+.         quietly {c -(}
+{txt}  3{com}.                 sum ``i''
+{txt}  4{com}.                 return list
+{txt}  5{com}.                 scalar N_``i'' = r(N) // N
+{txt}  6{com}.                 scalar mean_``i'' = r(mean) // mean
+{txt}  7{com}.                 scalar sd_``i'' = r(sd)  // sd
+{txt}  8{com}.                 scalar min_``i'' = r(min)  // sd
+{txt}  9{com}.                 scalar max_``i'' = r(max)  // sd
+{txt} 10{com}.                 
+.         * matrix for table
+.                 matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
+{txt} 11{com}.                 {c )-}
+{txt} 12{com}. {c )-}
+{txt}
+{com}. matrix A = mat_1
+{txt}
+{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
+{txt}  2{com}.         matrix A = A \ mat_`i'
+{txt}  3{com}. {c )-}
+{txt}
+{com}. 
+. * Table
+. frmttable using MDE_summary.doc, statmat(A) sdec(2) coljust(l;c;l;l) title("Co-op Level - HH Goat Sales: Summmary Stats") ///
+> ctitle("","N","Mean","sd","Min","Max") ///
+> rtitle("Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"% Sold through Co-op"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index"\"Net Goat Income"\"Net Income per Goat") addtable replace 
+{res}
+{txt}{center:Co-op Level - HH Goat Sales: Summmary Stats}
+{txt}{center:{hline 77}}
+{center:{txt}{lalign 24:}{txt}{center 7:N}{txt}{center 11:Mean}{txt}{center 10:sd}{txt}{center 12:Min}{txt}{center 11:Max}}
+{txt}{center:{hline 77}}
+{center:{txt}{lalign 24:Goats Sold}{res}{center 7:92.00}{res}{center 11:2.11}{res}{center 10:0.85}{res}{center 12:0.80}{res}{center 11:5.56}}
+{center:{txt}{lalign 24:Goat Revenue}{res}{center 7:92.00}{res}{center 11:17,457.45}{res}{center 10:8,027.81}{res}{center 12:4,865.86}{res}{center 11:60,121.95}}
+{center:{txt}{lalign 24:# Sold through Co-op}{res}{center 7:92.00}{res}{center 11:0.44}{res}{center 10:0.64}{res}{center 12:0.00}{res}{center 11:3.22}}
+{center:{txt}{lalign 24:Rev. through Co-op}{res}{center 7:92.00}{res}{center 11:3,863.52}{res}{center 10:5,347.00}{res}{center 12:0.00}{res}{center 11:22,372.73}}
+{center:{txt}{lalign 24:% Sold through Co-op}{res}{center 7:92.00}{res}{center 11:0.20}{res}{center 10:0.25}{res}{center 12:0.00}{res}{center 11:0.91}}
+{center:{txt}{lalign 24:Trader Visits per Sale}{res}{center 7:92.00}{res}{center 11:-5.62}{res}{center 10:50.99}{res}{center 12:-489.39}{res}{center 11:0.00}}
+{center:{txt}{lalign 24:Time Passed}{res}{center 7:92.00}{res}{center 11:-0.81}{res}{center 10:0.90}{res}{center 12:-3.88}{res}{center 11:0.00}}
+{center:{txt}{lalign 24:Transportation Costs}{res}{center 7:92.00}{res}{center 11:-6.83}{res}{center 10:40.69}{res}{center 12:-380.40}{res}{center 11:0.00}}
+{center:{txt}{lalign 24:Sale Costs Index}{res}{center 7:92.00}{res}{center 11:0.03}{res}{center 10:0.78}{res}{center 12:-6.01}{res}{center 11:0.51}}
+{center:{txt}{lalign 24:Net Goat Income}{res}{center 7:76.00}{res}{center 11:6,337.60}{res}{center 10:9,952.79}{res}{center 12:-19,599.14}{res}{center 11:44,402.72}}
+{center:{txt}{lalign 24:Net Income per Goat}{res}{center 7:76.00}{res}{center 11:2,226.72}{res}{center 10:4,213.64}{res}{center 12:-15,679.31}{res}{center 11:8,783.13}}
+{txt}{center:{hline 77}}
+
+
+{com}.  
+. * -------------------------------------------   
+. 
+.         
+. ** Transparency **
+. 
+. ** Co-op vars
+. gl co_trn CO_TRN1 CO_TRN2 ///
+>         CO_TRN3 CO_TRN4 CO_TRN5 ///
+>         CO_TRN6 CO_TRN7 index_CO_TRN
+{txt}
+{com}.         
+. ** HH vars
+. gl hh_trn HH_TRN1 HH_TRN2 ///
+>         HH_TRN3 HH_TRN4 HH_TRN5 ///
+>         HH_TRN6 HH_TRN7 index_HH_TRN index_dTRN avg_dTRN
+{txt}
+{com}. 
+. 
+. ** Co-op vars
+. local listsize : list sizeof global(co_trn)
+{txt}
+{com}. tokenize $co_trn
+{txt}
+{com}. 
+. forv i = 1/`listsize' {c -(}
+{txt}  2{com}.                 
+.         quietly {c -(}
+{txt}  3{com}.                 sum ``i''
+{txt}  4{com}.                 return list
+{txt}  5{com}.                 scalar N_``i'' = r(N) // N
+{txt}  6{com}.                 scalar mean_``i'' = r(mean) // mean
+{txt}  7{com}.                 scalar sd_``i'' = r(sd)  // sd
+{txt}  8{com}.                 scalar min_``i'' = r(min)  // sd
+{txt}  9{com}.                 scalar max_``i'' = r(max)  // sd
+{txt} 10{com}.                 
+.         * matrix for table
+.                 matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
+{txt} 11{com}.                 {c )-}
+{txt} 12{com}. {c )-}
+{txt}
+{com}. matrix A = mat_1
+{txt}
+{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
+{txt}  2{com}.         matrix A = A \ mat_`i'
+{txt}  3{com}. {c )-}
+{txt}
+{com}. 
+. * Table
+. frmttable using MDE_summary.doc, statmat(A) sdec(2) coljust(l;c;l;l) title("Co-op Level - Co-op Transparency: Summmary Stats") ///
+> ctitle("","N","Mean","sd","Min","Max") ///
+> rtitle("Mandate"\"Annual Report"\"Annual Budget"\"Financial Report"\"Meeting Minutes"\"Election Results"\"Sale Records"\"Co-op Index") addtable replace
+{res}
+{txt}{center:Co-op Level - Co-op Transparency: Summmary Stats}
+{txt}{center:{hline 52}}
+{center:{txt}{lalign 18:}{txt}{center 7:N}{txt}{center 6:Mean}{txt}{center 6:sd}{txt}{center 7:Min}{txt}{center 6:Max}}
+{txt}{center:{hline 52}}
+{center:{txt}{lalign 18:Mandate}{res}{center 7:90.00}{res}{center 6:0.81}{res}{center 6:0.38}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Annual Report}{res}{center 7:90.00}{res}{center 6:0.84}{res}{center 6:0.36}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Annual Budget}{res}{center 7:90.00}{res}{center 6:0.82}{res}{center 6:0.38}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Financial Report}{res}{center 7:90.00}{res}{center 6:0.81}{res}{center 6:0.38}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Meeting Minutes}{res}{center 7:90.00}{res}{center 6:0.78}{res}{center 6:0.40}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Election Results}{res}{center 7:90.00}{res}{center 6:0.55}{res}{center 6:0.49}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Sale Records}{res}{center 7:90.00}{res}{center 6:0.76}{res}{center 6:0.43}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Co-op Index}{res}{center 7:90.00}{res}{center 6:0.17}{res}{center 6:0.91}{res}{center 7:-1.98}{res}{center 6:0.98}}
+{txt}{center:{hline 52}}
+
+
+{com}.  
+.  
+. ** HH vars
+. local listsize : list sizeof global(hh_trn)
+{txt}
+{com}. tokenize $hh_trn
+{txt}
+{com}. 
+. forv i = 1/`listsize' {c -(}
+{txt}  2{com}.  
+.         quietly {c -(}
+{txt}  3{com}.                 sum ``i''
+{txt}  4{com}.                 return list
+{txt}  5{com}.                 scalar N_``i'' = r(N) // N
+{txt}  6{com}.                 scalar mean_``i'' = r(mean) // mean
+{txt}  7{com}.                 scalar sd_``i'' = r(sd)  // sd
+{txt}  8{com}.                 scalar min_``i'' = r(min)  // sd
+{txt}  9{com}.                 scalar max_``i'' = r(max)  // sd
+{txt} 10{com}.                 
+.         * matrix for table
+.                 matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
+{txt} 11{com}.                 {c )-}
+{txt} 12{com}. {c )-}
+{txt}
+{com}. matrix A = mat_1
+{txt}
+{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
+{txt}  2{com}.         matrix A = A \ mat_`i'
+{txt}  3{com}. {c )-}
+{txt}
+{com}. 
+. * Table
+. frmttable using MDE_summary.doc, statmat(A) sdec(2) coljust(l;c;l;l) title("Co-op Level - HH Awareness: Summmary Stats") ///
+> ctitle("","N","Mean","sd","Min","Max") ///
+> rtitle("Mandate"\"Annual Report"\"Annual Budget"\"Financial Report"\"Meeting Minutes"\"Election Results"\"Sale Records"\"HH Index"\"Discrepancy Index"\"Avg. Discrepancy") addtable replace
+{res}
+{txt}{center:Co-op Level - HH Awareness: Summmary Stats}
+{txt}{center:{hline 55}}
+{center:{txt}{lalign 19:}{txt}{center 7:N}{txt}{center 7:Mean}{txt}{center 6:sd}{txt}{center 7:Min}{txt}{center 7:Max}}
+{txt}{center:{hline 55}}
+{center:{txt}{lalign 19:Mandate}{res}{center 7:92.00}{res}{center 7:0.45}{res}{center 6:0.28}{res}{center 7:0.00}{res}{center 7:1.00}}
+{center:{txt}{lalign 19:Annual Report}{res}{center 7:92.00}{res}{center 7:0.52}{res}{center 6:0.30}{res}{center 7:0.00}{res}{center 7:1.00}}
+{center:{txt}{lalign 19:Annual Budget}{res}{center 7:92.00}{res}{center 7:0.54}{res}{center 6:0.30}{res}{center 7:0.00}{res}{center 7:1.00}}
+{center:{txt}{lalign 19:Financial Report}{res}{center 7:92.00}{res}{center 7:0.57}{res}{center 6:0.28}{res}{center 7:0.00}{res}{center 7:1.00}}
+{center:{txt}{lalign 19:Meeting Minutes}{res}{center 7:92.00}{res}{center 7:0.52}{res}{center 6:0.29}{res}{center 7:0.00}{res}{center 7:1.00}}
+{center:{txt}{lalign 19:Election Results}{res}{center 7:92.00}{res}{center 7:0.32}{res}{center 6:0.24}{res}{center 7:0.00}{res}{center 7:0.94}}
+{center:{txt}{lalign 19:Sale Records}{res}{center 7:92.00}{res}{center 7:0.47}{res}{center 6:0.29}{res}{center 7:0.00}{res}{center 7:0.95}}
+{center:{txt}{lalign 19:HH Index}{res}{center 7:92.00}{res}{center 7:0.07}{res}{center 6:1.05}{res}{center 7:-1.92}{res}{center 7:2.00}}
+{center:{txt}{lalign 19:Discrepancy Index}{res}{center 7:90.00}{res}{center 7:-0.16}{res}{center 6:1.03}{res}{center 7:-3.28}{res}{center 7:1.32}}
+{center:{txt}{lalign 19:Avg. Discrepancy}{res}{center 7:90.00}{res}{center 7:-0.33}{res}{center 6:0.22}{res}{center 7:-1.00}{res}{center 7:-0.02}}
+{txt}{center:{hline 55}}
+
+
+{com}.  
+. * -------------------------------------------           
+.         
+. 
+. 
+. ** HH level dataset
+. ********************************************* 
+. clear
+{txt}
+{com}. use "$d3/r_HH_Merged_Ind.dta"
+{txt}
+{com}. 
+. 
+. ** communication **
+. gl hh_comm COM3 COM8 index_HH_comm HHcontact
+{txt}
+{com}.         
+. ** Co-op vars
+. local listsize : list sizeof global(hh_comm)
+{txt}
+{com}. tokenize $hh_comm
+{txt}
+{com}. 
+. forv i = 1/`listsize' {c -(}
+{txt}  2{com}.                 
+.         quietly {c -(}
+{txt}  3{com}.                 sum ``i''
+{txt}  4{com}.                 return list
+{txt}  5{com}.                 scalar N_``i'' = r(N) // N
+{txt}  6{com}.                 scalar mean_``i'' = r(mean) // mean
+{txt}  7{com}.                 scalar sd_``i'' = r(sd)  // sd
+{txt}  8{com}.                 scalar min_``i'' = r(min)  // sd
+{txt}  9{com}.                 scalar max_``i'' = r(max)  // sd
+{txt} 10{com}.                 
+.         * matrix for table
+.                 matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
+{txt} 11{com}.                 {c )-}
+{txt} 12{com}. {c )-}
+{txt}
+{com}. matrix A = mat_1
+{txt}
+{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
+{txt}  2{com}.         matrix A = A \ mat_`i'
+{txt}  3{com}. {c )-}
+{txt}
+{com}. 
+. * Table
+. frmttable using MDE_summary.doc, statmat(A) sdec(2) coljust(l;c;l;l) title("HH Level - Communication: Summmary Stats") ///
+> ctitle("","N","Mean","sd","Min","Max") ///
+> rtitle("HH info sales"\"HH info activities"\"HH level index"\"Total HH Contact") addtable replace
+{res}
+{txt}{center:HH Level - Communication: Summmary Stats}
+{txt}{center:{hline 59}}
+{center:{txt}{lalign 20:}{txt}{center 10:N}{txt}{center 6:Mean}{txt}{center 6:sd}{txt}{center 7:Min}{txt}{center 8:Max}}
+{txt}{center:{hline 59}}
+{center:{txt}{lalign 20:HH info sales}{res}{center 10:1,261.00}{res}{center 6:1.37}{res}{center 6:1.75}{res}{center 7:0.00}{res}{center 8:10.00}}
+{center:{txt}{lalign 20:HH info activities}{res}{center 10:2,149.00}{res}{center 6:1.10}{res}{center 6:3.50}{res}{center 7:0.00}{res}{center 8:100.00}}
+{center:{txt}{lalign 20:HH level index}{res}{center 10:1,207.00}{res}{center 6:0.25}{res}{center 6:0.89}{res}{center 7:-0.47}{res}{center 8:9.14}}
+{center:{txt}{lalign 20:Total HH Contact}{res}{center 10:1,207.00}{res}{center 6:2.56}{res}{center 6:3.06}{res}{center 7:0.00}{res}{center 8:31.00}}
+{txt}{center:{hline 59}}
+
+
+{com}.  
+.  
+. * ------------------------------------------- 
+. 
+. ** goat sales **
+. 
+. ** Co-op vars
+. gl co_goatsales goats_sold goats_sold_member goatrev goatrev_member goatrev_sold ///
+>                                 col_points index_CO_goatsales
+{txt}
+{com}. 
+. gl hh_goatsales LS8 LS9 co_opgoatno co_opsalevalue ///
+>                                 co_opshare visits_sale LS41 LS42 index_salecost ///
+>                                 net_goat_income netincome_goat
+{txt}
+{com}. 
+. 
+.  
+. ** HH vars
+. local listsize : list sizeof global(hh_goatsales)
+{txt}
+{com}. tokenize $hh_goatsales
+{txt}
+{com}. 
+. forv i = 1/`listsize' {c -(} 
+{txt}  2{com}.  
+.         quietly {c -(}
+{txt}  3{com}.                 sum ``i''
+{txt}  4{com}.                 return list
+{txt}  5{com}.                 scalar N_``i'' = r(N) // N
+{txt}  6{com}.                 scalar mean_``i'' = r(mean) // mean
+{txt}  7{com}.                 scalar sd_``i'' = r(sd)  // sd
+{txt}  8{com}.                 scalar min_``i'' = r(min)  // sd
+{txt}  9{com}.                 scalar max_``i'' = r(max)  // sd
+{txt} 10{com}.                 
+.         * matrix for table
+.                 matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
+{txt} 11{com}.                 {c )-}
+{txt} 12{com}. {c )-}
+{txt}
+{com}. matrix A = mat_1
+{txt}
+{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
+{txt}  2{com}.         matrix A = A \ mat_`i'
+{txt}  3{com}. {c )-}
+{txt}
+{com}. 
+. * Table
+. frmttable using MDE_summary.doc, statmat(A) sdec(2) coljust(l;c;l;l) title("HH Level - HH Goat Sales: Summmary Stats") ///
+> ctitle("","N","Mean","sd","Min","Max") ///
+> rtitle("Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"% Sold through Co-op"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index"\"Net Goat Income"\"Net Income per Goat") addtable replace 
+{res}
+{txt}{center:HH Level - HH Goat Sales: Summmary Stats}
+{txt}{center:{hline 83}}
+{center:{txt}{lalign 24:}{txt}{center 10:N}{txt}{center 11:Mean}{txt}{center 11:sd}{txt}{center 13:Min}{txt}{center 12:Max}}
+{txt}{center:{hline 83}}
+{center:{txt}{lalign 24:Goats Sold}{res}{center 10:1,276.00}{res}{center 11:2.18}{res}{center 11:2.11}{res}{center 13:0.00}{res}{center 12:24.00}}
+{center:{txt}{lalign 24:Goat Revenue}{res}{center 10:2,448.00}{res}{center 11:9,478.96}{res}{center 11:15,229.14}{res}{center 13:0.00}{res}{center 12:113,300.00}}
+{center:{txt}{lalign 24:# Sold through Co-op}{res}{center 10:1,276.00}{res}{center 11:0.47}{res}{center 11:1.25}{res}{center 13:0.00}{res}{center 12:15.00}}
+{center:{txt}{lalign 24:Rev. through Co-op}{res}{center 10:2,448.00}{res}{center 11:2,236.58}{res}{center 11:8,561.74}{res}{center 13:0.00}{res}{center 12:127,000.00}}
+{center:{txt}{lalign 24:% Sold through Co-op}{res}{center 10:1,276.00}{res}{center 11:0.19}{res}{center 11:0.38}{res}{center 13:0.00}{res}{center 12:1.00}}
+{center:{txt}{lalign 24:Trader Visits per Sale}{res}{center 10:1,276.00}{res}{center 11:-4.22}{res}{center 11:139.98}{res}{center 13:-5,000.33}{res}{center 12:0.00}}
+{center:{txt}{lalign 24:Time Passed}{res}{center 10:1,276.00}{res}{center 11:0.79}{res}{center 11:2.16}{res}{center 13:0.00}{res}{center 12:30.00}}
+{center:{txt}{lalign 24:Transportation Costs}{res}{center 10:1,276.00}{res}{center 11:23.14}{res}{center 11:701.05}{res}{center 13:0.00}{res}{center 12:25,000.00}}
+{center:{txt}{lalign 24:Sale Costs Index}{res}{center 10:1,276.00}{res}{center 11:-0.08}{res}{center 11:0.80}{res}{center 13:-24.13}{res}{center 12:0.09}}
+{center:{txt}{lalign 24:Net Goat Income}{res}{center 10:175.00}{res}{center 11:-2,919.78}{res}{center 11:17,869.23}{res}{center 13:-124,900.00}{res}{center 12:60,200.00}}
+{center:{txt}{lalign 24:Net Income per Goat}{res}{center 10:87.00}{res}{center 11:840.55}{res}{center 11:7,798.78}{res}{center 13:-34,600.00}{res}{center 12:14,933.33}}
+{txt}{center:{hline 83}}
+
+
+{com}.  
+. * -------------------------------------------   
+. 
+.         
+. ** Transparency **
+. 
+. ** HH vars
+. gl hh_trn_d HH_TRN1 HH_TRN2 ///
+>         HH_TRN3 HH_TRN4 HH_TRN5 ///
+>         HH_TRN6 HH_TRN7 index_HH_TRN avg_dTRN
+{txt}
+{com}. 
+. 
+. ** Co-op vars
+. local listsize : list sizeof global(co_trn)
+{txt}
+{com}. tokenize $co_trn
+{txt}
+{com}. 
+. forv i = 1/`listsize' {c -(}
+{txt}  2{com}.                 
+.         quietly {c -(}
+{txt}  3{com}.                 sum ``i''
+{txt}  4{com}.                 return list
+{txt}  5{com}.                 scalar N_``i'' = r(N) // N
+{txt}  6{com}.                 scalar mean_``i'' = r(mean) // mean
+{txt}  7{com}.                 scalar sd_``i'' = r(sd)  // sd
+{txt}  8{com}.                 scalar min_``i'' = r(min)  // sd
+{txt}  9{com}.                 scalar max_``i'' = r(max)  // sd
+{txt} 10{com}.                 
+.         * matrix for table
+.                 matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
+{txt} 11{com}.                 {c )-}
+{txt} 12{com}. {c )-}
+{txt}
+{com}. matrix A = mat_1
+{txt}
+{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
+{txt}  2{com}.         matrix A = A \ mat_`i'
+{txt}  3{com}. {c )-}
+{txt}
+{com}. 
+. * Table
+. frmttable using MDE_summary.doc, statmat(A) sdec(2) coljust(l;c;l;l) title("HH Level - Co-op Transparency: Summmary Stats") ///
+> ctitle("","N","Mean","sd","Min","Max") ///
+> rtitle("Mandate"\"Annual Report"\"Annual Budget"\"Financial Report"\"Meeting Minutes"\"Election Results"\"Sale Records"\"Co-op Index") addtable replace
+{res}
+{txt}{center:HH Level - Co-op Transparency: Summmary Stats}
+{txt}{center:{hline 55}}
+{center:{txt}{lalign 18:}{txt}{center 10:N}{txt}{center 6:Mean}{txt}{center 6:sd}{txt}{center 7:Min}{txt}{center 6:Max}}
+{txt}{center:{hline 55}}
+{center:{txt}{lalign 18:Mandate}{res}{center 10:2,400.00}{res}{center 6:0.80}{res}{center 6:0.37}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Annual Report}{res}{center 10:2,400.00}{res}{center 6:0.83}{res}{center 6:0.34}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Annual Budget}{res}{center 10:2,400.00}{res}{center 6:0.81}{res}{center 6:0.37}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Financial Report}{res}{center 10:2,400.00}{res}{center 6:0.80}{res}{center 6:0.37}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Meeting Minutes}{res}{center 10:2,400.00}{res}{center 6:0.77}{res}{center 6:0.39}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Election Results}{res}{center 10:2,400.00}{res}{center 6:0.54}{res}{center 6:0.47}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Sale Records}{res}{center 10:2,400.00}{res}{center 6:0.76}{res}{center 6:0.41}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Co-op Index}{res}{center 10:2,400.00}{res}{center 6:0.20}{res}{center 6:0.92}{res}{center 7:-1.97}{res}{center 6:1.06}}
+{txt}{center:{hline 55}}
+
+
+{com}.  
+.  
+. ** HH vars
+. local listsize : list sizeof global(hh_trn_d)
+{txt}
+{com}. tokenize $hh_trn_d
+{txt}
+{com}. 
+. forv i = 1/`listsize' {c -(}
+{txt}  2{com}.  
+.         quietly {c -(}
+{txt}  3{com}.                 sum ``i''
+{txt}  4{com}.                 return list
+{txt}  5{com}.                 scalar N_``i'' = r(N) // N
+{txt}  6{com}.                 scalar mean_``i'' = r(mean) // mean
+{txt}  7{com}.                 scalar sd_``i'' = r(sd)  // sd
+{txt}  8{com}.                 scalar min_``i'' = r(min)  // sd
+{txt}  9{com}.                 scalar max_``i'' = r(max)  // sd
+{txt} 10{com}.                 
+.         * matrix for table
+.                 matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
+{txt} 11{com}.                 {c )-}
+{txt} 12{com}. {c )-}
+{txt}
+{com}. matrix A = mat_1
+{txt}
+{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
+{txt}  2{com}.         matrix A = A \ mat_`i'
+{txt}  3{com}. {c )-}
+{txt}
+{com}. 
+. * Table
+. frmttable using MDE_summary.doc, statmat(A) sdec(2) coljust(l;c;l;l) title("HH Level - HH Awareness: Summmary Stats") ///
+> ctitle("","N","Mean","sd","Min","Max") ///
+> rtitle("Mandate"\"Annual Report"\"Annual Budget"\"Financial Report"\"Meeting Minutes"\"Election Results"\"Sale Records"\"HH Index"\"Avg. Discrepancy") addtable replace
+{res}
+{txt}{center:HH Level - HH Awareness: Summmary Stats}
+{txt}{center:{hline 55}}
+{center:{txt}{lalign 18:}{txt}{center 10:N}{txt}{center 6:Mean}{txt}{center 6:sd}{txt}{center 7:Min}{txt}{center 6:Max}}
+{txt}{center:{hline 55}}
+{center:{txt}{lalign 18:Mandate}{res}{center 10:1,930.00}{res}{center 6:0.45}{res}{center 6:0.50}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Annual Report}{res}{center 10:1,938.00}{res}{center 6:0.52}{res}{center 6:0.50}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Annual Budget}{res}{center 10:1,952.00}{res}{center 6:0.54}{res}{center 6:0.50}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Financial Report}{res}{center 10:1,937.00}{res}{center 6:0.56}{res}{center 6:0.50}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Meeting Minutes}{res}{center 10:1,996.00}{res}{center 6:0.54}{res}{center 6:0.50}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Election Results}{res}{center 10:1,821.00}{res}{center 6:0.32}{res}{center 6:0.47}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:Sale Records}{res}{center 10:1,919.00}{res}{center 6:0.48}{res}{center 6:0.50}{res}{center 7:0.00}{res}{center 6:1.00}}
+{center:{txt}{lalign 18:HH Index}{res}{center 10:1,667.00}{res}{center 6:0.21}{res}{center 6:1.00}{res}{center 7:-0.92}{res}{center 6:1.59}}
+{center:{txt}{lalign 18:Avg. Discrepancy}{res}{center 10:2,092.00}{res}{center 6:0.46}{res}{center 6:0.37}{res}{center 7:0.00}{res}{center 6:1.00}}
+{txt}{center:{hline 55}}
+
+
+{com}.  
+.         
+. 
+{txt}end of do-file
+
+{com}. do "/var/folders/vj/bmv34kqd60j8sb8x04d58nhr0000gn/T//SD03725.000000"
+{txt}
+{com}. 
+. cd "$d3" 
+{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline aug 20 2018
+{txt}
+{com}. 
+. 
+. ** co-op dataset **
+. clear
+{txt}
+{com}. use "r_CO_Merged_PAP.dta"
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. browse GTT1
+
+. count if GTT1 = 0
+{err}=exp not allowed
+{txt}{search r(101), local:r(101);}
+
+{com}. do "/var/folders/vj/bmv34kqd60j8sb8x04d58nhr0000gn/T//SD03725.000000"
+{txt}
+{com}. gen groupsale = 0
+{txt}
+{com}. replace groupsale = 1 if GTT1 > 0
+{txt}(106 real changes made)
+
+{com}. 
+{txt}end of do-file
+
+{com}. sum groupsale, d
+
+                          {txt}groupsale
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        1              1
+{txt} 5%    {res}        1              1
+{txt}10%    {res}        1              1       {txt}Obs         {res}        106
+{txt}25%    {res}        1              1       {txt}Sum of Wgt. {res}        106
+
+{txt}50%    {res}        1                      {txt}Mean          {res}        1
+                        {txt}Largest       Std. Dev.     {res}        0
+{txt}75%    {res}        1              1
+{txt}90%    {res}        1              1       {txt}Variance      {res}        0
+{txt}95%    {res}        1              1       {txt}Skewness      {res}        .
+{txt}99%    {res}        1              1       {txt}Kurtosis      {res}        .
+
+{com}. sum groupsale
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 3}groupsale {c |}{res}        106           1           0          1          1
+
+{com}. 

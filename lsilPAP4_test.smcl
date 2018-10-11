@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP4_test.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}10 Oct 2018, 16:50:27
+ {txt}opened on:  {res}11 Oct 2018, 16:01:55
 {txt}
 {com}. 
 . cd "$d3" 
@@ -320,6 +320,29 @@
 {txt}
 {com}. 
 . 
+. 
+. * Gross margin -- Net rev. per goat
+. 
+. /* Costs
+> Amount spent purchasing goats: LSE12
+> Amount spent on feed/fodder : LSE15
+> Amount spent on vet care : LSE16
+> Amount spent on breeding fees : LSE17a * LSE17b
+> Amount spent on shelters : LSE18
+> */
+. 
+. gen goat_costs = LSE12 + LSE15 + LSE16 + LSE17a*LSE17b + LSE18
+{txt}(16 missing values generated)
+
+{com}. gen net_goat_income = LS9 - goat_costs
+{txt}(16 missing values generated)
+
+{com}. gen netincome_goat = net_goat_income / LS8
+{txt}(16 missing values generated)
+
+{com}. 
+. 
+. 
 . ** Decision-Making **
 . 
 . /* Variables 
@@ -350,7 +373,7 @@
 . local local_decision MAN18a MAN18b MAN18c MAN18d MAN18e 
 {txt}
 {com}. make_index_gr decision wgt stdgroup `local_decision'
-{res}  975
+{res}  978
 {txt}
 {com}. 
 . 
@@ -367,15 +390,23 @@
 
 {com}. 
 . 
+. ** Management Quality **
+. 
+. 
+. 
+. 
+. 
 . save "$d3/r_CO_Merged_Ind.dta", replace
 {txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline aug 20 2018/r_CO_Merged_Ind.dta saved
 
 {com}. 
+. 
+. 
 . ****************
 . ** HH dataset **
 . clear
 {txt}
-{com}. use "r_HH_Merged_PAP.dta"
+{com}. use "$d3/r_HH_Merged_PAP.dta"
 {txt}
 {com}. 
 . * Drop Banke District & Pilot Co-op
@@ -600,6 +631,28 @@
 {res}  953
 {txt}
 {com}. 
+. 
+. * Gross margin -- Net rev. per goat
+. 
+. /* Costs
+> Amount spent purchasing goats: LSE12
+> Amount spent on feed/fodder : LSE15
+> Amount spent on vet care : LSE16
+> Amount spent on breeding fees : LSE17a * LSE17b
+> Amount spent on shelters : LSE18
+> */
+. 
+. gen goat_costs = LSE12 + LSE15 + LSE16 + LSE17a*LSE17b + LSE18
+{txt}(2,273 missing values generated)
+
+{com}. gen net_goat_income = LS9 - goat_costs
+{txt}(2,273 missing values generated)
+
+{com}. gen netincome_goat = net_goat_income / LS8
+{txt}(2,361 missing values generated)
+
+{com}. 
+. 
 . save "$d3/r_HH_Merged_Ind.dta", replace
 {txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline aug 20 2018/r_HH_Merged_Ind.dta saved
 
@@ -629,7 +682,7 @@
 . 
 {txt}end of do-file
 
-{com}. do "/var/folders/vj/bmv34kqd60j8sb8x04d58nhr0000gn/T//SD03165.000000"
+{com}. do "/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP5_test_goatsales.do"
 {txt}
 {com}. clear
 {txt}
