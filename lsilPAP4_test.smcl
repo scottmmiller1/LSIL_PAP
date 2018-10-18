@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP4_test.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}11 Oct 2018, 16:01:55
+ {txt}opened on:  {res}18 Oct 2018, 17:11:24
 {txt}
 {com}. 
 . cd "$d3" 
@@ -210,41 +210,43 @@
 > Members : role_CPMgt_and_membershi1
 > */
 . 
-. gen revenue = REV4 // names too long for macros
+. * Convert to USD as of 1/1/18
+. 
+. gen revenue = REV4*(0.0099) // names too long for macros
 {txt}(2 missing values generated)
 
-{com}. gen costs = REC7
+{com}. gen costs = REC7*(0.0099)
 {txt}(2 missing values generated)
 
-{com}. gen assets = FAL1
+{com}. gen assets = FAL1*(0.0099)
 {txt}(2 missing values generated)
 
-{com}. gen liabilities = FAL2
+{com}. gen liabilities = FAL2*(0.0099)
 {txt}(2 missing values generated)
 
-{com}. gen goatrev = REC4_1
+{com}. gen goatrev = REC4_1*(0.0099)
 {txt}(2 missing values generated)
 
 {com}. 
-. gen net_rev = REV4 - REC7
+. gen net_rev = revenue - costs
 {txt}(2 missing values generated)
 
-{com}. gen net_finances = (REV4 - REC7) ///
->                                         + (FAL1 - FAL2)
+{com}. gen net_finances = (revenue - costs) ///
+>                                         + (assets - liabilities)
 {txt}(2 missing values generated)
 
 {com}. 
 . * per member
-. gen rev_member = REV4 / MAN3
+. gen rev_member = revenue / MAN3
 {txt}(2 missing values generated)
 
-{com}. gen cost_member =  REC7 / MAN3
+{com}. gen cost_member =  costs / MAN3
 {txt}(2 missing values generated)
 
-{com}. gen assets_member = FAL1 / MAN3
+{com}. gen assets_member = assets / MAN3
 {txt}(2 missing values generated)
 
-{com}. gen liab_member = FAL2 / MAN3
+{com}. gen liab_member = liabilities / MAN3
 {txt}(2 missing values generated)
 
 {com}. gen net_rev_member = net_rev / MAN3
@@ -253,11 +255,25 @@
 {com}. gen net_finances_member = net_finances / MAN3
 {txt}(2 missing values generated)
 
-{com}. gen goatrev_member = REC4_1 / MAN3
+{com}. gen goatrev_member = goatrev / MAN3
 {txt}(2 missing values generated)
 
 {com}. 
-. 
+. ** Replace Missing values with zero 
+. *  , 
+. replace revenue = 0 if revenue ==.
+{txt}(2 real changes made)
+
+{com}. replace rev_member = 0 if rev_member ==.
+{txt}(2 real changes made)
+
+{com}. replace costs = 0 if costs ==.
+{txt}(2 real changes made)
+
+{com}. replace cost_mem = 0 if cost_mem ==.            
+{txt}(2 real changes made)
+
+{com}. 
 . 
 . ** Goat Sales ** 
 . 
@@ -280,8 +296,8 @@
 {txt}(2 missing values generated)
 
 {com}. * goatrev
-. * goatrev_member
-. gen goatrev_sold = REC4_1 / REC1
+. * revenue per goat sold
+. gen goatrev_sold = goatrev / REC1
 {txt}(22 missing values generated)
 
 {com}. gen col_points = GTT1
@@ -304,10 +320,10 @@
 {txt}
 {com}. gen time_passed = -1*(LS41)
 {txt}
-{com}. gen transp_cost = -1*(LS42)
+{com}. gen transp_cost = -1*(LS42*(0.0099))
 {txt}
 {com}. 
-. local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue co_opshare visits_sale
+. local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue
 {txt}
 {com}. make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
 {res}  973
@@ -320,7 +336,6 @@
 {txt}
 {com}. 
 . 
-. 
 . * Gross margin -- Net rev. per goat
 . 
 . /* Costs
@@ -331,10 +346,10 @@
 > Amount spent on shelters : LSE18
 > */
 . 
-. gen goat_costs = LSE12 + LSE15 + LSE16 + LSE17a*LSE17b + LSE18
+. gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
 {txt}(16 missing values generated)
 
-{com}. gen net_goat_income = LS9 - goat_costs
+{com}. gen net_goat_income = LS9*(0.0099) - goat_costs
 {txt}(16 missing values generated)
 
 {com}. gen netincome_goat = net_goat_income / LS8
@@ -390,12 +405,25 @@
 
 {com}. 
 . 
-. ** Management Quality **
+. ** Planning and Goals **
 . 
+. /* Variables 
+> Business Plan : PNG1
+> Time Horizon : PNG2
+> Expected Goats Sold : PNG3
+> Expected Rev. : PNG4
+> */
 . 
-. 
-. 
-. 
+. gen expected_rev = PNG4*(0.0099)
+{txt}(2 missing values generated)
+
+{com}. 
+. local local_PNG PNG1 PNG2 PNG3 expected_rev
+{txt}
+{com}. make_index_gr PNG wgt stdgroup `local_PNG'
+{res}  981
+{txt}
+{com}. 
 . save "$d3/r_CO_Merged_Ind.dta", replace
 {txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline aug 20 2018/r_CO_Merged_Ind.dta saved
 
@@ -615,24 +643,10 @@
 {com}. gen time_passed = -1*(LS41)
 {txt}(1,172 missing values generated)
 
-{com}. gen transp_cost = -1*(LS42)
+{com}. gen transp_cost = -1*(LS42*(0.0099))
 {txt}(1,172 missing values generated)
 
 {com}. 
-. local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue co_opshare visits_sale
-{txt}
-{com}. make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
-{res}  952
-{txt}
-{com}. 
-. local local_salecost visits_sale time_passed transp_cost
-{txt}
-{com}. make_index_gr salecost wgt stdgroup `local_salecost' 
-{res}  953
-{txt}
-{com}. 
-. 
-. * Gross margin -- Net rev. per goat
 . 
 . /* Costs
 > Amount spent purchasing goats: LSE12
@@ -642,15 +656,28 @@
 > Amount spent on shelters : LSE18
 > */
 . 
-. gen goat_costs = LSE12 + LSE15 + LSE16 + LSE17a*LSE17b + LSE18
+. gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
 {txt}(2,273 missing values generated)
 
-{com}. gen net_goat_income = LS9 - goat_costs
+{com}. gen net_goat_income = LS9*(0.0099) - goat_costs
 {txt}(2,273 missing values generated)
 
 {com}. gen netincome_goat = net_goat_income / LS8
 {txt}(2,361 missing values generated)
 
+{com}. 
+. 
+. local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue net_goat_income
+{txt}
+{com}. make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
+{res}  955
+{txt}
+{com}. 
+. local local_salecost visits_sale time_passed transp_cost
+{txt}
+{com}. make_index_gr salecost wgt stdgroup `local_salecost' 
+{res}  956
+{txt}
 {com}. 
 . 
 . save "$d3/r_HH_Merged_Ind.dta", replace
@@ -682,7 +709,7 @@
 . 
 {txt}end of do-file
 
-{com}. do "/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP5_test_goatsales.do"
+{com}. do "/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP5_test_other.do"
 {txt}
 {com}. clear
 {txt}

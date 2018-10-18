@@ -124,25 +124,33 @@ Goat Rev : role_GMrevenuandcostREC4_1
 Members : role_CPMgt_and_membershi1
 */
 
-gen revenue = REV4 // names too long for macros
-gen costs = REC7
-gen assets = FAL1
-gen liabilities = FAL2
-gen goatrev = REC4_1
+* Convert to USD as of 1/1/18
 
-gen net_rev = REV4 - REC7
-gen net_finances = (REV4 - REC7) ///
-					+ (FAL1 - FAL2)
+gen revenue = REV4*(0.0099) // names too long for macros
+gen costs = REC7*(0.0099)
+gen assets = FAL1*(0.0099)
+gen liabilities = FAL2*(0.0099)
+gen goatrev = REC4_1*(0.0099)
+
+gen net_rev = revenue - costs
+gen net_finances = (revenue - costs) ///
+					+ (assets - liabilities)
 
 * per member
-gen rev_member = REV4 / MAN3
-gen cost_member =  REC7 / MAN3
-gen assets_member = FAL1 / MAN3
-gen liab_member = FAL2 / MAN3
+gen rev_member = revenue / MAN3
+gen cost_member =  costs / MAN3
+gen assets_member = assets / MAN3
+gen liab_member = liabilities / MAN3
 gen net_rev_member = net_rev / MAN3
 gen net_finances_member = net_finances / MAN3
-gen goatrev_member = REC4_1 / MAN3
+gen goatrev_member = goatrev / MAN3
 
+** Replace Missing values with zero 
+*  , 
+replace revenue = 0 if revenue ==.
+replace rev_member = 0 if rev_member ==.
+replace costs = 0 if costs ==.
+replace cost_mem = 0 if cost_mem ==.		
 
 
 ** Goat Sales ** 
@@ -162,8 +170,8 @@ Transportation costs
 gen goats_sold = REC1
 gen goats_sold_member = REC1 / MAN3
 * goatrev
-* goatrev_member
-gen goatrev_sold = REC4_1 / REC1
+* revenue per goat sold
+gen goatrev_sold = goatrev / REC1
 gen col_points = GTT1
 
 local local_CO_goatsales goats_sold goatrev col_points
@@ -175,9 +183,9 @@ gen co_opshare = 0
 replace co_opshare = co_opgoatno / LS8 if LS8 != 0
 gen visits_sale = -1*(LS40 / LS_n_sales)
 gen time_passed = -1*(LS41)
-gen transp_cost = -1*(LS42)
+gen transp_cost = -1*(LS42*(0.0099))
 
-local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue co_opshare visits_sale
+local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue
 make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
 
 local local_salecost visits_sale time_passed transp_cost
@@ -194,8 +202,8 @@ Amount spent on breeding fees : LSE17a * LSE17b
 Amount spent on shelters : LSE18
 */
 
-gen goat_costs = LSE12 + LSE15 + LSE16 + LSE17a*LSE17b + LSE18
-gen net_goat_income = LS9 - goat_costs
+gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
+gen net_goat_income = LS9*(0.0099) - goat_costs
 gen netincome_goat = net_goat_income / LS8
 
 
@@ -231,11 +239,19 @@ Available to Co-op : EAA3
 egen avg_EAA = rowmean(EAA1 EAA3)
 
 
-** Management Quality **
+** Planning and Goals **
 
+/* Variables 
+Business Plan : PNG1
+Time Horizon : PNG2
+Expected Goats Sold : PNG3
+Expected Rev. : PNG4
+*/
 
+gen expected_rev = PNG4*(0.0099)
 
-
+local local_PNG PNG1 PNG2 PNG3 expected_rev
+make_index_gr PNG wgt stdgroup `local_PNG'
 
 save "$d3/r_CO_Merged_Ind.dta", replace
 
@@ -363,16 +379,8 @@ gen co_opshare = 0
 replace co_opshare = co_opgoatno / LS8 if LS8 != 0
 gen visits_sale = -1*(LS40 / LS_n_sales)
 gen time_passed = -1*(LS41)
-gen transp_cost = -1*(LS42)
+gen transp_cost = -1*(LS42*(0.0099))
 
-local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue co_opshare visits_sale
-make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
-
-local local_salecost visits_sale time_passed transp_cost
-make_index_gr salecost wgt stdgroup `local_salecost' 
-
-
-* Gross margin -- Net rev. per goat
 
 /* Costs
 Amount spent purchasing goats: LSE12
@@ -382,9 +390,16 @@ Amount spent on breeding fees : LSE17a * LSE17b
 Amount spent on shelters : LSE18
 */
 
-gen goat_costs = LSE12 + LSE15 + LSE16 + LSE17a*LSE17b + LSE18
-gen net_goat_income = LS9 - goat_costs
+gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
+gen net_goat_income = LS9*(0.0099) - goat_costs
 gen netincome_goat = net_goat_income / LS8
+
+
+local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue net_goat_income
+make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
+
+local local_salecost visits_sale time_passed transp_cost
+make_index_gr salecost wgt stdgroup `local_salecost' 
 
 
 save "$d3/r_HH_Merged_Ind.dta", replace

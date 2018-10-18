@@ -52,7 +52,8 @@ forv i = 2/`listsize' { // appends into single matrix
 * Table
 frmttable using MDE_finance.doc, statmat(A) sdec(4) coljust(l;c;l;l) title("Co-op Level - Finances: Strata - No Interaction") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
-rtitle("Revenue"\"Rev. per Member"\"Costs"\"Costs per Mem."\"Assets"\"Assets per Mem."\"Liabilities"\"Liabilities per Mem."\"Goat Revenue"\"Goat Rev. per Mem."\"Net Revenue"\"Net Rev. per Mem."\"Net Finances"\"Net Fin. per Mem.") replace
+rtitle("Revenue"\"Rev. per Member"\"Costs"\"Costs per Mem."\"Assets"\"Assets per Mem."\"Liabilities"\"Liabilities per Mem."\"Goat Revenue"\"Goat Rev. per Mem."\"Net Revenue"\"Net Rev. per Mem."\"Net Finances"\"Net Fin. per Mem.") ///
+note("Currency measured in USD") replace
 
 
 

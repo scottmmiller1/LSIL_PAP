@@ -77,7 +77,8 @@ forv i = 2/`listsize' { // appends into single matrix
 * Table
 frmttable using MDE_summary.doc, statmat(A) sdec(2) coljust(l;c;l;l) title("Co-op Level - Finances: Summmary Stats") ///
 ctitle("","N","Mean","sd","Min","Max") ///
-rtitle("Revenue"\"Rev. per Member"\"Costs"\"Costs per Mem."\"Assets"\"Assets per Mem."\"Liabilities"\"Liabilities per Mem."\"Goat Revenue"\"Goat Rev. per Mem."\"Net Revenue"\"Net Rev. per Mem."\"Net Finances"\"Net Fin. per Mem.") addtable replace
+rtitle("Revenue"\"Rev. per Member"\"Costs"\"Costs per Mem."\"Assets"\"Assets per Mem."\"Liabilities"\"Liabilities per Mem."\"Goat Revenue"\"Goat Rev. per Mem."\"Net Revenue"\"Net Rev. per Mem."\"Net Finances"\"Net Fin. per Mem.") ///
+note("Currency measured in USD") addtable replace
 	
 	
 * ------------------------------------------- 
@@ -121,7 +122,8 @@ forv i = 2/`listsize' { // appends into single matrix
 * Table
 frmttable using MDE_summary.doc, statmat(A) sdec(2) coljust(l;c;l;l) title("Co-op Level - Co-op Goat Sales: Summmary Stats") ///
 ctitle("","N","Mean","sd","Min","Max") ///
-rtitle("Goats Sold"\"Goats Sold per Mem."\"Goat Revenue"\"Goat Rev. per Mem."\"Rev. per Goat Sold"\"Collection Points"\"CO Goat Sales Index") addtable replace
+rtitle("Goats Sold"\"Goats Sold per Mem."\"Goat Revenue"\"Goat Rev. per Mem."\"Rev. per Goat Sold"\"Collection Points"\"CO Goat Sales Index") ///
+note("Currency measured in USD") addtable replace
  
  
 ** HH vars
@@ -312,7 +314,8 @@ forv i = 2/`listsize' { // appends into single matrix
 * Table
 frmttable using MDE_summary.doc, statmat(A) sdec(2) coljust(l;c;l;l) title("HH Level - HH Goat Sales: Summmary Stats") ///
 ctitle("","N","Mean","sd","Min","Max") ///
-rtitle("Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"% Sold through Co-op"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index"\"Net Goat Income"\"Net Income per Goat") addtable replace 
+rtitle("Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"% Sold through Co-op"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index"\"Net Goat Income"\"Net Income per Goat") ///
+note("Currency measured in USD") addtable replace 
  
 * ------------------------------------------- 	
 

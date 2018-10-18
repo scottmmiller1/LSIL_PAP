@@ -1,6 +1,6 @@
 
 clear 
-use "$d3/r_Baseline_Merged_Str.dta"
+use "$d3/r_CO_Merged_Ind.dta"
 
 * ---------------------------------------------------
 ** Add true treatment status to this dataset
@@ -15,14 +15,14 @@ keep idx treat
 
 save "$d3/treat.dta", replace
 
-merge 1:1 idx using "$d3/r_Baseline_Merged_Str.dta"
+merge 1:1 idx using "$d3/r_CO_Merged_PAP.dta"
 
-save "$d3/r_Baseline_Merged_Str_treat.dta", replace
+save "$d3/r_CO_Merged_Ind_treat.dta", replace
 * ---------------------------------------------------
 
 * Balance tables after dropping Banke district
 clear 
-use "$d3/r_Baseline_Merged_Str_treat.dta"
+use "$d3/r_CO_Merged_Ind._treat.dta"
 
 
 lab var COMM6_1 "Co-op sends sale info by word-of-mouth"
@@ -99,12 +99,6 @@ COMM2d {
 	cap destring `v', replace
 }
 
-** Replace Missing values with zero 
-*  , 
-replace REV4 = 0 if REV4 ==.
-replace totrev_member = 0 if totrev_member ==.
-replace REC7 = 0 if REC7 ==.
-replace totcost_mem = 0 if totcost_mem ==.		
 
 
 *iebaltable
@@ -129,6 +123,22 @@ iebaltab MAN3 REV4 totrev_member ///
 		save("/Users/scottmiller/Dropbox (UFL)/LSIL/Stata files/Baseline/Randomization/Randomization Summary Stats/iebaltab1_nobanke_clean_zeroes.xlsx") replace
 
 
+* ---------------------------------------------------
+** Add true treatment status to this dataset
+* Merge treatment status from original randomization
+* Original dataset
+clear
+use "$d3/r_HH_Merged_Ind.dta"
+
+rename IDX idx
+drop if idx == "Karmath SEWC 2" | idx == "Lekhbesi SEWC 1"
+
+merge m:1 idx using "$d3/treat.dta"
+
+save "$d3/r_HH_Merged_Ind_treat.dta", replace
+* ---------------------------------------------------		
+		
+		
 clear
 use "$d3/Household_Merged_Edit_treat.dta"
 
@@ -194,14 +204,6 @@ replace LS9 = 0 if LS9 ==.
 replace co_opsalevalue = 0 if co_opsalevalue ==.
 
 
-
-collapse (firstnm) LS9 LS8 ///
-		co_opgoatno co_opsalevalue ///
-		HHR14 HSE5 HSE10  ///
-		MGT5 COM3 COM5 ///
-		BR1 BR BR2 ///
-		BR3 GP21 treat idx ID1, by(___id) 
-
 foreach v of var * {
 	label var `v' "`l`v''"
 	cap label val `v' "`ll`v''"
@@ -259,4 +261,3 @@ iebaltab LS9 LS8 ///
 		BR3 GP21, rowvarlabels ///
 		grpvar(treat) vce(cluster idx)  ///
 		save("/Users/scottmiller/Dropbox (UFL)/LSIL/Stata files/Baseline/Randomization/Randomization Summary Stats/iebaltab2_nobanke_clean3.xlsx") replace
-

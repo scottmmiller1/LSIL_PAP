@@ -106,7 +106,7 @@ use "$d3/r_HH_Merged_Ind.dta"
 ** HH vars
 gl hh_trn_d HH_TRN1 HH_TRN2 ///
 	HH_TRN3 HH_TRN4 HH_TRN5 ///
-	HH_TRN6 HH_TRN7 index_HH_TRN avg_dTRN
+	HH_TRN6 HH_TRN7 index_HH_TRN index_dTRN avg_dTRN
 
 
 *** Strata dummies - No interaction
@@ -175,5 +175,5 @@ forv i = 2/`listsize' { // appends into single matrix
 * Strata table
 frmttable using MDE_trn.doc, statmat(A) sdec(4) title("HH Level - HH Awareness: Strata - No Interaction") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
-rtitle("Mandate"\"Annual Report"\"Annual Budget"\"Financial Report"\"Meeting Minutes"\"Election Results"\"Sale Records"\"HH Index"\"Avg. Discrepancy") addtable replace
+rtitle("Mandate"\"Annual Report"\"Annual Budget"\"Financial Report"\"Meeting Minutes"\"Election Results"\"Sale Records"\"HH Index"\"Discrepancy Index"\"Avg. Discrepancy") addtable replace
 
