@@ -15,14 +15,14 @@ keep idx treat
 
 save "$d3/treat.dta", replace
 
-merge 1:1 idx using "$d3/r_CO_Merged_PAP.dta"
+merge 1:1 idx using "$d3/r_CO_Merged_Ind.dta"
 
 save "$d3/r_CO_Merged_Ind_treat.dta", replace
 * ---------------------------------------------------
 
 * Balance tables after dropping Banke district
 clear 
-use "$d3/r_CO_Merged_Ind._treat.dta"
+use "$d3/r_CO_Merged_Ind_treat.dta"
 
 
 lab var COMM6_1 "Co-op sends sale info by word-of-mouth"
@@ -106,21 +106,19 @@ COMM2d {
 * New code
 drop if district == "Banke" 
 
-iebaltab MAN3 REV4 totrev_member ///
-		REC7 totcost_mem ///
-		REC1 goatssold_mem GTT1 ///
-		COMM6_1 COMM6_2 COMM6_3 ///
+iebaltab revenue rev_member costs cost_mem net_rev net_rev_member ///
+		goats_sold goatssold_mem MAN3 ///
+		PNG1 PNG2 PNG3 expected_rev index_PNG ///
+		COMM6_1 COMM6_2 ///
 		COMM6_4 COMM6_5 COMM6_6 ///
 		COMM6_7 COMM6_8 ///
 		COMM8a_1 COMM8b_1 ///
 		COMM8c_1 COMM8d_1 ///
 		COMM8e_1  COMM8f_1 ///
-		COMM1a COMM1b COMM1c ///
-		COMM1d ///
-		COMM2a COMM2b COMM2c ///
-		COMM2d ///
-		GTT2 GTT3, rowvarlabels grpvar(treat) ///
-		save("/Users/scottmiller/Dropbox (UFL)/LSIL/Stata files/Baseline/Randomization/Randomization Summary Stats/iebaltab1_nobanke_clean_zeroes.xlsx") replace
+		CO_TRN1 CO_TRN2 CO_TRN3 CO_TRN4 CO_TRN5 ///
+		CO_TRN6 CO_TRN7 ///
+		GTT1 GTT2 GTT3, rowvarlabels grpvar(treat) ///
+		savetex("/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/iebaltab1_nobanke_PAP.tex") replace
 
 
 * ---------------------------------------------------

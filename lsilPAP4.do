@@ -1,58 +1,49 @@
-
-clear all
+clear
 set more off, perm
 
 *log
 cap log close
 log using "$d1/lsilPAP4.smcl", replace
 
-cd "$d2" 
-ssc install nmissing
+cd "$d3" 
 
- 
-***********************************************
-** 				co-op indicators			 **
-*********************************************** 
- 
+
 ** co-op dataset **
 clear
-use "Baseline_Merged_Str_wdistrictnames copy.dta"
+use "r_CO_Merged_PAP.dta"
 
 * Drop Banke District & Pilot Co-op
 drop if district == "Banke"
-drop if treat == .
+drop if r_treat ==.
+drop if idx == "" 
 
 * Weights = 1 & control group
 generate wgt = 1
-generate stdgroup = treat
+generate stdgroup = r_treat
+
+encode region, gen(n_region) // create numerical region variable for regression
+
+** Winsorize LS9
+* treatment
+sum LS9 if r_treat == 1, d
+scalar t_99 = r(p99)
+
+replace LS9 = t_99 if LS9 > t_99 & !missing(LS9) & r_treat == 1
+
+*control
+sum LS9 if r_treat == 0, d
+scalar c_99 = r(p99)
+
+replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & r_treat == 0
 
 
-** Communication **
+** Replace Missing values with zero 
+* LS9 , 
+replace LS9 = 0 if LS9 ==.
+replace co_opsalevalue = 0 if co_opsalevalue ==.
 
-/* Variables 
-# of times initiated contact with SHG : comm1
-# of times SHG initiated contact : comm2
-# of SHGs met with : role_BMBMgrp_in2COMM5
-Factors that limit communication : (not in index - used as control vars)
-*/
 
-	** Total # of times initiated contact
-	gen comm1 = role_BMBMgrp_in1COMM1a + role_BMBMgrp_in1COMM1b ///
-	+ role_BMBMgrp_in1COMM1c + role_BMBMgrp_in1COMM1d
-	gen comm2 = role_BMBMgrp_in2COMM2a + role_BMBMgrp_in2COMM2b ///
-	+ role_BMBMgrp_in2COMM2c + role_BMBMgrp_in2COMM2d
-	** Factors that limit communication
-	local vlist a b c d e f
-	foreach var of local vlist {
-		destring role_BMBMgrp_in3COMM8`var', replace
-		}
 
-local local_CO_comm comm1 comm2 role_BMBMgrp_in2COMM5 
-make_index_gr CO_comm wgt stdgroup `local_CO_comm' 
-
-* # missing observations
-nmissing index_CO_comm
-npresent index_CO_comm
 
 
 ** Cooperative Finances **
@@ -62,108 +53,139 @@ Revenue from all activities : role_GMrevenuandcostREV4
 Costs from all activities : role_GMrevenuandcostcalc_REC7
 Assets : role_GMFinLiabiliteisFAL1
 Liabilities : role_GMFinLiabiliteisFAL2
+Goat Rev : role_GMrevenuandcostREC4_1
+Members : role_CPMgt_and_membershi1
 */
 
-	** Make Costs and Liabilities negative
-	gen costs = -role_GMrevenuandcostcalc_REC7
-	gen liabilities = -role_GMFinLiabiliteisFAL2
+* Convert to USD as of 1/1/18
 
-local local_CO_finances role_GMrevenuandcostREV4 costs role_GMFinLiabiliteisFAL1 liabilities
-make_index_gr CO_finances wgt stdgroup `local_CO_finances' 
+gen revenue = REV4*(0.0099) // names too long for macros
+gen costs = REC7*(0.0099)
+gen assets = FAL1*(0.0099)
+gen liabilities = FAL2*(0.0099)
+gen goatrev = REC4_1*(0.0099)
 
-* # missing observations
-nmissing index_CO_finances
-npresent index_CO_finances
+gen net_rev = revenue - costs
+gen net_finances = (revenue - costs) ///
+					+ (assets - liabilities)
+
+* per member
+gen rev_member = revenue / MAN3
+gen cost_member =  costs / MAN3
+gen assets_member = assets / MAN3
+gen liab_member = liabilities / MAN3
+gen net_rev_member = net_rev / MAN3
+gen net_finances_member = net_finances / MAN3
+gen goatrev_member = goatrev / MAN3
+
+** Replace Missing values with zero 
+*  , 
+replace revenue = 0 if revenue ==.
+replace rev_member = 0 if rev_member ==.
+replace costs = 0 if costs ==.
+replace cost_mem = 0 if cost_mem ==.		
 
 
-** Decision-Making **
 
-/* Variables 
-Setting interest rate (loans) : MAN18a 
-Setting interest rate (savings) : MAN18b
-Setting prices (traders) : MAN18c
-Buying equipment : MAN18d
-General assembly dates: MAN18e
+** household level vars
+gen co_opshare = 0
+replace co_opshare = co_opgoatno / LS8 if LS8 != 0
+gen visits_sale = -1*(LS40 / LS_n_sales)
+gen time_passed = -1*(LS41)
+gen transp_cost = -1*(LS42*(0.0099))
+
+local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue
+make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
+
+local local_salecost visits_sale time_passed transp_cost
+make_index_gr salecost wgt stdgroup `local_salecost' 
+
+
+* Gross margin -- Net rev. per goat
+
+/* Costs
+Amount spent purchasing goats: LSE12
+Amount spent on feed/fodder : LSE15
+Amount spent on vet care : LSE16
+Amount spent on breeding fees : LSE17a * LSE17b
+Amount spent on shelters : LSE18
 */
 
-	foreach i in 25 27 29 31 33 {
-		destring role_CPMgt_and_membersh`i', replace
-		replace role_CPMgt_and_membersh`i' = . if role_CPMgt_and_membersh`i' == 97
-		replace role_CPMgt_and_membersh`i' = . if role_CPMgt_and_membersh`i' == 4
-		}
-
-local local_CO_decision role_CPMgt_and_membersh25 role_CPMgt_and_membersh27 ///
-	role_CPMgt_and_membersh29 role_CPMgt_and_membersh31 role_CPMgt_and_membersh33
-make_index_gr CO_decision wgt stdgroup `local_CO_decision' 
-
-* # missing observations
-nmissing index_CO_decision
-npresent index_CO_decision
-
-
-** Evaluation & Assessment **
-
-/* Variables 
-External Evaluation : role_GMevalEAA1
-Available to Co-op : role_GMevalEAA3
-*/
-
-	** Make EAA binary
-	foreach i in 1 3 { 
-		destring role_GMevalEAA`i', replace
-		replace role_GMevalEAA`i' = 0 if  role_GMevalEAA`i' == 2
-		replace role_GMevalEAA`i' = . if  role_GMevalEAA`i' == 97
-		}
-
-local local_CO_EAA role_GMevalEAA1 role_GMevalEAA3
-make_index_gr CO_EAA wgt stdgroup `local_CO_EAA' 
-
-* # missing observations
-nmissing index_CO_EAA
-npresent index_CO_EAA
-
-
-** Goat Sales ** 
-
-/* Variables 
-# of goats sold : role_GMrevenuandcostREC1
-revenue : role_GMrevenuandcostREC2
-# of organized sales at collection points : Co_opGoat_transactionsGTT1
-*/
-
-local local_CO_goatsales role_GMrevenuandcostREC1 role_GMrevenuandcostREC2 Co_opGoat_transactionsGTT1
-make_index_gr CO_goatsales wgt stdgroup `local_CO_goatsales' 
-
-* # missing observations
-nmissing index_CO_goatsales
-npresent index_CO_goatsales
-
-
-** Management Quality **
+gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
+gen net_goat_income = LS9*(0.0099) - goat_costs
+gen netincome_goat = net_goat_income / LS8
 
 
 
 ** Planning and Goals **
 
 /* Variables 
-Business Plan : role_GMplanandgoalsPNG1
-Planning Time Horizon : role_GMplanandgoalsPNG2
-Expected Goats Sold : role_GMplanandgoalsPNG3
-Expected Total Revenue : role_GMplanandgoalsPNG4
+Business Plan : PNG1
+Time Horizon : PNG2
+Expected Goats Sold : PNG3
+Expected Rev. : PNG4
 */
 
-	* make PNG1 binary
-	destring role_GMplanandgoalsPNG1, replace
-	replace role_GMplanandgoalsPNG1 = 0 if role_GMplanandgoalsPNG1 == 2
-	replace role_GMplanandgoalsPNG1 = . if role_GMplanandgoalsPNG1 == 97
+gen expected_rev = PNG4*(0.0099)
 
-local local_CO_PNG role_GMplanandgoalsPNG1 role_GMplanandgoalsPNG2 ///
-	role_GMplanandgoalsPNG3 role_GMplanandgoalsPNG4
-make_index_gr CO_PNG wgt stdgroup `local_CO_PNG' 
+local local_PNG PNG1 PNG2 PNG3 expected_rev
+make_index_gr PNG wgt stdgroup `local_PNG'
 
-* # missing observations
-nmissing index_CO_goatsales
-npresent index_CO_goatsales
+save "$d3/r_CO_Merged_Ind.dta", replace
+
+
+
+****************
+** HH dataset **
+clear
+use "$d3/r_HH_Merged_PAP.dta"
+
+* Drop Banke District & Pilot Co-op
+drop if district == "Banke"
+drop if r_treat == .
+drop if idx == "" 
+
+* Weights = 1 & control group
+generate wgt = 1
+generate stdgroup = r_treat
+
+encode region, gen(n_region) // create numerical region variable for regression
+
+
+** Winsorize LS9
+* treatment
+sum LS9 if r_treat == 1, d
+scalar t_99 = r(p99)
+
+replace LS9 = t_99 if LS9 > t_99 & !missing(LS9) & r_treat == 1
+
+*control
+sum LS9 if r_treat == 0, d
+scalar c_99 = r(p99)
+
+replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & r_treat == 0
+
+
+** Replace Missing values with zero 
+* LS9 , 
+replace LS9 = 0 if LS9 ==.
+replace co_opsalevalue = 0 if co_opsalevalue ==.
+
+
+
+** Communication **
+
+* Variables 
+	* Total # of times HH is contacted
+	gen HHcontact = COM3 + COM8
+
+* HH comm index
+local local_HH_comm COM3 COM8
+make_index_gr HH_comm wgt stdgroup `local_HH_comm' 
+
+* factors that limit communication
+	* principal components index
+
 
 
 ** Transparency **
@@ -179,168 +201,88 @@ Sale Records : Co_opTransparencyTRN7
 Evaluations : Co_opTransparencyTRN8
 */
 
+	/*
 	forvalues i=1/7 { 
 		destring role_GMtransTRN`i', replace
 		replace role_GMtransTRN`i' = 0 if role_GMtransTRN`i' == 2
 		replace role_GMtransTRN`i' = . if role_GMtransTRN`i' == 97
 		}
-
-	* correlation between household and co-op transparency
-	forvalues i=1/7 {
-		corr Co_opTransparencyTRN`i' role_GMtransTRN`i' 
-		sum Co_opTransparencyTRN`i' role_GMtransTRN`i' 
-		}
+	*/
 	
-** Management Transparency	
-local local_CO_trans role_GMtransTRN1 role_GMtransTRN2 ///
-	role_GMtransTRN3 role_GMtransTRN4 role_GMtransTRN5 ///
-	role_GMtransTRN6 role_GMtransTRN7
-make_index_gr CO_trans wgt stdgroup `local_CO_trans' 
+** Co-op Transparency	
+local local_CO_TRN CO_TRN1 CO_TRN2 ///
+	CO_TRN3 CO_TRN4 CO_TRN5 ///
+	CO_TRN6 CO_TRN7
+make_index_gr CO_TRN wgt stdgroup `local_CO_TRN' 		
 
-* # missing observations
-nmissing index_CO_trans
-npresent index_CO_trans
+** Household Awareness
+local local_HH_TRN HH_TRN1 HH_TRN2 ///
+	HH_TRN3 HH_TRN4 HH_TRN5 ///
+	HH_TRN6 HH_TRN7
+make_index_gr HH_TRN wgt stdgroup `local_HH_TRN' 
 
+	
+** Transparency Discrepancy index
+	forvalues i=1/7 { 
+		gen dTRN`i' = 1 if CO_TRN`i' == HH_TRN`i' ///
+			&  !missing(CO_TRN`i') & !missing(HH_TRN`i')
+		replace dTRN`i' = 0 if CO_TRN`i' != HH_TRN`i' ///
+			&  !missing(CO_TRN`i') & !missing(HH_TRN`i')
+		}
+		
+local local_dTRN dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7
+make_index_gr dTRN wgt stdgroup `local_dTRN' 
 
+* average discrepancy
+egen avg_dTRN = rowmean(dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7)
 
-
-
-***********************************************
-** 			  household indicators			 **
-***********************************************
-
-** household dataset **
-clear
-use "Household_PAP.dta"
-
-* Drop Banke District & Pilot Co-op
-drop if district == "Banke"
-drop if treat == .
-
-* Weights = 1 & control group
-*generate wgt = 1
-*generate stdgroup = treat
-
-
-
-* W&C Dietary Diversity
-
- gen WDD = Food_ConsumptionGrainsFC1A + Food_ConsumptionPulsesFC1B + Food_ConsumptionMeat_fish_and_e0 + ///
- Food_ConsumptionDairy_productsFC + Food_ConsumptionFruitsFC1E + Food_ConsumptionVegetablesFC1F ///
- + Food_ConsumptionSugar_and_or_sw0 + Food_ConsumptionOilFC1H
-
-* # missing observations
-nmissing WDD
-npresent WDD
-
-
-** Communication **
-
-/* Variables 
-# of times member received information about sales : Co_opCommunicationCOM3
-# of times member received information about activities : Co_opCommunicationCOM8
-*/
-
-local local_HH_comm Co_opCommunicationCOM3 Co_opCommunicationCOM8 
-make_index_gr HH_comm wgt stdgroup `local_HH_comm' 
-
-* # missing observations
-nmissing index_HH_comm
-npresent index_HH_comm
 
 
 ** Goat Sales ** 
 
 /* Variables 
-# of goats sold : co_opgoatno
-revenue : co_opsalevalue
-# of organized sales at collection points : Co_opGoat_transactionsGTT1
+# of goats sold : Livestock_SalesLS8
+goat revenue : Livestock_SalesLS9
+goats sold through co-op : co_opgoatno
+goat revenue through co-op : co_opsalevalue
+share through co-op : co_opshare
+trader visits home : Livestock_SalesLS40
+time passed before sale : Livestock_SalesLS41
+transportation cost : Livestock_SalesLS42
 */
 
-local local_HH_goatsales co_opgoatno co_opsalevalue Co_opGoat_transactionsGTT1 
+
+** household level vars
+gen co_opshare = 0
+replace co_opshare = co_opgoatno / LS8 if LS8 != 0
+gen visits_sale = -1*(LS40 / LS_n_sales)
+gen time_passed = -1*(LS41)
+gen transp_cost = -1*(LS42*(0.0099))
+
+
+/* Costs
+Amount spent purchasing goats: LSE12
+Amount spent on feed/fodder : LSE15
+Amount spent on vet care : LSE16
+Amount spent on breeding fees : LSE17a * LSE17b
+Amount spent on shelters : LSE18
+*/
+
+gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
+gen net_goat_income = LS9*(0.0099) - goat_costs
+gen netincome_goat = net_goat_income / LS8
+
+
+local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue net_goat_income
 make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
 
-
-** Membership **
-
-/* Variables 
-% of members who have attended a co-op meeting : Co_opMembershipMEM8
-# of SHG meetings attended in the last 6 months ; Co_opMembershipMEM7
-*/
+local local_salecost visits_sale time_passed transp_cost
+make_index_gr salecost wgt stdgroup `local_salecost' 
 
 
-local local_HH_membership Co_opMembershipMEM8 Co_opMembershipMEM7
-make_index_gr membership wgt stdgroup `local_HH_membership' 
-
-* # missing observations
-nmissing index_HH_membership
-npresent index_HH_membership
+save "$d3/r_HH_Merged_Ind.dta", replace
 
 
-** Transparency **
-
-/* Variables
-Mandate : Co_opTransparencyTRN1
-Annual Report : Co_opTransparencyTRN2
-Annual Budget : Co_opTransparencyTRN3
-Financial Report: Co_opTransparencyTRN4 
-Meeting minutes : Co_opTransparencyTRN5
-Election Results : Co_opTransparencyTRN6
-Sale Records : Co_opTransparencyTRN7
-Evaluations : Co_opTransparencyTRN8
-*/
 
 
-	forvalues i=1/7 { 
-		destring role_GMtransTRN`i', replace
-		replace role_GMtransTRN`i' = 0 if role_GMtransTRN`i' == 2
-		replace role_GMtransTRN`i' = . if role_GMtransTRN`i' == 97
-		}
 
-	* correlation between household and co-op transparency
-	forvalues i=1/7 {
-		corr Co_opTransparencyTRN`i' role_GMtransTRN`i' 
-		sum Co_opTransparencyTRN`i' role_GMtransTRN`i' 
-		}
-
-
-** Household Transparency
-local local_HH_TRN Co_opTransparencyTRN1 Co_opTransparencyTRN2 ///
-	Co_opTransparencyTRN3 Co_opTransparencyTRN4 Co_opTransparencyTRN5 ///
-	Co_opTransparencyTRN6 Co_opTransparencyTRN7
-make_index_gr HH_TRN wgt stdgroup `local_HH_TRN' 
-
-
-	
-** Transparency Discrepancy index
-	forvalues i=1/7 { 
-		gen dTRN`i' = 1 if role_GMtransTRN`i' == Co_opTransparencyTRN`i' ///
-			&  !missing(role_GMtransTRN`i') & !missing(Co_opTransparencyTRN`i')
-		replace dTRN`i' = 0 if role_GMtransTRN`i' != Co_opTransparencyTRN`i' ///
-			&  !missing(role_GMtransTRN`i') & !missing(Co_opTransparencyTRN`i')
-		}
-		
-	forvalues i=1/7 { 
-		tab dTRN`i'
-		nmissing dTRN`i'
-		}
-	
-** Transparency Discrepancy
-local local_dTRN dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7
-make_index_gr dTRN wgt stdgroup `local_dTRN' 
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	

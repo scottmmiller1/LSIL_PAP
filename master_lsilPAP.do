@@ -28,6 +28,9 @@ lsilPAP4:
 
 lsilPAP5: 
 	Calculates MDEs for each indicator
+	
+lsilPAP6: 
+	Calculates balance tables
 
 *******************************************************************************/
 clear all

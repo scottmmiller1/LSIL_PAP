@@ -406,23 +406,3 @@ save "$d3/r_HH_Merged_Ind.dta", replace
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
