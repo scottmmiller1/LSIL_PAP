@@ -5,7 +5,7 @@ set more off, perm
 cap log close
 log using "$d1/lsilPAP5.smcl", replace
 
-
+cd "$d2"
 
 ** HH level dataset
 ********************************************* 

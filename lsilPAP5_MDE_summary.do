@@ -9,6 +9,44 @@ clear
 use "$d3/r_CO_Merged_Ind.dta"
 
 
+** Co-op indicators **
+
+gl co_summ MAN3 revenue costs net_rev rev_member net_rev_member ///
+		PNG1 PNG2 PNG3 expected_rev index_PNG CO_TRN1 CO_TRN2 ///
+		CO_TRN3 CO_TRN4 CO_TRN5 CO_TRN6 CO_TRN7
+
+local listsize : list sizeof global(co_summ)
+tokenize $co_summ
+
+forv i = 1/`listsize' {
+		
+	quietly {
+		sum ``i''
+		return list
+		scalar N_``i'' = r(N) // N
+		scalar mean_``i'' = r(mean) // mean
+		scalar sd_``i'' = r(sd)  // sd
+		scalar min_``i'' = r(min)  // sd
+		scalar max_``i'' = r(max)  // sd
+		
+	* matrix for table
+		matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
+		}
+}
+matrix A = mat_1
+forv i = 2/`listsize' { // appends into single matrix
+	matrix A = A \ mat_`i'
+}
+
+* Table
+frmttable using CO_summary.tex, tex statmat(A) sdec(2) coljust(l;c;l;l) title("Cooperative Indicators - Summmary Statistics") ///
+ctitle("","N","Mean","sd","Min","Max") ///
+rtitle("\# of Members"\"Revenue (USD)"\"Costs (USD)"\"Net Revenue (USD)"\"Revenue per Member (USD)"\"Net Revenue per Member (USD)"\"Co-op has a Business Plan"\"Planning Time Horizon (Years)"\"Expected Goats Sold"\"Expected Revenue (USD)"\"Planning \& Goals Summmary Index"\"Transparency: Mandate"\"Transparency: Annual Report"\"Transparency: Annual Budget"\"Transparency: Financial Report"\"Transparency: Meeting Minutes"\"Transparency: Election Results"\"Transparency: Sale Records")replace
+ 
+
+
+
+
 ** communication **
 gl co_comm comm1 comm2 contact COM3 COM8 index_CO_comm HHcontact
 	
@@ -238,6 +276,45 @@ rtitle("Mandate"\"Annual Report"\"Annual Budget"\"Financial Report"\"Meeting Min
 ********************************************* 
 clear
 use "$d3/r_HH_Merged_Ind.dta"
+
+
+** HH indicators **
+
+gl hh_summ COM3 COM8 index_HH_comm ///
+				LS8 LS9 co_opgoatno co_opsalevalue ///
+				net_goat_income index_HH_goatsales ///
+				visits_sale LS41 LS42 index_salecost ///
+				index_dTRN ///
+				
+
+local listsize : list sizeof global(hh_summ)
+tokenize $hh_summ
+
+forv i = 1/`listsize' {
+		
+	quietly {
+		sum ``i''
+		return list
+		scalar N_``i'' = r(N) // N
+		scalar mean_``i'' = r(mean) // mean
+		scalar sd_``i'' = r(sd)  // sd
+		scalar min_``i'' = r(min)  // sd
+		scalar max_``i'' = r(max)  // sd
+		
+	* matrix for table
+		matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
+		}
+}
+matrix A = mat_1
+forv i = 2/`listsize' { // appends into single matrix
+	matrix A = A \ mat_`i'
+}
+
+* Table
+frmttable using HH_summary.tex, tex statmat(A) sdec(2) coljust(l;c;l;l) title("Household Indicators - Summmary Statistics") ///
+ctitle("","N","Mean","sd","Min","Max") ///
+rtitle("HH info sales"\"HH info activities"\"HH level index"\"Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"Net Goat Income"\"HH Goat Sales Index"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index"\"Transparency Discrepancy Index")replace
+ 
 
 
 ** communication **

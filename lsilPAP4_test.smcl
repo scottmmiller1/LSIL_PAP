@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP4_test.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}18 Oct 2018, 17:11:24
+ {txt}opened on:  {res}20 Oct 2018, 19:03:04
 {txt}
 {com}. 
 . cd "$d3" 
@@ -346,64 +346,26 @@
 > Amount spent on shelters : LSE18
 > */
 . 
+. foreach v of varlist LSE12 LSE15 LSE16 LSE17a LSE17b LSE18 {c -(}
+{txt}  2{com}.         replace `v' = 0 if `v'==.
+{txt}  3{com}.         {c )-}
+{txt}(16 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+
+{com}. 
 . gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
-{txt}(16 missing values generated)
-
+{txt}
 {com}. gen net_goat_income = LS9*(0.0099) - goat_costs
-{txt}(16 missing values generated)
-
+{txt}
 {com}. gen netincome_goat = net_goat_income / LS8
-{txt}(16 missing values generated)
-
-{com}. 
-. 
-. 
-. ** Decision-Making **
-. 
-. /* Variables 
-> Setting interest rate (loans) : MAN18a 
-> Setting interest rate (savings) : MAN18b
-> Setting prices (traders) : MAN18c
-> Buying equipment : MAN18d
-> General assembly dates: MAN18e
-> */
-. 
-. * destring
-. foreach v of varlist MAN18a MAN18b ///
-> MAN18c MAN18d MAN18e {c -(}
-{txt}  2{com}.         destring `v', replace
-{txt}  3{com}. {c )-}       
-{txt}MAN18a: all characters numeric; {res}replaced {txt}as {res}byte
-{txt}(65 missing values generated)
-{res}{txt}MAN18b: all characters numeric; {res}replaced {txt}as {res}byte
-{txt}(65 missing values generated)
-{res}{txt}MAN18c: all characters numeric; {res}replaced {txt}as {res}byte
-{txt}(68 missing values generated)
-{res}{txt}MAN18d: all characters numeric; {res}replaced {txt}as {res}byte
-{txt}(65 missing values generated)
-{res}{txt}MAN18e: all characters numeric; {res}replaced {txt}as {res}byte
-{txt}(65 missing values generated)
-{res}{txt}
-{com}. 
-. local local_decision MAN18a MAN18b MAN18c MAN18d MAN18e 
-{txt}
-{com}. make_index_gr decision wgt stdgroup `local_decision'
-{res}  978
 {txt}
 {com}. 
 . 
 . 
-. ** Evaluation & Assessment **
-. 
-. /* Variables 
-> External Evaluation : EAA1
-> Available to Co-op : EAA3
-> */
-. 
-. egen avg_EAA = rowmean(EAA1 EAA3)
-{txt}(2 missing values generated)
-
-{com}. 
 . 
 . ** Planning and Goals **
 . 
@@ -417,11 +379,14 @@
 . gen expected_rev = PNG4*(0.0099)
 {txt}(2 missing values generated)
 
+{com}. replace PNG2 =. if PNG2 == 99
+{txt}(1 real change made, 1 to missing)
+
 {com}. 
 . local local_PNG PNG1 PNG2 PNG3 expected_rev
 {txt}
 {com}. make_index_gr PNG wgt stdgroup `local_PNG'
-{res}  981
+{res}  979
 {txt}
 {com}. 
 . save "$d3/r_CO_Merged_Ind.dta", replace
@@ -656,14 +621,23 @@
 > Amount spent on shelters : LSE18
 > */
 . 
+. foreach v of varlist LSE12 LSE15 LSE16 LSE17a LSE17b LSE18 {c -(}
+{txt}  2{com}.         replace `v' = 0 if `v'==.
+{txt}  3{com}.         {c )-}
+{txt}(2,191 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(539 real changes made)
+(0 real changes made)
+
+{com}. 
 . gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
-{txt}(2,273 missing values generated)
-
+{txt}
 {com}. gen net_goat_income = LS9*(0.0099) - goat_costs
-{txt}(2,273 missing values generated)
-
+{txt}
 {com}. gen netincome_goat = net_goat_income / LS8
-{txt}(2,361 missing values generated)
+{txt}(1,234 missing values generated)
 
 {com}. 
 . 
@@ -687,32 +661,324 @@
 . 
 . 
 . 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
 {txt}end of do-file
 
-{com}. do "/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP5_test_other.do"
+{com}. do "/var/folders/vj/bmv34kqd60j8sb8x04d58nhr0000gn/T//SD01247.000000"
 {txt}
 {com}. clear
 {txt}
+{com}. use "$d3/r_HH_Merged_Ind.dta"
+{txt}
+{com}. 
+. 
+. ** HH indicators **
+. 
+. gl hh_summ COM3 COM8 index_HH_comm ///
+>                                 LS8 LS9 co_opgoatno co_opsalevalue ///
+>                                 net_goat_income index_HH_goatsales ///
+>                                 visits_sale LS41 LS42 index_salecost ///
+>                                 index_dTRN ///
+>                                 
+{txt}
+{com}. 
+. local listsize : list sizeof global(hh_summ)
+{txt}
+{com}. tokenize $hh_summ
+{txt}
+{com}. 
+. forv i = 1/`listsize' {c -(}
+{txt}  2{com}.                 
+.         quietly {c -(}
+{txt}  3{com}.                 sum ``i''
+{txt}  4{com}.                 return list
+{txt}  5{com}.                 scalar N_``i'' = r(N) // N
+{txt}  6{com}.                 scalar mean_``i'' = r(mean) // mean
+{txt}  7{com}.                 scalar sd_``i'' = r(sd)  // sd
+{txt}  8{com}.                 scalar min_``i'' = r(min)  // sd
+{txt}  9{com}.                 scalar max_``i'' = r(max)  // sd
+{txt} 10{com}.                 
+.         * matrix for table
+.                 matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
+{txt} 11{com}.                 {c )-}
+{txt} 12{com}. {c )-}
+{txt}
+{com}. matrix A = mat_1
+{txt}
+{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
+{txt}  2{com}.         matrix A = A \ mat_`i'
+{txt}  3{com}. {c )-}
+{txt}
+{com}. 
+. * Table
+. frmttable using HH_summary.tex, tex statmat(A) sdec(2) coljust(l;c;l;l) title("Household Indicators - Summmary Statistics") ///
+> ctitle("","N","Mean","sd","Min","Max") ///
+> rtitle("HH info sales"\"HH info activities"\"HH level index"\"Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"Net Goat Income"\"HH Goat Sales Index"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index"\"Transparency Discrepancy Index")replace
+{res}{txt:(note: file HH_summary.tex not found)}
+{txt}{center:Household Indicators - Summmary Statistics}
+{txt}{center:{hline 76}}
+{center:{txt}{lalign 32:}{txt}{center 10:N}{txt}{center 10:Mean}{txt}{center 11:sd}{txt}{center 11:Min}}
+{txt}{center:{hline 76}}
+{center:{txt}{lalign 32:HH info sales}{res}{center 10:1,261.00}{res}{center 10:1.37}{res}{center 11:1.75}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:HH info activities}{res}{center 10:2,149.00}{res}{center 10:1.10}{res}{center 11:3.50}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:HH level index}{res}{center 10:1,207.00}{res}{center 10:0.25}{res}{center 11:0.89}{res}{center 11:-0.47}}
+{center:{txt}{lalign 32:Goats Sold}{res}{center 10:1,276.00}{res}{center 10:2.18}{res}{center 11:2.11}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:Goat Revenue}{res}{center 10:2,448.00}{res}{center 10:9,478.96}{res}{center 11:15,229.14}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:# Sold through Co-op}{res}{center 10:1,276.00}{res}{center 10:0.47}{res}{center 11:1.25}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:Rev. through Co-op}{res}{center 10:2,448.00}{res}{center 10:2,236.58}{res}{center 11:8,561.74}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:Net Goat Income}{res}{center 10:2,448.00}{res}{center 10:51.15}{res}{center 11:295.51}{res}{center 11:-9,867.33}}
+{center:{txt}{lalign 32:HH Goat Sales Index}{res}{center 10:1,276.00}{res}{center 10:0.37}{res}{center 11:0.95}{res}{center 11:-2.07}}
+{center:{txt}{lalign 32:Trader Visits per Sale}{res}{center 10:1,276.00}{res}{center 10:-4.22}{res}{center 11:139.98}{res}{center 11:-5,000.33}}
+{center:{txt}{lalign 32:Time Passed}{res}{center 10:1,276.00}{res}{center 10:0.79}{res}{center 11:2.16}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:Transportation Costs}{res}{center 10:1,276.00}{res}{center 10:23.14}{res}{center 11:701.05}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:Sale Costs Index}{res}{center 10:1,276.00}{res}{center 10:-0.08}{res}{center 11:0.80}{res}{center 11:-24.13}}
+{center:{txt}{lalign 32:Transparency Discrepancy Index}{res}{center 10:1,647.00}{res}{center 10:0.31}{res}{center 11:0.98}{res}{center 11:-1.05}}
+{txt}{center:{hline 76}}
+
+
+{txt}{center:Household Indicators - Summmary Statistics}
+{txt}{center:{hline 46}}
+{center:{txt}{lalign 32:}{txt}{center 12:Max}}
+{txt}{center:{hline 46}}
+{center:{txt}{lalign 32:HH info sales}{res}{center 12:10.00}}
+{center:{txt}{lalign 32:HH info activities}{res}{center 12:100.00}}
+{center:{txt}{lalign 32:HH level index}{res}{center 12:9.14}}
+{center:{txt}{lalign 32:Goats Sold}{res}{center 12:24.00}}
+{center:{txt}{lalign 32:Goat Revenue}{res}{center 12:113,300.00}}
+{center:{txt}{lalign 32:# Sold through Co-op}{res}{center 12:15.00}}
+{center:{txt}{lalign 32:Rev. through Co-op}{res}{center 12:127,000.00}}
+{center:{txt}{lalign 32:Net Goat Income}{res}{center 12:1,121.67}}
+{center:{txt}{lalign 32:HH Goat Sales Index}{res}{center 12:9.61}}
+{center:{txt}{lalign 32:Trader Visits per Sale}{res}{center 12:0.00}}
+{center:{txt}{lalign 32:Time Passed}{res}{center 12:30.00}}
+{center:{txt}{lalign 32:Transportation Costs}{res}{center 12:25,000.00}}
+{center:{txt}{lalign 32:Sale Costs Index}{res}{center 12:0.09}}
+{center:{txt}{lalign 32:Transparency Discrepancy Index}{res}{center 12:2.00}}
+{txt}{center:{hline 46}}
+
+
+{com}.  
+. 
+{txt}end of do-file
+
+{com}. do "/var/folders/vj/bmv34kqd60j8sb8x04d58nhr0000gn/T//SD01247.000000"
+{txt}
+{com}. ** HH level dataset
+. ********************************************* 
+. clear
+{txt}
+{com}. use "$d3/r_HH_Merged_Ind.dta"
+{txt}
+{com}. 
+. 
+. ** HH indicators **
+. 
+. gl hh_summ COM3 COM8 index_HH_comm ///
+>                                 LS8 LS9 co_opgoatno co_opsalevalue ///
+>                                 net_goat_income index_HH_goatsales ///
+>                                 visits_sale LS41 LS42 index_salecost ///
+>                                 index_dTRN ///
+>                                 
+{txt}
+{com}. 
+. local listsize : list sizeof global(hh_summ)
+{txt}
+{com}. tokenize $hh_summ
+{txt}
+{com}. 
+. forv i = 1/`listsize' {c -(}
+{txt}  2{com}.                 
+.         quietly {c -(}
+{txt}  3{com}.                 sum ``i''
+{txt}  4{com}.                 return list
+{txt}  5{com}.                 scalar N_``i'' = r(N) // N
+{txt}  6{com}.                 scalar mean_``i'' = r(mean) // mean
+{txt}  7{com}.                 scalar sd_``i'' = r(sd)  // sd
+{txt}  8{com}.                 scalar min_``i'' = r(min)  // sd
+{txt}  9{com}.                 scalar max_``i'' = r(max)  // sd
+{txt} 10{com}.                 
+.         * matrix for table
+.                 matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
+{txt} 11{com}.                 {c )-}
+{txt} 12{com}. {c )-}
+{txt}
+{com}. matrix A = mat_1
+{txt}
+{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
+{txt}  2{com}.         matrix A = A \ mat_`i'
+{txt}  3{com}. {c )-}
+{txt}
+{com}. 
+. * Table
+. frmttable using HH_summary.tex, tex statmat(A) sdec(2) coljust(l;c;l;l) title("Household Indicators - Summmary Statistics") ///
+> ctitle("","N","Mean","sd","Min","Max") ///
+> rtitle("HH info sales"\"HH info activities"\"HH level index"\"Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"Net Goat Income"\"HH Goat Sales Index"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index"\"Transparency Discrepancy Index")replace
+{res}
+{txt}{center:Household Indicators - Summmary Statistics}
+{txt}{center:{hline 76}}
+{center:{txt}{lalign 32:}{txt}{center 10:N}{txt}{center 10:Mean}{txt}{center 11:sd}{txt}{center 11:Min}}
+{txt}{center:{hline 76}}
+{center:{txt}{lalign 32:HH info sales}{res}{center 10:1,261.00}{res}{center 10:1.37}{res}{center 11:1.75}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:HH info activities}{res}{center 10:2,149.00}{res}{center 10:1.10}{res}{center 11:3.50}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:HH level index}{res}{center 10:1,207.00}{res}{center 10:0.25}{res}{center 11:0.89}{res}{center 11:-0.47}}
+{center:{txt}{lalign 32:Goats Sold}{res}{center 10:1,276.00}{res}{center 10:2.18}{res}{center 11:2.11}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:Goat Revenue}{res}{center 10:2,448.00}{res}{center 10:9,478.96}{res}{center 11:15,229.14}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:# Sold through Co-op}{res}{center 10:1,276.00}{res}{center 10:0.47}{res}{center 11:1.25}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:Rev. through Co-op}{res}{center 10:2,448.00}{res}{center 10:2,236.58}{res}{center 11:8,561.74}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:Net Goat Income}{res}{center 10:2,448.00}{res}{center 10:51.15}{res}{center 11:295.51}{res}{center 11:-9,867.33}}
+{center:{txt}{lalign 32:HH Goat Sales Index}{res}{center 10:1,276.00}{res}{center 10:0.37}{res}{center 11:0.95}{res}{center 11:-2.07}}
+{center:{txt}{lalign 32:Trader Visits per Sale}{res}{center 10:1,276.00}{res}{center 10:-4.22}{res}{center 11:139.98}{res}{center 11:-5,000.33}}
+{center:{txt}{lalign 32:Time Passed}{res}{center 10:1,276.00}{res}{center 10:0.79}{res}{center 11:2.16}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:Transportation Costs}{res}{center 10:1,276.00}{res}{center 10:23.14}{res}{center 11:701.05}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:Sale Costs Index}{res}{center 10:1,276.00}{res}{center 10:-0.08}{res}{center 11:0.80}{res}{center 11:-24.13}}
+{center:{txt}{lalign 32:Transparency Discrepancy Index}{res}{center 10:1,647.00}{res}{center 10:0.31}{res}{center 11:0.98}{res}{center 11:-1.05}}
+{txt}{center:{hline 76}}
+
+
+{txt}{center:Household Indicators - Summmary Statistics}
+{txt}{center:{hline 46}}
+{center:{txt}{lalign 32:}{txt}{center 12:Max}}
+{txt}{center:{hline 46}}
+{center:{txt}{lalign 32:HH info sales}{res}{center 12:10.00}}
+{center:{txt}{lalign 32:HH info activities}{res}{center 12:100.00}}
+{center:{txt}{lalign 32:HH level index}{res}{center 12:9.14}}
+{center:{txt}{lalign 32:Goats Sold}{res}{center 12:24.00}}
+{center:{txt}{lalign 32:Goat Revenue}{res}{center 12:113,300.00}}
+{center:{txt}{lalign 32:# Sold through Co-op}{res}{center 12:15.00}}
+{center:{txt}{lalign 32:Rev. through Co-op}{res}{center 12:127,000.00}}
+{center:{txt}{lalign 32:Net Goat Income}{res}{center 12:1,121.67}}
+{center:{txt}{lalign 32:HH Goat Sales Index}{res}{center 12:9.61}}
+{center:{txt}{lalign 32:Trader Visits per Sale}{res}{center 12:0.00}}
+{center:{txt}{lalign 32:Time Passed}{res}{center 12:30.00}}
+{center:{txt}{lalign 32:Transportation Costs}{res}{center 12:25,000.00}}
+{center:{txt}{lalign 32:Sale Costs Index}{res}{center 12:0.09}}
+{center:{txt}{lalign 32:Transparency Discrepancy Index}{res}{center 12:2.00}}
+{txt}{center:{hline 46}}
+
+
+{com}.  
+. 
+{txt}end of do-file
+
+{com}. do "/var/folders/vj/bmv34kqd60j8sb8x04d58nhr0000gn/T//SD01247.000000"
+{txt}
+{com}. cd "$d2"
+{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/vj/bmv34kqd60j8sb8x04d58nhr0000gn/T//SD01247.000000"
+{txt}
+{com}. ********************************************* 
+. clear
+{txt}
+{com}. use "$d3/r_HH_Merged_Ind.dta"
+{txt}
+{com}. 
+. 
+. ** HH indicators **
+. 
+. gl hh_summ COM3 COM8 index_HH_comm ///
+>                                 LS8 LS9 co_opgoatno co_opsalevalue ///
+>                                 net_goat_income index_HH_goatsales ///
+>                                 visits_sale LS41 LS42 index_salecost ///
+>                                 index_dTRN ///
+>                                 
+{txt}
+{com}. 
+. local listsize : list sizeof global(hh_summ)
+{txt}
+{com}. tokenize $hh_summ
+{txt}
+{com}. 
+. forv i = 1/`listsize' {c -(}
+{txt}  2{com}.                 
+.         quietly {c -(}
+{txt}  3{com}.                 sum ``i''
+{txt}  4{com}.                 return list
+{txt}  5{com}.                 scalar N_``i'' = r(N) // N
+{txt}  6{com}.                 scalar mean_``i'' = r(mean) // mean
+{txt}  7{com}.                 scalar sd_``i'' = r(sd)  // sd
+{txt}  8{com}.                 scalar min_``i'' = r(min)  // sd
+{txt}  9{com}.                 scalar max_``i'' = r(max)  // sd
+{txt} 10{com}.                 
+.         * matrix for table
+.                 matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
+{txt} 11{com}.                 {c )-}
+{txt} 12{com}. {c )-}
+{txt}
+{com}. matrix A = mat_1
+{txt}
+{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
+{txt}  2{com}.         matrix A = A \ mat_`i'
+{txt}  3{com}. {c )-}
+{txt}
+{com}. 
+. * Table
+. frmttable using HH_summary.tex, tex statmat(A) sdec(2) coljust(l;c;l;l) title("Household Indicators - Summmary Statistics") ///
+> ctitle("","N","Mean","sd","Min","Max") ///
+> rtitle("HH info sales"\"HH info activities"\"HH level index"\"Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"Net Goat Income"\"HH Goat Sales Index"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index"\"Transparency Discrepancy Index")replace
+{res}
+{txt}{center:Household Indicators - Summmary Statistics}
+{txt}{center:{hline 76}}
+{center:{txt}{lalign 32:}{txt}{center 10:N}{txt}{center 10:Mean}{txt}{center 11:sd}{txt}{center 11:Min}}
+{txt}{center:{hline 76}}
+{center:{txt}{lalign 32:HH info sales}{res}{center 10:1,261.00}{res}{center 10:1.37}{res}{center 11:1.75}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:HH info activities}{res}{center 10:2,149.00}{res}{center 10:1.10}{res}{center 11:3.50}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:HH level index}{res}{center 10:1,207.00}{res}{center 10:0.25}{res}{center 11:0.89}{res}{center 11:-0.47}}
+{center:{txt}{lalign 32:Goats Sold}{res}{center 10:1,276.00}{res}{center 10:2.18}{res}{center 11:2.11}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:Goat Revenue}{res}{center 10:2,448.00}{res}{center 10:9,478.96}{res}{center 11:15,229.14}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:# Sold through Co-op}{res}{center 10:1,276.00}{res}{center 10:0.47}{res}{center 11:1.25}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:Rev. through Co-op}{res}{center 10:2,448.00}{res}{center 10:2,236.58}{res}{center 11:8,561.74}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:Net Goat Income}{res}{center 10:2,448.00}{res}{center 10:51.15}{res}{center 11:295.51}{res}{center 11:-9,867.33}}
+{center:{txt}{lalign 32:HH Goat Sales Index}{res}{center 10:1,276.00}{res}{center 10:0.37}{res}{center 11:0.95}{res}{center 11:-2.07}}
+{center:{txt}{lalign 32:Trader Visits per Sale}{res}{center 10:1,276.00}{res}{center 10:-4.22}{res}{center 11:139.98}{res}{center 11:-5,000.33}}
+{center:{txt}{lalign 32:Time Passed}{res}{center 10:1,276.00}{res}{center 10:0.79}{res}{center 11:2.16}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:Transportation Costs}{res}{center 10:1,276.00}{res}{center 10:23.14}{res}{center 11:701.05}{res}{center 11:0.00}}
+{center:{txt}{lalign 32:Sale Costs Index}{res}{center 10:1,276.00}{res}{center 10:-0.08}{res}{center 11:0.80}{res}{center 11:-24.13}}
+{center:{txt}{lalign 32:Transparency Discrepancy Index}{res}{center 10:1,647.00}{res}{center 10:0.31}{res}{center 11:0.98}{res}{center 11:-1.05}}
+{txt}{center:{hline 76}}
+
+
+{txt}{center:Household Indicators - Summmary Statistics}
+{txt}{center:{hline 46}}
+{center:{txt}{lalign 32:}{txt}{center 12:Max}}
+{txt}{center:{hline 46}}
+{center:{txt}{lalign 32:HH info sales}{res}{center 12:10.00}}
+{center:{txt}{lalign 32:HH info activities}{res}{center 12:100.00}}
+{center:{txt}{lalign 32:HH level index}{res}{center 12:9.14}}
+{center:{txt}{lalign 32:Goats Sold}{res}{center 12:24.00}}
+{center:{txt}{lalign 32:Goat Revenue}{res}{center 12:113,300.00}}
+{center:{txt}{lalign 32:# Sold through Co-op}{res}{center 12:15.00}}
+{center:{txt}{lalign 32:Rev. through Co-op}{res}{center 12:127,000.00}}
+{center:{txt}{lalign 32:Net Goat Income}{res}{center 12:1,121.67}}
+{center:{txt}{lalign 32:HH Goat Sales Index}{res}{center 12:9.61}}
+{center:{txt}{lalign 32:Trader Visits per Sale}{res}{center 12:0.00}}
+{center:{txt}{lalign 32:Time Passed}{res}{center 12:30.00}}
+{center:{txt}{lalign 32:Transportation Costs}{res}{center 12:25,000.00}}
+{center:{txt}{lalign 32:Sale Costs Index}{res}{center 12:0.09}}
+{center:{txt}{lalign 32:Transparency Discrepancy Index}{res}{center 12:2.00}}
+{txt}{center:{hline 46}}
+
+
+{com}.  
+. 
+{txt}end of do-file
+
+{com}. do "/var/folders/vj/bmv34kqd60j8sb8x04d58nhr0000gn/T//SD01247.000000"
+{txt}
+{com}. rtitle("Discrepancy Index") addtable replace
+{err}command {bf}rtitle{sf} is unrecognized
+{txt}{search r(199), local:r(199);}
+
+end of do-file
+
+{search r(199), local:r(199);}
+
+{com}. do "/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP5.do"
+{txt}
+{com}. clear all
+{res}{txt}
 {com}. set more off, perm
 {txt}({cmd:set more} preference recorded)
 

@@ -202,41 +202,15 @@ Amount spent on breeding fees : LSE17a * LSE17b
 Amount spent on shelters : LSE18
 */
 
+foreach v of varlist LSE12 LSE15 LSE16 LSE17a LSE17b LSE18 {
+	replace `v' = 0 if `v'==.
+	}
+
 gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
 gen net_goat_income = LS9*(0.0099) - goat_costs
 gen netincome_goat = net_goat_income / LS8
 
 
-
-** Decision-Making **
-
-/* Variables 
-Setting interest rate (loans) : MAN18a 
-Setting interest rate (savings) : MAN18b
-Setting prices (traders) : MAN18c
-Buying equipment : MAN18d
-General assembly dates: MAN18e
-*/
-
-* destring
-foreach v of varlist MAN18a MAN18b ///
-MAN18c MAN18d MAN18e {
-	destring `v', replace
-}	
-
-local local_decision MAN18a MAN18b MAN18c MAN18d MAN18e 
-make_index_gr decision wgt stdgroup `local_decision'
-
-
-
-** Evaluation & Assessment **
-
-/* Variables 
-External Evaluation : EAA1
-Available to Co-op : EAA3
-*/
-
-egen avg_EAA = rowmean(EAA1 EAA3)
 
 
 ** Planning and Goals **
@@ -249,6 +223,7 @@ Expected Rev. : PNG4
 */
 
 gen expected_rev = PNG4*(0.0099)
+replace PNG2 =. if PNG2 == 99
 
 local local_PNG PNG1 PNG2 PNG3 expected_rev
 make_index_gr PNG wgt stdgroup `local_PNG'
@@ -389,6 +364,10 @@ Amount spent on vet care : LSE16
 Amount spent on breeding fees : LSE17a * LSE17b
 Amount spent on shelters : LSE18
 */
+
+foreach v of varlist LSE12 LSE15 LSE16 LSE17a LSE17b LSE18 {
+	replace `v' = 0 if `v'==.
+	}
 
 gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
 gen net_goat_income = LS9*(0.0099) - goat_costs
