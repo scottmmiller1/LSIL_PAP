@@ -26,7 +26,7 @@ tokenize $co_decision
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata, cluster(idx)
+	reg ``i'' r_treat i.strata
 	
 	quietly {
 		ereturn list
@@ -67,7 +67,7 @@ tokenize $co_EAA
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata, cluster(idx)
+	reg ``i'' r_treat i.strata
 	
 	quietly {
 		ereturn list
@@ -107,7 +107,7 @@ tokenize $co_MNG
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata, cluster(idx)
+	reg ``i'' r_treat i.strata
 	
 	quietly {
 		ereturn list
@@ -148,7 +148,7 @@ tokenize $co_PNG
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata, cluster(idx)
+	reg ``i'' r_treat i.strata
 	
 	quietly {
 		ereturn list

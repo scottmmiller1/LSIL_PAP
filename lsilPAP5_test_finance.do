@@ -27,7 +27,7 @@ tokenize $co_finance
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata, cluster(idx)
+	reg ``i'' r_treat i.strata
 	
 	quietly {
 		ereturn list

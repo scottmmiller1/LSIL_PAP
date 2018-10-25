@@ -32,7 +32,7 @@ tokenize $co_trn
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata, cluster(idx)
+	reg ``i'' r_treat i.strata
 	
 	quietly {
 		ereturn list
@@ -66,7 +66,7 @@ tokenize $hh_trn
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata, cluster(idx)
+	reg ``i'' r_treat i.strata
 	
 	quietly {
 		ereturn list

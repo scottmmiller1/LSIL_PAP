@@ -16,6 +16,7 @@ keep idx treat
 save "$d3/treat.dta", replace
 
 merge 1:1 idx using "$d3/r_CO_Merged_Ind.dta"
+drop if _merge == 1 // banke district in original treatment status
 
 save "$d3/r_CO_Merged_Ind_treat.dta", replace
 * ---------------------------------------------------
@@ -100,11 +101,32 @@ COMM2d {
 }
 
 
+lab var revenue "Co-op Revenue (USD)"
+lab var rev_member "Co-op Revenue per Member (USD)"
+lab var costs "Co-op Costs (UDS)"
+lab var cost_mem "Co-op Costs per Member (USD)"
+lab var net_rev "Co-op Net Revenue (UDS)"
+lab var net_rev_member "Co-op Net Revenue per Member (USD)"
+lab var goats_sold "Co-op Goats Sold"
+lab var goatssold_mem "Co-op Goats Sold per Member"
+lab var MAN3 "\# of Members"
+lab var PNG1 "Does the cooperative have a written business plan?"
+lab var PNG2 "Planning Tume Horizon (Years)"
+lab var PNG3 "Expected Goats Sold over next 6 months"
+lab var expected_rev "Expected Revenue over next 6 months (USD)"
+lab var index_PNG "Planning & Goals Summary Index"
+lab var CO_TRN1 "Co-op makes its mandate available to its members"
+lab var CO_TRN2 "Co-op makes its annual report available to its members"
+lab var CO_TRN3 "Co-op makes its annual budget available to its members"
+lab var CO_TRN4 "Co-op makes its financial report available to its members"
+lab var CO_TRN5 "Co-op makes its meeting minutes available to its members"
+lab var CO_TRN6 "Co-op makes its election results available to its members"
+lab var CO_TRN7 "Co-op makes its sale records available to its members"
+lab var GTT1 "% of goats expected to be sold through co-op"
+lab var GTT2 "% of goats expected to be sold through other channels"
+lab var GTT3 "% of goats expected to not be sold"
 
 *iebaltable
-
-* New code
-drop if district == "Banke" 
 
 iebaltab revenue rev_member costs cost_mem net_rev net_rev_member ///
 		goats_sold goatssold_mem MAN3 ///
@@ -127,25 +149,25 @@ iebaltab revenue rev_member costs cost_mem net_rev net_rev_member ///
 * Original dataset
 clear
 use "$d3/r_HH_Merged_Ind.dta"
-
-rename IDX idx
-drop if idx == "Karmath SEWC 2" | idx == "Lekhbesi SEWC 1"
+drop _merge
 
 merge m:1 idx using "$d3/treat.dta"
+drop if _merge == 1 // banke district in original treatment status
+drop if idx == "Karmath SEWC 2" | idx == "Lekhbesi SEWC 1"
 
 save "$d3/r_HH_Merged_Ind_treat.dta", replace
 * ---------------------------------------------------		
 		
 		
 clear
-use "$d3/Household_Merged_Edit_treat.dta"
+use "$d3/r_HH_Merged_Ind_treat.dta"
 
 replace HHR14 = . if HHR4 < 18
 
-rename Co_opTransparencyTransparency_no Co_opTransparency_no
-rename Live_EntexofemaleExotic_Female Live_Exotic_Female
-rename Live_EntcrofemaleCross_Breed_Fem Live_Cross_Breed_Fem
-rename Live_EntCro_breed_female_goats Live_breed_female_goats
+*rename Co_opTransparencyTransparency_no Co_opTransparency_no
+*rename Live_EntexofemaleExotic_Female Live_Exotic_Female
+*rename Live_EntcrofemaleCross_Breed_Fem Live_Cross_Breed_Fem
+*rename Live_EntCro_breed_female_goats Live_breed_female_goats
 
 foreach v of var * {
 	cap local vv = subinstr("`v'", "Follow_up", "Follup",.) // names too long for macros
@@ -207,55 +229,40 @@ foreach v of var * {
 	cap label val `v' "`ll`v''"
 }
 
-decode ID1, gen(district)
 
-replace district = "Arghakanchhi" if ID1== 51
-replace district = "Baglung" if ID1== 45
-replace district = "Banke" if ID1== 57
-replace district = "Bardiya" if ID1== 58
-replace district = "Chitwan" if ID1== 35
-replace district = "Dang" if ID1== 56
-replace district = "Dhading" if ID1== 30 
-replace district = "Kaski" if ID1== 40
-replace district = "Kapilbastu" if ID1== 50
-replace district = "Lamjung" if ID1== 37
-replace district = "Mahottari" if ID1== 18
-replace district = "Morang" if ID1== 5
-replace district = "Nawalparasi" if ID1== 48
-replace district = "Nuwakot" if ID1== 28
-replace district = "Palpa" if ID1== 47
-replace district = "Parbat" if ID1== 44
-replace district = "Pyuthan" if ID1== 52
-replace district = "Rautahat" if ID1== 32
-replace district = "Rupandehi" if ID1== 49
-replace district = "Salyan" if ID1== 55
-replace district = "Sarlahi" if ID1== 19
-replace district = "Sindhuli" if ID1== 20
-replace district = "Surkhet" if ID1== 59
-replace district = "Tanahu" if ID1== 38
+lab var COM3 "HH Info Sales"
+lab var COM8 "HH Info Activities"
+lab var index_HH_comm "Communication Summary Index"
+lab var LS8 "Goats Sold"
+lab var LS9 "Goats Revenue (USD)"
+lab var co_opgoatno "Goats Sold through Co-op"
+lab var co_opsalevalue "Goat Revenue through Co-op (USD)"
+lab var net_goat_income "Net Goat Income (USD)"
+lab var index_HH_goatsales "Goat Sales Summary Index"
+lab var visits_sale "Trader Visits per Sale"
+lab var LS41 "Time between Contact & Sale (Days)"
+lab var LS42 "Transportation Costs (USD)"
+lab var index_salecost "Sales Cost Summary Index"
+lab var index_dTRN "Transparency Discrepancy Summary Index"
 
- 
-gen region = "Mid-Hills" if district=="Arghakanchhi" | district=="Baglung" | ///
-	district=="Dhading" | district =="Kaski" | district =="Lamjung" | district=="Nuwakot" | ///
-	district=="Palpa" | district =="Parbat" | district =="Pyuthan" | district =="Salyan" | ///
-	district=="Tanahu" | district =="Sindhuli"
-	 
-replace region = "Terai" if district=="Banke" | district =="Bardiya" | district =="Kapilbastu" | ///
-	district=="Mahottari" | district =="Morang" | district =="Nawalparasi" | ///
-	district=="Rautahat" | district =="Rupandehi" | district=="Sarlahi" | district =="Surkhet" | ///
-	district =="Chitwan" | district =="Dang"
 
 
 *iebaltable
 
-* New code
-drop if district == "Banke" 
-
-iebaltab LS9 LS8 ///
-		co_opgoatno co_opsalevalue ///
+iebaltab COM3 COM8 index_HH_comm ///
+		LS8 LS9 co_opgoatno co_opsalevalue ///
+		net_goat_income index_HH_goatsales ///
+		visits_sale LS41 LS42 index_salecost ///
+		index_dTRN ///
 		HHR14 HSE5 HSE10  ///
 		MGT5 COM3 COM5 ///
 		BR1 BR BR2 ///
 		BR3 GP21, rowvarlabels ///
 		grpvar(treat) vce(cluster idx)  ///
-		save("/Users/scottmiller/Dropbox (UFL)/LSIL/Stata files/Baseline/Randomization/Randomization Summary Stats/iebaltab2_nobanke_clean3.xlsx") replace
+		savetex("/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/iebaltab2_nobanke_PAP.tex") replace
+		
+		
+		
+		
+		
+		

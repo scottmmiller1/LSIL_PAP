@@ -23,7 +23,7 @@ encode idx, gen(idx_n)
 local varlist comm1 comm2 contact COM3 COM8 index_CO_comm HHcontact
 foreach v in `varlist' {
 	
-	reg `v' r_treat i.strata, cluster(idx_n)
+	reg `v' r_treat i.strata
 	
 	quietly { 
 		ereturn list
@@ -62,7 +62,7 @@ rtitle("Contacted SHG"\"Contacted by SHG"\"Total Co-op Contact"\"HH info sales"\
 
 ** Strata - No interaction
 * no control
-reg contact r_treat i.strata, cluster(idx_n)
+reg contact r_treat i.strata
 
 quietly scalar r2_n = e(r2)
 * individual controls
