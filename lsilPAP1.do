@@ -21,16 +21,6 @@ drop if idx =="Karmath SEWC 2"
 * true treatment status: seed 3581 *
 set seed 62184  // random seed to generate different treatment assignment
 
-/*
-* Region
-tab region
-*# of members
-MAN3
-* Co-op Goat Revenue
-REV4
-* HH Goat Revenue
-LS9
-*/
 
 * Region - HH Goat Rev
 gen bin=. 

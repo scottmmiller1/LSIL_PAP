@@ -8,19 +8,21 @@ log using "$d1/lsilPAP0.smcl", replace
 
 ** Create co-op dataset from clean data **
 
-
 ******************************
 ** Co-op dataset
-
 clear
 use "$d3/Cooperative.dta"
 
-drop *start* *end* *note* consent *GPS* ____version metainstanceID ___id ___parent* ___tags ___uuid ___sub*
-rename role_CPSerLiv_rel_serLive_rel_se role_CPSerLiv_rel_serLive_rel
 
+* drop data collection notes & time stamps
+drop *start* *end* *note* consent *GPS* ____version metainstanceID ///
+		___id ___parent* ___tags ___uuid ___sub*
+* rename variables with invalid names	
+rename role_CPSerLiv_rel_serLive_rel_se role_CPSerLiv_rel_serLive_rel
+* rename co-op variable to match HH & Co-op dataset
 rename IDX idx
 
-** Assign region names
+** Assign district & region names
 destring ID1, replace
 gen district = "Arghakanchhi" if ID1==51
 replace district = "Arghakanchhi" if ID1== 51
@@ -58,8 +60,8 @@ replace region = "Terai" if district=="Banke" | district =="Bardiya" | district 
 	district=="Rautahat" | district =="Rupandehi" | district=="Sarlahi" | district =="Surkhet" | ///
 	district =="Chitwan" | district =="Dang"
 	
+	
 ** save labels and value labels in macros
-	* role_GMequipmentprinterheader_mob is an invalid name
 foreach v of var * {
 	cap local vv = subinstr("`v'", "CPManagement", "CPMgt",.) // names too long for macros
 	if _rc == 0 {
@@ -133,7 +135,7 @@ foreach v of var * {
 	}
 }
 
-* Change Yes / No to binary
+* Change Yes / No variables to binary
 foreach v of varlist TRN1 TRN2 TRN3 TRN4 TRN5 TRN6 TRN6a TRN7 TRN14 TRN15 MAN1 MAN11 MAN15 MAN17 ///
 		SER1 SER2 SER3 SER4 SER5 SER6 SER7 SER8 SER9 SER10 SER1* SERV2 SERV3 SERV4 SERV8 IND5 ///
 		REC8 EQP1_1 EQP2_1* EQP3_1 EQP4_1 EQP5_1 EQP6_1 EQP7_1 EQP8_1 EQP9_1 EQP10_1 EQP11_1 ///
@@ -148,13 +150,13 @@ foreach v of varlist TRN* {
 	rename `v' CO_`v'
 	}	
 	
-* Change blank cells in string vars to missing values
+* Change blank cells in strings to missing values
 ds, has(type string) 
 quietly foreach v in `r(varlist)' { 
 	replace `v' = trim(`v')
 	}
 
-* Change COMM8 to string -- Match original dataset
+* Change COMM8 to string
 foreach v of varlist COMM8a COMM8b ///
 COMM8c COMM8d COMM8e ///
 COMM8f {
@@ -188,16 +190,23 @@ foreach v of var * {
 	cap label val `v' "`ll`v''"
 }
 
+* save collapsed dataset
 save "$d3/Cooperative_collapse.dta", replace
 
 
-******************************
-** HH dataset
+* ------------------------------------------------------------------------
+
+
+** Merge separate HH modules into single dataset **
+** Collapse to one row per co-op **
+
 
 * Livestock Sales Module
 clear
 use "$d3/Livestocksales.dta"
 
+
+** save labels and value labels in macros
 foreach v of var * {
 	cap local vv = subinstr("`v'", "Livestock_Saleslivestock", "Livestock_Sales",.) // names too long for macros
 	if _rc == 0 {
@@ -206,12 +215,15 @@ foreach v of var * {
 	}
 }
  
+* drop data collection notes & time stamps 
 drop LS2 LS6 LS6_1 ___id ___uuid ___submission_time ///
 		___parent_table_name ___tags ___notes LS4 
 		
+* total revenue through co-op		
 gen co_opsalevalue = LS9 if LS3==1 			
 lab var co_opsalevalue "Total revenue, goats sold through co-op"
 
+* goats sold through co-op	
 gen co_opgoatno = LS8 if LS3==1		
 lab var co_opgoatno "Total goats sold through co-op"
 
@@ -221,12 +233,13 @@ quietly foreach v in `r(varlist)' {
 	replace `v' = trim(`v')
 	}
 
+* destring all variables in module
 destring *, replace
 ds *, has(type numeric)
 local numeric = "`r(varlist)'"		
 recode `numeric' (99=.) (98=.) (97=.)
 
-
+* make 1/2 variables binary
 foreach v of varlist LS3 ///
 		LS39 LS44 ///
 		LS45 {
@@ -235,6 +248,7 @@ foreach v of varlist LS3 ///
 	quietly replace `v'=0 if `v'==2
 }
  
+** save labels and value labels in macros 
 foreach v of var * {
 	cap local vv = subinstr("`v'", "Livestock_Sales", "Livestock_Sales",.) // names too long for macros
 	if _rc == 0 {
@@ -248,7 +262,7 @@ foreach v of var * {
 	}
 }
 
-* create # of sales variable
+* # of sales
 bysort ___parent_index: egen LS_n_sales=count(___parent_index)
 
 collapse (firstnm) LS_n_sales (mean) LS3 *LS6* LS7 (sum) LS8 LS9 LS10 LS12 LS13 LS14 LS15 LS16 ///
@@ -256,12 +270,14 @@ collapse (firstnm) LS_n_sales (mean) LS3 *LS6* LS7 (sum) LS8 LS9 LS10 LS12 LS13 
 		LS38 LS39 LS40 LS41 LS42 *LS43* LS44 LS45 LS46 ///
 		LS47 co_opsalevalue co_opgoatno , by(___parent_index)
 
+** save labels and value labels in macros
 foreach v of var * {
 	label var `v' "`l`v''"
 	cap label val `v' "`ll`v''"
 }
 		
-* Top coding
+		
+* Top code LS9 -- obvious outliers
 g price = LS9/LS8
 
 g n = _n
@@ -282,12 +298,15 @@ LS8 < . // Replaces outliers with median
 save "$d3/Livestocksales_collapse.dta", replace
 
 
+
 ** Merge separate modules into Household
 
 *household
 clear
 use"$d3/Household.dta"
 
+
+* assign district & region names
 decode ID1, gen(district)
 
 replace district = "Arghakanchhi" if ID1== 51
@@ -332,12 +351,12 @@ foreach v of varlist TRN* {
 	rename `v' HH_`v'
 	}		
 	
-	
+* save edited HH dataset	
 save "$d3/Household_edit.dta", replace
 
 
+* create single merge variable "___index" for all modules
 * -----------------------------------------------
-* ---- create merge variable "___index"
 use "$d3/Borrowing.dta"
 rename A__parent_index ___index
 save "$d3/Borrowing_edit.dta", replace
@@ -356,7 +375,6 @@ use "$d3/Livestocksales_collapse.dta"
 *rename ___index A___index
 rename ___parent_index ___index
 save "$d3/Livestocksales_collapse_edit.dta", replace
-
 * -----------------------------------------------
 
 
@@ -385,37 +403,29 @@ use "$d3/modules_merged.dta", clear
 merge m:m ___index using "$d3/Livestocksales_collapse_edit.dta", force
 save "$d3/Household_Merged.dta", replace
  
- *______________________________________________________________________________ 
+  
  
- 
- 
- ** Prepare Household_Merged to be collapsed by Co-op **
+** Prepare Household_Merged to be collapsed by Co-op **
 clear
 use "$d3/Household_Merged.dta"
  
-*drop irrelevant vars
+*drop unused vars vars
 *section timing, notes, section headers, other (specificy), etc.
 drop start end *Note* HH_IDstartHHID HH_IDendHHID end_rooster Number_children_count ///
 	Land_and_homestart_land Land_and_homeLand_and_home_note Land_and_homeEnd_land ///
-	Co_opstart_coop MEM4_1 MEM9_1 ///
-	Co_opMembershipMEM10MEM10_Header MEM13_1 Co_opServiceService_note MGT1_1 ///
-	COM1_1 COM2_1 COM6_1 ///
+	Co_opstart_coop MEM4_1 MEM9_1 Co_opMembershipMEM10MEM10_Header MEM13_1 ///
+	Co_opServiceService_note MGT1_1 COM1_1 COM2_1 COM6_1 ///
 	COM11_1 GTT4_1 Co_opGoat_transactionsGTT4_1 Co_opFollow_up_transparency_ques ///
 	Savingsstart_savings SavingsSavings_Note ///
 	SV2_1 Savingsend_savings Borrowingstart_borrowing Borrowingend_borrowing ///
 	Food_Consumptionstart_food Food_ConsumptionGrainsGrains_N Food_ConsumptionPulsesPulses_n ///
 	Food_ConsumptionMeat_fish_and_eg Food_ConsumptionDairy_productsDa Food_ConsumptionFruitsFruits_not ///
 	Food_ConsumptionVegetablesVegeta Food_ConsumptionSugar_and_or_swe Food_ConsumptionOilOil_note ///
-	time_food start_stockR Live_rel_emp_stockR ///
-	Live_Entsta_liveE Live_Ent_liveE  ///
-	Goat_Prod_Sys_goat GP2_1 GP4_1 ///
-	GP8_1 Goat_Pro_Sys_goat Live_Sale_sales Live_Sale_sale ///
-	PQ1_1 PQ1 GPS ///
-	____version metainstanceID ___uuid ___submission_time ___tags ___notes ///
+	time_food start_stockR Live_rel_emp_stockR Live_Entsta_liveE Live_Ent_liveE  ///
+	Goat_Prod_Sys_goat GP2_1 GP4_1 GP8_1 Goat_Pro_Sys_goat Live_Sale_sales Live_Sale_sale ///
+	PQ1_1 PQ1 GPS ____version metainstanceID ___uuid ___submission_time ___tags ___notes ///
 	merge1 merge2 Rosterstart_Rooster RosterRoster_Note merge3 _merge ///
-	LSE10_2 LSE10_3 LSE10_1 SV8_1 ///
-	LSE1 GP22_1 GP22_2 HHR1 HHR2 ///
-	GP22_1 GP22_2
+	LSE10_2 LSE10_3 LSE10_1 SV8_1 LSE1 GP22_1 GP22_2 HHR1 HHR2 GP22_1 GP22_2
 
 	
 * Change blank cells in string vars to missing values
@@ -424,37 +434,23 @@ quietly foreach v in `r(varlist)' {
 	replace `v' = trim(`v')
 	}
 	
-
 *drop multi-choice vars with individual dummys already created
-drop COM1 COM2 COM6 COM7 ///
-	GTT4 SV2 LSE22 ///
-	GP4 GP12 GP18 GP22 ///
-	GP25 LS48 PQ2 BR5 ///
-	GP3 BR56 HHR10_1
+drop COM1 COM2 COM6 COM7 GTT4 SV2 LSE22 GP4 GP12 GP18 GP22 ///
+		GP25 LS48 PQ2 BR5 GP3 BR56 HHR10_1
 
- 
- * Destring 1-2 dummys __ format to binary
-	* 2 -> 0  1 -> 1 ______ Most are Y/N __> Y=1 N=0
-	
- foreach v of varlist HSE6 HSE7 HSE10 ///
-		MEM3 MEM6 MEM8 MEM12 ///
-		MEM14 MEM16 SER1 SER2 ///
-		SER3 SER4 SER6 SER7 ///
-		SER8 SER9 SER10 SER11 ///
-		SER12 SER13 SER14 SER15 ///
+* Change 1-2 vars to binary
+ foreach v of varlist HSE6 HSE7 HSE10 MEM3 MEM6 MEM8 MEM12 ///
+		MEM14 MEM16 SER1 SER2 SER3 SER4 SER6 SER7 ///
+		SER8 SER9 SER10 SER11 SER12 SER13 SER14 SER15 ///
 		SER16 SER17 SER18 SER19 MGT5 COM5 HH_TRN1 ///
-		HH_TRN2 HH_TRN3 HH_TRN4 HH_TRN5 ///
-		HH_TRN6 HH_TRN7 HH_TRN8 ///
-		SV3 SV4 SV7 BR1 FC1A FC1B ///
-		FC1E FC1F ///
-		FC1H GP7 ///
-		GP13 GP16 GP19 ///
-		GP21 {
+		HH_TRN2 HH_TRN3 HH_TRN4 HH_TRN5 HH_TRN6 HH_TRN7 HH_TRN8 ///
+		SV3 SV4 SV7 BR1 FC1A FC1B FC1E FC1F FC1H GP7 ///
+		GP13 GP16 GP19 GP21 {
 	quietly replace `v'=. if `v'==99
 	quietly replace `v'=. if `v'==97
 	quietly replace `v'=0 if `v'==2
 }
-
+* Change 1-2 vars to binary
 foreach v of varlist HHR3 HHR5 HHR11 HHR13 HHR14 ///
 		HHR15 HHR17 HHR18 HHR19 {
 	quietly destring `v', replace
@@ -464,6 +460,7 @@ foreach v of varlist HHR3 HHR5 HHR11 HHR13 HHR14 ///
 	
 }
 
+* destring relevant vars
 quietly {
 	destring *COM1* *COM2* *COM6*, replace 
 	destring *COM7* *GTT* *SV2*, replace 
@@ -474,19 +471,23 @@ quietly {
 
 save "$d3/Household_Merged_Edit.dta", replace
  
- *______________________________________________________________________________ 
+*-------------------------------------------------------------------------
  
 ** Collapse HH into 1 row per cooperative
  
 use "$d3/Household_Merged_Edit.dta", clear
 
+* rename co-op indicator
 rename IDX idx
+* rename vars with invalid names
 rename Co_opTransparencyTransparency_no Co_opTransparencyTransparency
 rename Live_EntexofemaleExotic_Female Live_EntexofemaleExotic_F
 rename Live_EntcrofemaleCross_Breed_F Live_EntcrofemaleCross
 rename Live_EntCro_breed_female_goats Live_EntCro_breed_female
 drop Co_opTransparencyTransparency
 
+
+** save labels and value labels in macros 
 foreach v of var * {
 	cap local vv = subinstr("`v'", "Follow_up_", "Follup",.) // names too long for macros
 	if _rc == 0 {
@@ -520,6 +521,7 @@ foreach v of var * {
 	}
 }
 
+* collapse to one row per co-op
 ds *HHR* *ID* *LND* *HSE* *MEM* *SER* *MGT* *COM* *GTT* *TRN* *SV* *BR* *FC* *EMP* *LS* *GP* region district, has(type string)
 local HHstrings = "`r(varlist)'"
 ds *HHR* *ID* *LND* *HSE* *MEM* *SER* *MGT* *COM* *GTT* *TRN* *SV* *BR* *FC* *EMP* *LS* *GP* region district, has(type numeric)
@@ -538,9 +540,9 @@ drop if idx == "" | idx == "2"
 save "$d3/Household_Collapsed.dta", replace
 
 
-  *------------------------------------------------------------------------------ 
+*------------------------------------------------------------------------------ 
  
- ** Merge Cooperative_collapse into Household_Collapsed
+** Merge collapse HH and Co-op datasets
 
 clear 
 use "$d3/Household_Collapsed.dta"  
