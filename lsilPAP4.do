@@ -45,6 +45,31 @@ replace co_opsalevalue = 0 if co_opsalevalue ==.
 
 
 
+** Communication **
+
+/* Variables 
+# of times initiated contact with SHG : comm1
+# of times SHG initiated contact : comm2
+Factors that limit communication : (not in index - used as control vars)
+*/
+
+	* # of times initiated contact with SHG : comm1
+	gen comm1 = COMM1a + COMM1b ///
+	+ COMM1c + COMM1d
+	* # of times SHG initiated contact : comm2
+	gen comm2 = COMM2a + COMM2b ///
+	+ COMM2c + COMM2d
+	** Total # of times initiated contact
+	gen contact = comm1 + comm2
+	
+	* Total # of times HH is contacted
+	gen HHcontact = COM3 + COM8
+	
+
+* co-op comm index
+local local_CO_comm_full contact COM3 COM8
+make_index_gr CO_comm_full wgt stdgroup `local_CO_comm_full' 
+
 
 ** Cooperative Finances **
 
@@ -169,8 +194,9 @@ replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & r_treat == 0
 ** Replace Missing values with zero 
 * LS9 , 
 replace LS9 = 0 if LS9 ==.
+replace LS8 = 0 if LS8 ==.
 replace co_opsalevalue = 0 if co_opsalevalue ==.
-
+replace co_opgoatno = 0 if co_opgoatno ==.
 
 
 ** Communication **

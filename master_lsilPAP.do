@@ -37,6 +37,7 @@ clear all
 
 *packages
 *ssc install outreg
+*ssc install ietoolkit
 
 *pathways
 gl d1 = "/Users/scottmiller/Documents/GitHub/LSIL_PAP" // do files stored here

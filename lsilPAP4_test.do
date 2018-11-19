@@ -266,7 +266,9 @@ replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & r_treat == 0
 ** Replace Missing values with zero 
 * LS9 , 
 replace LS9 = 0 if LS9 ==.
+replace LS8 = 0 if LS8 ==.
 replace co_opsalevalue = 0 if co_opsalevalue ==.
+replace co_opgoatno = 0 if co_opgoatno ==.
 
 
 ** Communication **
