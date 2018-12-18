@@ -357,7 +357,8 @@ replace co_opshare = co_opgoatno / LS8 if LS8 != 0
 gen visits_sale = -1*(LS40 / LS_n_sales)
 gen time_passed = -1*(LS41)
 gen transp_cost = -1*(LS42*(0.0099))
-
+replace LS9 = LS9*(0.0099)
+replace co_opsalevalue = co_opsalevalue*(0.0099)
 
 /* Costs
 Amount spent purchasing goats: LSE12
@@ -372,7 +373,7 @@ foreach v of varlist LSE12 LSE15 LSE16 LSE17a LSE17b LSE18 {
 	}
 
 gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
-gen net_goat_income = LS9*(0.0099) - goat_costs
+gen net_goat_income = LS9 - goat_costs
 gen netincome_goat = net_goat_income / LS8
 
 

@@ -240,8 +240,8 @@ lab var co_opsalevalue "Goat Revenue through Co-op (USD)"
 lab var net_goat_income "Net Goat Income (USD)"
 lab var index_HH_goatsales "Goat Sales Summary Index"
 lab var visits_sale "Trader Visits per Sale"
-lab var LS41 "Time between Contact & Sale (Days)"
-lab var LS42 "Transportation Costs (USD)"
+lab var time_passed "Time between Contact & Sale (Days)"
+lab var transp_cost "Transportation Costs (USD)"
 lab var index_salecost "Sales Cost Summary Index"
 lab var index_dTRN "Transparency Discrepancy Summary Index"
 
@@ -252,7 +252,7 @@ lab var index_dTRN "Transparency Discrepancy Summary Index"
 iebaltab COM3 COM8 index_HH_comm ///
 		LS8 LS9 co_opgoatno co_opsalevalue ///
 		net_goat_income index_HH_goatsales ///
-		visits_sale LS41 LS42 index_salecost ///
+		visits_sale time_passed transp_cost index_salecost ///
 		index_dTRN ///
 		HHR14 HSE5 HSE10  ///
 		MGT5 COM3 COM5 ///

@@ -283,7 +283,7 @@ use "$d3/r_HH_Merged_Ind.dta"
 gl hh_summ COM3 COM8 index_HH_comm ///
 				LS8 LS9 co_opgoatno co_opsalevalue ///
 				net_goat_income index_HH_goatsales ///
-				visits_sale LS41 LS42 index_salecost ///
+				visits_sale time_passed transp_cost index_salecost ///
 				index_dTRN ///
 				
 
