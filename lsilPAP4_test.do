@@ -170,6 +170,7 @@ Transportation costs
 gen goats_sold = REC1
 gen goats_sold_member = REC1 / MAN3
 * goatrev
+gen co_goat_rev = REC4_1*(0.0099)
 * revenue per goat sold
 gen goatrev_sold = goatrev / REC1
 gen col_points = GTT1

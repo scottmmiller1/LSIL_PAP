@@ -41,7 +41,7 @@ forv i = 2/`listsize' { // appends into single matrix
 * Table
 frmttable using CO_summary.tex, tex statmat(A) sdec(2) coljust(l;c;l;l) title("Cooperative Indicators - Summmary Statistics") ///
 ctitle("","N","Mean","sd","Min","Max") ///
-rtitle("\# of Members"\"Revenue (USD)"\"Costs (USD)"\"Net Revenue (USD)"\"Revenue per Member (USD)"\"Net Revenue per Member (USD)"\"Co-op has a Business Plan"\"Planning Time Horizon (Years)"\"Expected Goats Sold"\"Expected Revenue (USD)"\"Planning \& Goals Summmary Index"\"Transparency: Mandate"\"Transparency: Annual Report"\"Transparency: Annual Budget"\"Transparency: Financial Report"\"Transparency: Meeting Minutes"\"Transparency: Election Results"\"Transparency: Sale Records")replace
+rtitle("\# of Members"\"Revenue (USD)"\"Costs (USD)"\"Net Revenue (USD)"\"Revenue per Member (USD)"\"Net Revenue per Member (USD)"\"Goat Revenue"\"Co-op has a Business Plan"\"Planning Time Horizon (Years)"\"Expected Goats Sold"\"Expected Revenue (USD)"\"Planning \& Goals Summmary Index"\"Transparency: Mandate"\"Transparency: Annual Report"\"Transparency: Annual Budget"\"Transparency: Financial Report"\"Transparency: Meeting Minutes"\"Transparency: Election Results"\"Transparency: Sale Records")replace
  
 
 
