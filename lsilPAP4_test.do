@@ -23,7 +23,9 @@ generate stdgroup = r_treat
 
 encode region, gen(n_region) // create numerical region variable for regression
 
+
 ** Winsorize LS9
+* -----------------------------------------------
 * treatment
 sum LS9 if r_treat == 1, d
 scalar t_99 = r(p99)
@@ -41,7 +43,7 @@ replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & r_treat == 0
 * LS9 , 
 replace LS9 = 0 if LS9 ==.
 replace co_opsalevalue = 0 if co_opsalevalue ==.
-
+* -----------------------------------------------
 
 
 
@@ -126,7 +128,7 @@ Members : role_CPMgt_and_membershi1
 
 * Convert to USD as of 1/1/18
 
-gen revenue = REV4*(0.0099) // names too long for macros
+gen revenue = REV4*(0.0099)
 gen costs = REC7*(0.0099)
 gen assets = FAL1*(0.0099)
 gen liabilities = FAL2*(0.0099)
@@ -170,7 +172,6 @@ Transportation costs
 gen goats_sold = REC1
 gen goats_sold_member = REC1 / MAN3
 * goatrev
-gen co_goat_rev = REC4_1*(0.0099)
 * revenue per goat sold
 gen goatrev_sold = goatrev / REC1
 gen col_points = GTT1
@@ -251,6 +252,7 @@ encode region, gen(n_region) // create numerical region variable for regression
 
 
 ** Winsorize LS9
+* -----------------------------------------------
 * treatment
 sum LS9 if r_treat == 1, d
 scalar t_99 = r(p99)
@@ -262,14 +264,17 @@ sum LS9 if r_treat == 0, d
 scalar c_99 = r(p99)
 
 replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & r_treat == 0
+* -----------------------------------------------
 
 
-** Replace Missing values with zero 
+** Replace Missing values with zero
+* ----------------------------------------------- 
 * LS9 , 
 replace LS9 = 0 if LS9 ==.
 replace LS8 = 0 if LS8 ==.
 replace co_opsalevalue = 0 if co_opsalevalue ==.
 replace co_opgoatno = 0 if co_opgoatno ==.
+* -----------------------------------------------
 
 
 ** Communication **
@@ -350,6 +355,13 @@ trader visits home : Livestock_SalesLS40
 time passed before sale : Livestock_SalesLS41
 transportation cost : Livestock_SalesLS42
 */
+/* Costs
+Amount spent purchasing goats: LSE12
+Amount spent on feed/fodder : LSE15
+Amount spent on vet care : LSE16
+Amount spent on breeding fees : LSE17a * LSE17b
+Amount spent on shelters : LSE18
+*/
 
 
 ** household level vars
@@ -361,14 +373,11 @@ gen transp_cost = -1*(LS42*(0.0099))
 replace LS9 = LS9*(0.0099)
 replace co_opsalevalue = co_opsalevalue*(0.0099)
 
-/* Costs
-Amount spent purchasing goats: LSE12
-Amount spent on feed/fodder : LSE15
-Amount spent on vet care : LSE16
-Amount spent on breeding fees : LSE17a * LSE17b
-Amount spent on shelters : LSE18
-*/
 
+* replace obvious outlier with sample median (median = 0)
+replace visits_sale = 0 if visits_sale <= -5000
+
+* replace missing values with zero
 foreach v of varlist LSE12 LSE15 LSE16 LSE17a LSE17b LSE18 {
 	replace `v' = 0 if `v'==.
 	}

@@ -11,7 +11,7 @@ use "$d3/r_CO_Merged_Ind.dta"
 
 ** Co-op indicators **
 
-gl co_summ MAN3 revenue costs net_rev rev_member net_rev_member ///
+gl co_summ MAN3 revenue costs net_rev rev_member net_rev_member goatrev ///
 		PNG1 PNG2 PNG3 expected_rev index_PNG CO_TRN1 CO_TRN2 ///
 		CO_TRN3 CO_TRN4 CO_TRN5 CO_TRN6 CO_TRN7
 

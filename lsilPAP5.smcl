@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP5.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}18 Dec 2018, 15:45:03
+ {txt}opened on:  {res}21 Dec 2018, 11:34:59
 {txt}
 {com}. 
 . cd "$d2"
@@ -474,42 +474,42 @@
 {txt}Linear regression                               Number of obs     = {res}     1,276
                                                 {txt}{help j_robustsingular:F(23, 91) }        =  {res}        .
                                                 {txt}Prob > F          = {res}         .
-                                                {txt}R-squared         = {res}    0.0127
-                                                {txt}Root MSE          =    {res} 140.41
+                                                {txt}R-squared         = {res}    0.0766
+                                                {txt}Root MSE          =    {res} .59633
 
 {txt}{ralign 78:(Std. Err. adjusted for {res:92} clusters in idx)}
 {hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {col 14}{c |}{col 26}    Robust
 {col 1} visits_sale{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
 {hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 5}r_treat {c |}{col 14}{res}{space 2}-5.729581{col 26}{space 2} 5.614848{col 37}{space 1}   -1.02{col 46}{space 3}0.310{col 54}{space 4}-16.88279{col 67}{space 3} 5.423625
+{space 5}r_treat {c |}{col 14}{res}{space 2} .0846798{col 26}{space 2} .0478129{col 37}{space 1}    1.77{col 46}{space 3}0.080{col 54}{space 4}-.0102947{col 67}{space 3} .1796542
 {txt}{space 12} {c |}
 {space 6}strata {c |}
-{space 8}112  {c |}{col 14}{res}{space 2}-2.431736{col 26}{space 2} 3.116129{col 37}{space 1}   -0.78{col 46}{space 3}0.437{col 54}{space 4}-8.621544{col 67}{space 3} 3.758071
-{txt}{space 8}121  {c |}{col 14}{res}{space 2} .3682395{col 26}{space 2}  2.69999{col 37}{space 1}    0.14{col 46}{space 3}0.892{col 54}{space 4} -4.99496{col 67}{space 3} 5.731439
-{txt}{space 8}122  {c |}{col 14}{res}{space 2} .9936641{col 26}{space 2} 2.153353{col 37}{space 1}    0.46{col 46}{space 3}0.646{col 54}{space 4}-3.283706{col 67}{space 3} 5.271034
-{txt}{space 8}211  {c |}{col 14}{res}{space 2} .0572502{col 26}{space 2} 2.384669{col 37}{space 1}    0.02{col 46}{space 3}0.981{col 54}{space 4}-4.679601{col 67}{space 3} 4.794102
-{txt}{space 8}212  {c |}{col 14}{res}{space 2} 1.845521{col 26}{space 2}  2.56893{col 37}{space 1}    0.72{col 46}{space 3}0.474{col 54}{space 4}-3.257344{col 67}{space 3} 6.948385
-{txt}{space 8}221  {c |}{col 14}{res}{space 2} 1.054038{col 26}{space 2} 2.328816{col 37}{space 1}    0.45{col 46}{space 3}0.652{col 54}{space 4}-3.571868{col 67}{space 3} 5.679944
-{txt}{space 8}222  {c |}{col 14}{res}{space 2} .7831429{col 26}{space 2} 2.166206{col 37}{space 1}    0.36{col 46}{space 3}0.719{col 54}{space 4}-3.519758{col 67}{space 3} 5.086044
-{txt}{space 8}311  {c |}{col 14}{res}{space 2}   .72985{col 26}{space 2} 2.244186{col 37}{space 1}    0.33{col 46}{space 3}0.746{col 54}{space 4}-3.727949{col 67}{space 3} 5.187649
-{txt}{space 8}312  {c |}{col 14}{res}{space 2} 2.261944{col 26}{space 2}   2.7699{col 37}{space 1}    0.82{col 46}{space 3}0.416{col 54}{space 4}-3.240123{col 67}{space 3} 7.764011
-{txt}{space 8}321  {c |}{col 14}{res}{space 2}-.0727284{col 26}{space 2} 2.406756{col 37}{space 1}   -0.03{col 46}{space 3}0.976{col 54}{space 4}-4.853454{col 67}{space 3} 4.707997
-{txt}{space 8}322  {c |}{col 14}{res}{space 2}  1.41675{col 26}{space 2} 2.480972{col 37}{space 1}    0.57{col 46}{space 3}0.569{col 54}{space 4}-3.511396{col 67}{space 3} 6.344896
-{txt}{space 8}411  {c |}{col 14}{res}{space 2} .8411608{col 26}{space 2} 2.224503{col 37}{space 1}    0.38{col 46}{space 3}0.706{col 54}{space 4} -3.57754{col 67}{space 3} 5.259862
-{txt}{space 8}412  {c |}{col 14}{res}{space 2} 1.966877{col 26}{space 2} 2.399847{col 37}{space 1}    0.82{col 46}{space 3}0.415{col 54}{space 4}-2.800124{col 67}{space 3} 6.733877
-{txt}{space 8}421  {c |}{col 14}{res}{space 2} .0993167{col 26}{space 2} 2.300797{col 37}{space 1}    0.04{col 46}{space 3}0.966{col 54}{space 4}-4.470934{col 67}{space 3} 4.669568
-{txt}{space 8}422  {c |}{col 14}{res}{space 2} .2112674{col 26}{space 2} 2.093426{col 37}{space 1}    0.10{col 46}{space 3}0.920{col 54}{space 4}-3.947065{col 67}{space 3}   4.3696
-{txt}{space 8}511  {c |}{col 14}{res}{space 2} 1.165149{col 26}{space 2} 2.230499{col 37}{space 1}    0.52{col 46}{space 3}0.603{col 54}{space 4}-3.265463{col 67}{space 3} 5.595762
-{txt}{space 8}512  {c |}{col 14}{res}{space 2} .6375143{col 26}{space 2} 2.202214{col 37}{space 1}    0.29{col 46}{space 3}0.773{col 54}{space 4}-3.736913{col 67}{space 3} 5.011941
-{txt}{space 8}521  {c |}{col 14}{res}{space 2} .2322515{col 26}{space 2} 2.220314{col 37}{space 1}    0.10{col 46}{space 3}0.917{col 54}{space 4} -4.17813{col 67}{space 3} 4.642633
-{txt}{space 8}522  {c |}{col 14}{res}{space 2} .6788456{col 26}{space 2} 2.202744{col 37}{space 1}    0.31{col 46}{space 3}0.759{col 54}{space 4}-3.696635{col 67}{space 3} 5.054326
-{txt}{space 8}611  {c |}{col 14}{res}{space 2} .2893387{col 26}{space 2} 2.236897{col 37}{space 1}    0.13{col 46}{space 3}0.897{col 54}{space 4}-4.153983{col 67}{space 3}  4.73266
-{txt}{space 8}612  {c |}{col 14}{res}{space 2} 1.433302{col 26}{space 2} 2.264352{col 37}{space 1}    0.63{col 46}{space 3}0.528{col 54}{space 4}-3.064555{col 67}{space 3}  5.93116
-{txt}{space 8}621  {c |}{col 14}{res}{space 2}  .405974{col 26}{space 2} 2.184073{col 37}{space 1}    0.19{col 46}{space 3}0.853{col 54}{space 4} -3.93242{col 67}{space 3} 4.744368
-{txt}{space 8}622  {c |}{col 14}{res}{space 2}-64.16111{col 26}{space 2} 57.05305{col 37}{space 1}   -1.12{col 46}{space 3}0.264{col 54}{space 4}  -177.49{col 67}{space 3} 49.16776
+{space 8}112  {c |}{col 14}{res}{space 2} .3300377{col 26}{space 2}  .183476{col 37}{space 1}    1.80{col 46}{space 3}0.075{col 54}{space 4}-.0344148{col 67}{space 3} .6944902
+{txt}{space 8}121  {c |}{col 14}{res}{space 2}  .222883{col 26}{space 2} .2005707{col 37}{space 1}    1.11{col 46}{space 3}0.269{col 54}{space 4} -.175526{col 67}{space 3}  .621292
+{txt}{space 8}122  {c |}{col 14}{res}{space 2} .5128694{col 26}{space 2} .2060077{col 37}{space 1}    2.49{col 46}{space 3}0.015{col 54}{space 4} .1036604{col 67}{space 3} .9220784
+{txt}{space 8}211  {c |}{col 14}{res}{space 2} .6386763{col 26}{space 2} .1968385{col 37}{space 1}    3.24{col 46}{space 3}0.002{col 54}{space 4} .2476809{col 67}{space 3} 1.029672
+{txt}{space 8}212  {c |}{col 14}{res}{space 2} .3158164{col 26}{space 2}  .222989{col 37}{space 1}    1.42{col 46}{space 3}0.160{col 54}{space 4}-.1271239{col 67}{space 3} .7587567
+{txt}{space 8}221  {c |}{col 14}{res}{space 2} .4241597{col 26}{space 2} .2051565{col 37}{space 1}    2.07{col 46}{space 3}0.042{col 54}{space 4} .0166415{col 67}{space 3} .8316779
+{txt}{space 8}222  {c |}{col 14}{res}{space 2} .4250695{col 26}{space 2} .2076482{col 37}{space 1}    2.05{col 46}{space 3}0.044{col 54}{space 4} .0126018{col 67}{space 3} .8375372
+{txt}{space 8}311  {c |}{col 14}{res}{space 2} .5383485{col 26}{space 2} .2396596{col 37}{space 1}    2.25{col 46}{space 3}0.027{col 54}{space 4} .0622941{col 67}{space 3} 1.014403
+{txt}{space 8}312  {c |}{col 14}{res}{space 2} .2206324{col 26}{space 2} .2400261{col 37}{space 1}    0.92{col 46}{space 3}0.360{col 54}{space 4}-.2561501{col 67}{space 3} .6974148
+{txt}{space 8}321  {c |}{col 14}{res}{space 2} .5392349{col 26}{space 2} .2006566{col 37}{space 1}    2.69{col 46}{space 3}0.009{col 54}{space 4} .1406551{col 67}{space 3} .9378146
+{txt}{space 8}322  {c |}{col 14}{res}{space 2} .2538974{col 26}{space 2} .3617727{col 37}{space 1}    0.70{col 46}{space 3}0.485{col 54}{space 4}-.4647197{col 67}{space 3} .9725145
+{txt}{space 8}411  {c |}{col 14}{res}{space 2} .6312014{col 26}{space 2} .2149469{col 37}{space 1}    2.94{col 46}{space 3}0.004{col 54}{space 4} .2042357{col 67}{space 3} 1.058167
+{txt}{space 8}412  {c |}{col 14}{res}{space 2} .7033933{col 26}{space 2} .2035253{col 37}{space 1}    3.46{col 46}{space 3}0.001{col 54}{space 4} .2991154{col 67}{space 3} 1.107671
+{txt}{space 8}421  {c |}{col 14}{res}{space 2} .3974207{col 26}{space 2}  .260793{col 37}{space 1}    1.52{col 46}{space 3}0.131{col 54}{space 4}-.1206126{col 67}{space 3}  .915454
+{txt}{space 8}422  {c |}{col 14}{res}{space 2} .4535283{col 26}{space 2} .2151796{col 37}{space 1}    2.11{col 46}{space 3}0.038{col 54}{space 4} .0261005{col 67}{space 3} .8809561
+{txt}{space 8}511  {c |}{col 14}{res}{space 2} .5352708{col 26}{space 2} .2113828{col 37}{space 1}    2.53{col 46}{space 3}0.013{col 54}{space 4} .1153848{col 67}{space 3} .9551569
+{txt}{space 8}512  {c |}{col 14}{res}{space 2} .7075008{col 26}{space 2} .1904833{col 37}{space 1}    3.71{col 46}{space 3}0.000{col 54}{space 4} .3291291{col 67}{space 3} 1.085872
+{txt}{space 8}521  {c |}{col 14}{res}{space 2} .6086876{col 26}{space 2} .1991188{col 37}{space 1}    3.06{col 46}{space 3}0.003{col 54}{space 4} .2131625{col 67}{space 3} 1.004213
+{txt}{space 8}522  {c |}{col 14}{res}{space 2} .5334891{col 26}{space 2} .2050184{col 37}{space 1}    2.60{col 46}{space 3}0.011{col 54}{space 4} .1262452{col 67}{space 3}  .940733
+{txt}{space 8}611  {c |}{col 14}{res}{space 2} .6495701{col 26}{space 2} .2197525{col 37}{space 1}    2.96{col 46}{space 3}0.004{col 54}{space 4} .2130588{col 67}{space 3} 1.086081
+{txt}{space 8}612  {c |}{col 14}{res}{space 2} .7593768{col 26}{space 2} .1906195{col 37}{space 1}    3.98{col 46}{space 3}0.000{col 54}{space 4} .3807345{col 67}{space 3} 1.138019
+{txt}{space 8}621  {c |}{col 14}{res}{space 2} .6240088{col 26}{space 2}  .216339{col 37}{space 1}    2.88{col 46}{space 3}0.005{col 54}{space 4} .1942779{col 67}{space 3}  1.05374
+{txt}{space 8}622  {c |}{col 14}{res}{space 2} .5693496{col 26}{space 2}  .210404{col 37}{space 1}    2.71{col 46}{space 3}0.008{col 54}{space 4}  .151408{col 67}{space 3} .9872913
 {txt}{space 12} {c |}
-{space 7}_cons {c |}{col 14}{res}{space 2} 1.913218{col 26}{space 2} 3.116129{col 37}{space 1}    0.61{col 46}{space 3}0.541{col 54}{space 4} -4.27659{col 67}{space 3} 8.103025
+{space 7}_cons {c |}{col 14}{res}{space 2}-.8485562{col 26}{space 2}  .183476{col 37}{space 1}   -4.62{col 46}{space 3}0.000{col 54}{space 4}-1.213009{col 67}{space 3}-.4841037
 {txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}
 {txt}Linear regression                               Number of obs     = {res}     1,276
@@ -597,42 +597,42 @@
 {txt}Linear regression                               Number of obs     = {res}     1,276
                                                 {txt}{help j_robustsingular:F(23, 91) }        =  {res}        .
                                                 {txt}Prob > F          = {res}         .
-                                                {txt}R-squared         = {res}    0.0168
-                                                {txt}Root MSE          =    {res} .79737
+                                                {txt}R-squared         = {res}    0.0652
+                                                {txt}Root MSE          =    {res} 1.1232
 
 {txt}{ralign 78:(Std. Err. adjusted for {res:92} clusters in idx)}
 {hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {col 14}{c |}{col 26}    Robust
 {col 1}index_sale~t{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
 {hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 5}r_treat {c |}{col 14}{res}{space 2} .0280862{col 26}{space 2} .0389986{col 37}{space 1}    0.72{col 46}{space 3}0.473{col 54}{space 4}-.0493798{col 67}{space 3} .1055523
+{space 5}r_treat {c |}{col 14}{res}{space 2} .1795355{col 26}{space 2} .0858266{col 37}{space 1}    2.09{col 46}{space 3}0.039{col 54}{space 4} .0090516{col 67}{space 3} .3500194
 {txt}{space 12} {c |}
 {space 6}strata {c |}
-{space 8}112  {c |}{col 14}{res}{space 2} .1543671{col 26}{space 2} .0771425{col 37}{space 1}    2.00{col 46}{space 3}0.048{col 54}{space 4}  .001133{col 67}{space 3} .3076012
-{txt}{space 8}121  {c |}{col 14}{res}{space 2} .0639476{col 26}{space 2} .0816641{col 37}{space 1}    0.78{col 46}{space 3}0.436{col 54}{space 4}-.0982682{col 67}{space 3} .2261633
-{txt}{space 8}122  {c |}{col 14}{res}{space 2} .1728148{col 26}{space 2} .0786273{col 37}{space 1}    2.20{col 46}{space 3}0.030{col 54}{space 4} .0166313{col 67}{space 3} .3289983
-{txt}{space 8}211  {c |}{col 14}{res}{space 2} .1977651{col 26}{space 2} .0785435{col 37}{space 1}    2.52{col 46}{space 3}0.014{col 54}{space 4} .0417481{col 67}{space 3} .3537821
-{txt}{space 8}212  {c |}{col 14}{res}{space 2} .0438327{col 26}{space 2} .1274372{col 37}{space 1}    0.34{col 46}{space 3}0.732{col 54}{space 4}-.2093057{col 67}{space 3} .2969711
-{txt}{space 8}221  {c |}{col 14}{res}{space 2} .1033572{col 26}{space 2} .0812529{col 37}{space 1}    1.27{col 46}{space 3}0.207{col 54}{space 4}-.0580417{col 67}{space 3} .2647561
-{txt}{space 8}222  {c |}{col 14}{res}{space 2} .1497777{col 26}{space 2} .0838095{col 37}{space 1}    1.79{col 46}{space 3}0.077{col 54}{space 4}-.0166995{col 67}{space 3} .3162549
-{txt}{space 8}311  {c |}{col 14}{res}{space 2} .1331991{col 26}{space 2} .1088593{col 37}{space 1}    1.22{col 46}{space 3}0.224{col 54}{space 4}-.0830365{col 67}{space 3} .3494348
-{txt}{space 8}312  {c |}{col 14}{res}{space 2} .0591413{col 26}{space 2} .1033708{col 37}{space 1}    0.57{col 46}{space 3}0.569{col 54}{space 4}-.1461921{col 67}{space 3} .2644747
-{txt}{space 8}321  {c |}{col 14}{res}{space 2} .1370832{col 26}{space 2} .0860381{col 37}{space 1}    1.59{col 46}{space 3}0.115{col 54}{space 4} -.033821{col 67}{space 3} .3079874
-{txt}{space 8}322  {c |}{col 14}{res}{space 2} .0396782{col 26}{space 2} .1336135{col 37}{space 1}    0.30{col 46}{space 3}0.767{col 54}{space 4}-.2257287{col 67}{space 3} .3050851
-{txt}{space 8}411  {c |}{col 14}{res}{space 2} .1525335{col 26}{space 2} .0939005{col 37}{space 1}    1.62{col 46}{space 3}0.108{col 54}{space 4}-.0339884{col 67}{space 3} .3390553
-{txt}{space 8}412  {c |}{col 14}{res}{space 2} .1210211{col 26}{space 2} .1155934{col 37}{space 1}    1.05{col 46}{space 3}0.298{col 54}{space 4} -.108591{col 67}{space 3} .3506332
-{txt}{space 8}421  {c |}{col 14}{res}{space 2}-.1452927{col 26}{space 2}  .172688{col 37}{space 1}   -0.84{col 46}{space 3}0.402{col 54}{space 4}-.4883161{col 67}{space 3} .1977308
-{txt}{space 8}422  {c |}{col 14}{res}{space 2} .0439954{col 26}{space 2} .0914884{col 37}{space 1}    0.48{col 46}{space 3}0.632{col 54}{space 4} -.137735{col 67}{space 3} .2257257
-{txt}{space 8}511  {c |}{col 14}{res}{space 2} .1120409{col 26}{space 2} .0935955{col 37}{space 1}    1.20{col 46}{space 3}0.234{col 54}{space 4}-.0738751{col 67}{space 3}  .297957
-{txt}{space 8}512  {c |}{col 14}{res}{space 2} .2193944{col 26}{space 2} .0794754{col 37}{space 1}    2.76{col 46}{space 3}0.007{col 54}{space 4} .0615263{col 67}{space 3} .3772625
-{txt}{space 8}521  {c |}{col 14}{res}{space 2} .1084077{col 26}{space 2} .1141697{col 37}{space 1}    0.95{col 46}{space 3}0.345{col 54}{space 4}-.1183764{col 67}{space 3} .3351917
-{txt}{space 8}522  {c |}{col 14}{res}{space 2}-.0353213{col 26}{space 2} .1222125{col 37}{space 1}   -0.29{col 46}{space 3}0.773{col 54}{space 4}-.2780814{col 67}{space 3} .2074389
-{txt}{space 8}611  {c |}{col 14}{res}{space 2} .1359183{col 26}{space 2} .0806877{col 37}{space 1}    1.68{col 46}{space 3}0.096{col 54}{space 4}-.0243579{col 67}{space 3} .2961946
-{txt}{space 8}612  {c |}{col 14}{res}{space 2}  .176489{col 26}{space 2} .0839819{col 37}{space 1}    2.10{col 46}{space 3}0.038{col 54}{space 4} .0096694{col 67}{space 3} .3433087
-{txt}{space 8}621  {c |}{col 14}{res}{space 2} .2234703{col 26}{space 2} .0814593{col 37}{space 1}    2.74{col 46}{space 3}0.007{col 54}{space 4} .0616614{col 67}{space 3} .3852791
-{txt}{space 8}622  {c |}{col 14}{res}{space 2}-.1468838{col 26}{space 2} .2890165{col 37}{space 1}   -0.51{col 46}{space 3}0.613{col 54}{space 4}-.7209796{col 67}{space 3}  .427212
+{space 8}112  {c |}{col 14}{res}{space 2} .6227636{col 26}{space 2} .3133961{col 37}{space 1}    1.99{col 46}{space 3}0.050{col 54}{space 4} .0002406{col 67}{space 3} 1.245287
+{txt}{space 8}121  {c |}{col 14}{res}{space 2} .3472693{col 26}{space 2}  .323226{col 37}{space 1}    1.07{col 46}{space 3}0.285{col 54}{space 4}-.2947793{col 67}{space 3}  .989318
+{txt}{space 8}122  {c |}{col 14}{res}{space 2} .8355371{col 26}{space 2}  .338911{col 37}{space 1}    2.47{col 46}{space 3}0.016{col 54}{space 4} .1623321{col 67}{space 3} 1.508742
+{txt}{space 8}211  {c |}{col 14}{res}{space 2}  1.02348{col 26}{space 2} .3343143{col 37}{space 1}    3.06{col 46}{space 3}0.003{col 54}{space 4} .3594062{col 67}{space 3} 1.687555
+{txt}{space 8}212  {c |}{col 14}{res}{space 2}  .414222{col 26}{space 2} .4200646{col 37}{space 1}    0.99{col 46}{space 3}0.327{col 54}{space 4}-.4201846{col 67}{space 3} 1.248629
+{txt}{space 8}221  {c |}{col 14}{res}{space 2} .6315437{col 26}{space 2} .3391423{col 37}{space 1}    1.86{col 46}{space 3}0.066{col 54}{space 4}-.0421208{col 67}{space 3} 1.305208
+{txt}{space 8}222  {c |}{col 14}{res}{space 2}  .702368{col 26}{space 2} .3547995{col 37}{space 1}    1.98{col 46}{space 3}0.051{col 54}{space 4}-.0023976{col 67}{space 3} 1.407134
+{txt}{space 8}311  {c |}{col 14}{res}{space 2} .8084496{col 26}{space 2}  .422117{col 37}{space 1}    1.92{col 46}{space 3}0.059{col 54}{space 4} -.030034{col 67}{space 3} 1.646933
+{txt}{space 8}312  {c |}{col 14}{res}{space 2} .3240606{col 26}{space 2} .4182565{col 37}{space 1}    0.77{col 46}{space 3}0.440{col 54}{space 4}-.5067544{col 67}{space 3} 1.154876
+{txt}{space 8}321  {c |}{col 14}{res}{space 2} .8161478{col 26}{space 2} .3446348{col 37}{space 1}    2.37{col 46}{space 3}0.020{col 54}{space 4} .1315731{col 67}{space 3} 1.500723
+{txt}{space 8}322  {c |}{col 14}{res}{space 2} .3399588{col 26}{space 2} .6083179{col 37}{space 1}    0.56{col 46}{space 3}0.578{col 54}{space 4}  -.86839{col 67}{space 3} 1.548308
+{txt}{space 8}411  {c |}{col 14}{res}{space 2} .9431633{col 26}{space 2} .3554434{col 37}{space 1}    2.65{col 46}{space 3}0.009{col 54}{space 4} .2371186{col 67}{space 3} 1.649208
+{txt}{space 8}412  {c |}{col 14}{res}{space 2} .9719987{col 26}{space 2} .3507157{col 37}{space 1}    2.77{col 46}{space 3}0.007{col 54}{space 4} .2753451{col 67}{space 3} 1.668652
+{txt}{space 8}421  {c |}{col 14}{res}{space 2} .2442322{col 26}{space 2} .5105769{col 37}{space 1}    0.48{col 46}{space 3}0.634{col 54}{space 4} -.769966{col 67}{space 3}  1.25843
+{txt}{space 8}422  {c |}{col 14}{res}{space 2} .5845237{col 26}{space 2}  .364224{col 37}{space 1}    1.60{col 46}{space 3}0.112{col 54}{space 4}-.1389624{col 67}{space 3}  1.30801
+{txt}{space 8}511  {c |}{col 14}{res}{space 2} .7712865{col 26}{space 2} .3743754{col 37}{space 1}    2.06{col 46}{space 3}0.042{col 54}{space 4} .0276357{col 67}{space 3} 1.514937
+{txt}{space 8}512  {c |}{col 14}{res}{space 2} 1.130079{col 26}{space 2}  .327021{col 37}{space 1}    3.46{col 46}{space 3}0.001{col 54}{space 4} .4804916{col 67}{space 3} 1.779666
+{txt}{space 8}521  {c |}{col 14}{res}{space 2} .8571382{col 26}{space 2} .3671443{col 37}{space 1}    2.33{col 46}{space 3}0.022{col 54}{space 4} .1278512{col 67}{space 3} 1.586425
+{txt}{space 8}522  {c |}{col 14}{res}{space 2} .5573739{col 26}{space 2} .3797773{col 37}{space 1}    1.47{col 46}{space 3}0.146{col 54}{space 4}-.1970071{col 67}{space 3} 1.311755
+{txt}{space 8}611  {c |}{col 14}{res}{space 2} .9433501{col 26}{space 2} .3585736{col 37}{space 1}    2.63{col 46}{space 3}0.010{col 54}{space 4} .2310878{col 67}{space 3} 1.655612
+{txt}{space 8}612  {c |}{col 14}{res}{space 2} 1.121249{col 26}{space 2} .3312413{col 37}{space 1}    3.38{col 46}{space 3}0.001{col 54}{space 4} .4632787{col 67}{space 3} 1.779219
+{txt}{space 8}621  {c |}{col 14}{res}{space 2} 1.041669{col 26}{space 2} .3615755{col 37}{space 1}    2.88{col 46}{space 3}0.005{col 54}{space 4} .3234434{col 67}{space 3} 1.759894
+{txt}{space 8}622  {c |}{col 14}{res}{space 2} .8906995{col 26}{space 2} .3550159{col 37}{space 1}    2.51{col 46}{space 3}0.014{col 54}{space 4}  .185504{col 67}{space 3} 1.595895
 {txt}{space 12} {c |}
-{space 7}_cons {c |}{col 14}{res}{space 2}-.1841203{col 26}{space 2} .0771425{col 37}{space 1}   -2.39{col 46}{space 3}0.019{col 54}{space 4}-.3373544{col 67}{space 3}-.0308862
+{space 7}_cons {c |}{col 14}{res}{space 2}-1.118944{col 26}{space 2} .3133961{col 37}{space 1}   -3.57{col 46}{space 3}0.001{col 54}{space 4}-1.741467{col 67}{space 3}-.4964215
 {txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
 {com}. matrix A = mat_1
@@ -658,10 +658,10 @@
 {center:{txt}{lalign 24:Rev. through Co-op}{res}{center 9:14.4437}{res}{center 11:0.6523}{res}{center 12:0.1704}}
 {center:{txt}{lalign 24:Net Goat Income}{res}{center 9:35.7381}{res}{center 11:0.6988}{res}{center 12:0.1209}}
 {center:{txt}{lalign 24:HH Goat Sales Index}{res}{center 9:0.1456}{res}{center 11:-2.0742}{res}{center 12:0.1616}}
-{center:{txt}{lalign 24:Trader Visits per Sale}{res}{center 9:15.9011}{res}{center 11:-3.7679}{res}{center 12:0.1136}}
+{center:{txt}{lalign 24:Trader Visits per Sale}{res}{center 9:0.1354}{res}{center 11:-0.4493}{res}{center 12:0.2203}}
 {center:{txt}{lalign 24:Time Passed}{res}{center 9:0.3957}{res}{center 11:-0.5015}{res}{center 12:0.1829}}
 {center:{txt}{lalign 24:Transportation Costs}{res}{center 9:0.5808}{res}{center 11:-2.5356}{res}{center 12:0.0837}}
-{center:{txt}{lalign 24:Sale Costs Index}{res}{center 9:0.1104}{res}{center 11:-1.3333}{res}{center 12:0.1387}}
+{center:{txt}{lalign 24:Sale Costs Index}{res}{center 9:0.2431}{res}{center 11:-0.8143}{res}{center 12:0.2112}}
 {txt}{center:{hline 58}}
 {txt}{center:Currency measured in USD}
 
@@ -1038,7 +1038,80 @@
 . 
 {txt}end of do-file
 
-{com}. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD02649.000000"
+{com}. clear
+
+. use "$d3/r_CO_Merged_Ind.dta"
+
+. sum REV4, d
+
+                     {txt}Total co-op revenue
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}    10400              0
+{txt}10%    {res}    29546           1000       {txt}Obs         {res}         90
+{txt}25%    {res}    68236           1854       {txt}Sum of Wgt. {res}         90
+
+{txt}50%    {res}   188700                      {txt}Mean          {res} 389808.1
+                        {txt}Largest       Std. Dev.     {res} 816545.3
+{txt}75%    {res}   385741        1391466
+{txt}90%    {res} 757937.5        1455179       {txt}Variance      {res} 6.67e+11
+{txt}95%    {res}  1110357        3715744       {txt}Skewness      {res} 5.863374
+{txt}99%    {res}  6637324        6637324       {txt}Kurtosis      {res} 42.15608
+
+{com}. sum REC4_1, d
+
+       {txt}REC4_1: How much revenue was earned in the past
+                 six months from Goat sales?
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}         90
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}         90
+
+{txt}50%    {res}     4000                      {txt}Mean          {res} 11299.03
+                        {txt}Largest       Std. Dev.     {res} 20579.21
+{txt}75%    {res}  10581.5          71120
+{txt}90%    {res}    25210          76990       {txt}Variance      {res} 4.24e+08
+{txt}95%    {res}    65505          79810       {txt}Skewness      {res} 2.688166
+{txt}99%    {res}   103980         103980       {txt}Kurtosis      {res} 9.727732
+
+{com}. sum revenue, d
+
+                           {txt}revenue
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}      9.9              0
+{txt}10%    {res}   242.55              0       {txt}Obs         {res}         92
+{txt}25%    {res}  600.336              0       {txt}Sum of Wgt. {res}         92
+
+{txt}50%    {res} 1783.262                      {txt}Mean          {res} 3775.206
+                        {txt}Largest       Std. Dev.     {res} 8014.474
+{txt}75%    {res} 3801.273       13775.51
+{txt}90%    {res} 7250.067       14406.27       {txt}Variance      {res} 6.42e+07
+{txt}95%    {res} 10992.53       36785.87       {txt}Skewness      {res} 5.913001
+{txt}99%    {res} 65709.51       65709.51       {txt}Kurtosis      {res} 42.91379
+
+{com}. sum goatrev, d
+
+                           {txt}goatrev
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}         90
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}         90
+
+{txt}50%    {res}     39.6                      {txt}Mean          {res} 111.8604
+                        {txt}Largest       Std. Dev.     {res} 203.7342
+{txt}75%    {res} 104.7569        704.088
+{txt}90%    {res}  249.579        762.201       {txt}Variance      {res} 41507.61
+{txt}95%    {res} 648.4995        790.119       {txt}Skewness      {res} 2.688166
+{txt}99%    {res} 1029.402       1029.402       {txt}Kurtosis      {res} 9.727732
+
+{com}. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD01874.000000"
 {txt}
 {com}. 
 . clear
@@ -1060,8 +1133,8 @@
 . 
 . ** Co-op indicators **
 . 
-. gl co_summ MAN3 revenue costs net_rev rev_member net_rev_member ///
->                 REC4_1 PNG1 PNG2 PNG3 expected_rev index_PNG CO_TRN1 CO_TRN2 ///
+. gl co_summ MAN3 revenue costs net_rev rev_member net_rev_member goatrev ///
+>                 PNG1 PNG2 PNG3 expected_rev index_PNG CO_TRN1 CO_TRN2 ///
 >                 CO_TRN3 CO_TRN4 CO_TRN5 CO_TRN6 CO_TRN7
 {txt}
 {com}. 
@@ -1099,29 +1172,29 @@
 > rtitle("\# of Members"\"Revenue (USD)"\"Costs (USD)"\"Net Revenue (USD)"\"Revenue per Member (USD)"\"Net Revenue per Member (USD)"\"Goat Revenue"\"Co-op has a Business Plan"\"Planning Time Horizon (Years)"\"Expected Goats Sold"\"Expected Revenue (USD)"\"Planning \& Goals Summmary Index"\"Transparency: Mandate"\"Transparency: Annual Report"\"Transparency: Annual Budget"\"Transparency: Financial Report"\"Transparency: Meeting Minutes"\"Transparency: Election Results"\"Transparency: Sale Records")replace
 {res}
 {txt}{center:Cooperative Indicators - Summmary Statistics}
-{txt}{center:{hline 84}}
-{center:{txt}{lalign 34:}{txt}{center 7:N}{txt}{center 11:Mean}{txt}{center 11:sd}{txt}{center 7:Min}{txt}{center 12:Max}}
-{txt}{center:{hline 84}}
-{center:{txt}{lalign 34:\# of Members}{res}{center 7:92.00}{res}{center 11:553.36}{res}{center 11:376.42}{res}{center 7:11.00}{res}{center 12:2,600.00}}
-{center:{txt}{lalign 34:Revenue (USD)}{res}{center 7:92.00}{res}{center 11:3.78}{res}{center 11:8.01}{res}{center 7:0.00}{res}{center 12:65.71}}
-{center:{txt}{lalign 34:Costs (USD)}{res}{center 7:92.00}{res}{center 11:0.38}{res}{center 11:1.64}{res}{center 7:0.00}{res}{center 12:10.96}}
-{center:{txt}{lalign 34:Net Revenue (USD)}{res}{center 7:90.00}{res}{center 11:3.47}{res}{center 11:8.25}{res}{center 7:-7.93}{res}{center 12:65.55}}
-{center:{txt}{lalign 34:Revenue per Member (USD)}{res}{center 7:92.00}{res}{center 11:0.01}{res}{center 11:0.01}{res}{center 7:0.00}{res}{center 12:0.06}}
-{center:{txt}{lalign 34:Net Revenue per Member (USD)}{res}{center 7:90.00}{res}{center 11:0.01}{res}{center 11:0.01}{res}{center 7:-0.01}{res}{center 12:0.06}}
-{center:{txt}{lalign 34:Goat Revenue}{res}{center 7:90.00}{res}{center 11:11,299.03}{res}{center 11:20,579.21}{res}{center 7:0.00}{res}{center 12:103,980.00}}
-{center:{txt}{lalign 34:Co-op has a Business Plan}{res}{center 7:90.00}{res}{center 11:0.52}{res}{center 11:0.49}{res}{center 7:0.00}{res}{center 12:1.00}}
-{center:{txt}{lalign 34:Planning Time Horizon (Years)}{res}{center 7:89.00}{res}{center 11:1.26}{res}{center 11:1.00}{res}{center 7:0.00}{res}{center 12:5.00}}
-{center:{txt}{lalign 34:Expected Goats Sold}{res}{center 7:90.00}{res}{center 11:271.74}{res}{center 11:363.26}{res}{center 7:0.00}{res}{center 12:2,500.00}}
-{center:{txt}{lalign 34:Expected Revenue (USD)}{res}{center 7:90.00}{res}{center 11:1,026.62}{res}{center 11:2,158.46}{res}{center 7:0.00}{res}{center 12:14,850.00}}
-{center:{txt}{lalign 34:Planning \& Goals Summmary Index}{res}{center 7:89.00}{res}{center 11:0.06}{res}{center 11:0.91}{res}{center 7:-1.17}{res}{center 12:3.88}}
-{center:{txt}{lalign 34:Transparency: Mandate}{res}{center 7:90.00}{res}{center 11:0.81}{res}{center 11:0.38}{res}{center 7:0.00}{res}{center 12:1.00}}
-{center:{txt}{lalign 34:Transparency: Annual Report}{res}{center 7:90.00}{res}{center 11:0.84}{res}{center 11:0.36}{res}{center 7:0.00}{res}{center 12:1.00}}
-{center:{txt}{lalign 34:Transparency: Annual Budget}{res}{center 7:90.00}{res}{center 11:0.82}{res}{center 11:0.38}{res}{center 7:0.00}{res}{center 12:1.00}}
-{center:{txt}{lalign 34:Transparency: Financial Report}{res}{center 7:90.00}{res}{center 11:0.81}{res}{center 11:0.38}{res}{center 7:0.00}{res}{center 12:1.00}}
-{center:{txt}{lalign 34:Transparency: Meeting Minutes}{res}{center 7:90.00}{res}{center 11:0.78}{res}{center 11:0.40}{res}{center 7:0.00}{res}{center 12:1.00}}
-{center:{txt}{lalign 34:Transparency: Election Results}{res}{center 7:90.00}{res}{center 11:0.55}{res}{center 11:0.49}{res}{center 7:0.00}{res}{center 12:1.00}}
-{center:{txt}{lalign 34:Transparency: Sale Records}{res}{center 7:90.00}{res}{center 11:0.76}{res}{center 11:0.43}{res}{center 7:0.00}{res}{center 12:1.00}}
-{txt}{center:{hline 84}}
+{txt}{center:{hline 85}}
+{center:{txt}{lalign 34:}{txt}{center 7:N}{txt}{center 10:Mean}{txt}{center 10:sd}{txt}{center 11:Min}{txt}{center 11:Max}}
+{txt}{center:{hline 85}}
+{center:{txt}{lalign 34:\# of Members}{res}{center 7:92.00}{res}{center 10:553.36}{res}{center 10:376.42}{res}{center 11:11.00}{res}{center 11:2,600.00}}
+{center:{txt}{lalign 34:Revenue (USD)}{res}{center 7:92.00}{res}{center 10:3,775.21}{res}{center 10:8,014.47}{res}{center 11:0.00}{res}{center 11:65,709.51}}
+{center:{txt}{lalign 34:Costs (USD)}{res}{center 7:92.00}{res}{center 10:377.52}{res}{center 10:1,639.07}{res}{center 11:0.00}{res}{center 11:10,964.25}}
+{center:{txt}{lalign 34:Net Revenue (USD)}{res}{center 7:90.00}{res}{center 10:3,473.19}{res}{center 10:8,245.85}{res}{center 11:-7,935.00}{res}{center 11:65,554.27}}
+{center:{txt}{lalign 34:Revenue per Member (USD)}{res}{center 7:92.00}{res}{center 10:7.20}{res}{center 10:10.55}{res}{center 11:0.00}{res}{center 11:63.53}}
+{center:{txt}{lalign 34:Net Revenue per Member (USD)}{res}{center 7:90.00}{res}{center 10:6.80}{res}{center 10:10.95}{res}{center 11:-13.22}{res}{center 11:63.53}}
+{center:{txt}{lalign 34:Goat Revenue}{res}{center 7:90.00}{res}{center 10:111.86}{res}{center 10:203.73}{res}{center 11:0.00}{res}{center 11:1,029.40}}
+{center:{txt}{lalign 34:Co-op has a Business Plan}{res}{center 7:90.00}{res}{center 10:0.52}{res}{center 10:0.49}{res}{center 11:0.00}{res}{center 11:1.00}}
+{center:{txt}{lalign 34:Planning Time Horizon (Years)}{res}{center 7:89.00}{res}{center 10:1.26}{res}{center 10:1.00}{res}{center 11:0.00}{res}{center 11:5.00}}
+{center:{txt}{lalign 34:Expected Goats Sold}{res}{center 7:90.00}{res}{center 10:271.74}{res}{center 10:363.26}{res}{center 11:0.00}{res}{center 11:2,500.00}}
+{center:{txt}{lalign 34:Expected Revenue (USD)}{res}{center 7:90.00}{res}{center 10:1,026.62}{res}{center 10:2,158.46}{res}{center 11:0.00}{res}{center 11:14,850.00}}
+{center:{txt}{lalign 34:Planning \& Goals Summmary Index}{res}{center 7:89.00}{res}{center 10:0.06}{res}{center 10:0.91}{res}{center 11:-1.17}{res}{center 11:3.88}}
+{center:{txt}{lalign 34:Transparency: Mandate}{res}{center 7:90.00}{res}{center 10:0.81}{res}{center 10:0.38}{res}{center 11:0.00}{res}{center 11:1.00}}
+{center:{txt}{lalign 34:Transparency: Annual Report}{res}{center 7:90.00}{res}{center 10:0.84}{res}{center 10:0.36}{res}{center 11:0.00}{res}{center 11:1.00}}
+{center:{txt}{lalign 34:Transparency: Annual Budget}{res}{center 7:90.00}{res}{center 10:0.82}{res}{center 10:0.38}{res}{center 11:0.00}{res}{center 11:1.00}}
+{center:{txt}{lalign 34:Transparency: Financial Report}{res}{center 7:90.00}{res}{center 10:0.81}{res}{center 10:0.38}{res}{center 11:0.00}{res}{center 11:1.00}}
+{center:{txt}{lalign 34:Transparency: Meeting Minutes}{res}{center 7:90.00}{res}{center 10:0.78}{res}{center 10:0.40}{res}{center 11:0.00}{res}{center 11:1.00}}
+{center:{txt}{lalign 34:Transparency: Election Results}{res}{center 7:90.00}{res}{center 10:0.55}{res}{center 10:0.49}{res}{center 11:0.00}{res}{center 11:1.00}}
+{center:{txt}{lalign 34:Transparency: Sale Records}{res}{center 7:90.00}{res}{center 10:0.76}{res}{center 10:0.43}{res}{center 11:0.00}{res}{center 11:1.00}}
+{txt}{center:{hline 85}}
 
 
 {com}.  
@@ -1231,20 +1304,20 @@
 {txt}{center:{hline 77}}
 {center:{txt}{lalign 22:}{txt}{center 7:N}{txt}{center 11:Mean}{txt}{center 11:sd}{txt}{center 12:Min}{txt}{center 12:Max}}
 {txt}{center:{hline 77}}
-{center:{txt}{lalign 22:Revenue}{res}{center 7:92.00}{res}{center 11:3.78}{res}{center 11:8.01}{res}{center 12:0.00}{res}{center 12:65.71}}
-{center:{txt}{lalign 22:Rev. per Member}{res}{center 7:92.00}{res}{center 11:0.01}{res}{center 11:0.01}{res}{center 12:0.00}{res}{center 12:0.06}}
-{center:{txt}{lalign 22:Costs}{res}{center 7:92.00}{res}{center 11:0.38}{res}{center 11:1.64}{res}{center 12:0.00}{res}{center 12:10.96}}
-{center:{txt}{lalign 22:Costs per Mem.}{res}{center 7:92.00}{res}{center 11:0.00}{res}{center 11:0.00}{res}{center 12:0.00}{res}{center 12:0.02}}
+{center:{txt}{lalign 22:Revenue}{res}{center 7:92.00}{res}{center 11:3,775.21}{res}{center 11:8,014.47}{res}{center 12:0.00}{res}{center 12:65,709.51}}
+{center:{txt}{lalign 22:Rev. per Member}{res}{center 7:92.00}{res}{center 11:7.20}{res}{center 11:10.55}{res}{center 12:0.00}{res}{center 12:63.53}}
+{center:{txt}{lalign 22:Costs}{res}{center 7:92.00}{res}{center 11:377.52}{res}{center 11:1,639.07}{res}{center 12:0.00}{res}{center 12:10,964.25}}
+{center:{txt}{lalign 22:Costs per Mem.}{res}{center 7:92.00}{res}{center 11:0.55}{res}{center 11:2.30}{res}{center 12:0.00}{res}{center 12:18.27}}
 {center:{txt}{lalign 22:Assets}{res}{center 7:90.00}{res}{center 11:33,020.56}{res}{center 11:40,397.44}{res}{center 12:0.00}{res}{center 12:257,985.61}}
 {center:{txt}{lalign 22:Assets per Mem.}{res}{center 7:90.00}{res}{center 11:107.53}{res}{center 11:379.45}{res}{center 12:0.00}{res}{center 12:3,600.00}}
 {center:{txt}{lalign 22:Liabilities}{res}{center 7:90.00}{res}{center 11:7,041.03}{res}{center 11:18,065.10}{res}{center 12:0.00}{res}{center 12:86,877.45}}
 {center:{txt}{lalign 22:Liabilities per Mem.}{res}{center 7:90.00}{res}{center 11:13.78}{res}{center 11:36.17}{res}{center 12:0.00}{res}{center 12:217.19}}
 {center:{txt}{lalign 22:Goat Revenue}{res}{center 7:90.00}{res}{center 11:111.86}{res}{center 11:203.73}{res}{center 12:0.00}{res}{center 12:1,029.40}}
 {center:{txt}{lalign 22:Goat Rev. per Mem.}{res}{center 7:90.00}{res}{center 11:0.22}{res}{center 11:0.46}{res}{center 12:0.00}{res}{center 12:3.02}}
-{center:{txt}{lalign 22:Net Revenue}{res}{center 7:90.00}{res}{center 11:3.47}{res}{center 11:8.25}{res}{center 12:-7.93}{res}{center 12:65.55}}
-{center:{txt}{lalign 22:Net Rev. per Mem.}{res}{center 7:90.00}{res}{center 11:0.01}{res}{center 11:0.01}{res}{center 12:-0.01}{res}{center 12:0.06}}
-{center:{txt}{lalign 22:Net Finances}{res}{center 7:90.00}{res}{center 11:25,982.99}{res}{center 11:46,455.02}{res}{center 12:-77,457.15}{res}{center 12:257,992.86}}
-{center:{txt}{lalign 22:Net Fin. per Mem.}{res}{center 7:90.00}{res}{center 11:93.76}{res}{center 11:384.31}{res}{center 12:-193.64}{res}{center 12:3,600.00}}
+{center:{txt}{lalign 22:Net Revenue}{res}{center 7:90.00}{res}{center 11:3,473.19}{res}{center 11:8,245.85}{res}{center 12:-7,935.00}{res}{center 12:65,554.27}}
+{center:{txt}{lalign 22:Net Rev. per Mem.}{res}{center 7:90.00}{res}{center 11:6.80}{res}{center 11:10.95}{res}{center 12:-13.22}{res}{center 12:63.53}}
+{center:{txt}{lalign 22:Net Finances}{res}{center 7:90.00}{res}{center 11:29,452.71}{res}{center 11:49,576.76}{res}{center 12:-75,679.20}{res}{center 12:265,235.69}}
+{center:{txt}{lalign 22:Net Fin. per Mem.}{res}{center 7:90.00}{res}{center 11:100.55}{res}{center 11:384.64}{res}{center 12:-189.20}{res}{center 12:3,600.00}}
 {txt}{center:{hline 77}}
 {txt}{center:Currency measured in USD}
 
@@ -1561,10 +1634,10 @@
 {center:{txt}{lalign 32:Rev. through Co-op}{res}{center 10:2,448.00}{res}{center 7:22.14}{res}{center 8:84.76}{res}{center 11:0.00}{res}{center 10:1,257.30}}
 {center:{txt}{lalign 32:Net Goat Income}{res}{center 10:2,448.00}{res}{center 7:51.15}{res}{center 8:295.51}{res}{center 11:-9,867.33}{res}{center 10:1,121.67}}
 {center:{txt}{lalign 32:HH Goat Sales Index}{res}{center 10:2,448.00}{res}{center 7:-0.07}{res}{center 8:0.90}{res}{center 11:-3.00}{res}{center 10:12.57}}
-{center:{txt}{lalign 32:Trader Visits per Sale}{res}{center 10:1,276.00}{res}{center 7:-4.22}{res}{center 8:139.98}{res}{center 11:-5,000.33}{res}{center 10:0.00}}
+{center:{txt}{lalign 32:Trader Visits per Sale}{res}{center 10:1,276.00}{res}{center 7:-0.30}{res}{center 8:0.61}{res}{center 11:-5.00}{res}{center 10:0.00}}
 {center:{txt}{lalign 32:Time Passed}{res}{center 10:1,276.00}{res}{center 7:-0.79}{res}{center 8:2.16}{res}{center 11:-30.00}{res}{center 10:0.00}}
 {center:{txt}{lalign 32:Transportation Costs}{res}{center 10:1,276.00}{res}{center 7:-0.23}{res}{center 8:6.94}{res}{center 11:-247.50}{res}{center 10:0.00}}
-{center:{txt}{lalign 32:Sale Costs Index}{res}{center 10:1,276.00}{res}{center 7:-0.08}{res}{center 8:0.80}{res}{center 11:-24.13}{res}{center 10:0.09}}
+{center:{txt}{lalign 32:Sale Costs Index}{res}{center 10:1,276.00}{res}{center 7:-0.30}{res}{center 8:1.15}{res}{center 11:-9.45}{res}{center 10:0.28}}
 {center:{txt}{lalign 32:Transparency Discrepancy Index}{res}{center 10:1,647.00}{res}{center 7:0.31}{res}{center 8:0.98}{res}{center 11:-1.05}{res}{center 10:2.00}}
 {txt}{center:{hline 80}}
 
@@ -1683,10 +1756,10 @@
 {center:{txt}{lalign 24:# Sold through Co-op}{res}{center 10:2,448.00}{res}{center 7:0.25}{res}{center 8:0.93}{res}{center 11:0.00}{res}{center 11:15.00}}
 {center:{txt}{lalign 24:Rev. through Co-op}{res}{center 10:2,448.00}{res}{center 7:22.14}{res}{center 8:84.76}{res}{center 11:0.00}{res}{center 11:1,257.30}}
 {center:{txt}{lalign 24:% Sold through Co-op}{res}{center 10:2,448.00}{res}{center 7:0.10}{res}{center 8:0.29}{res}{center 11:0.00}{res}{center 11:1.00}}
-{center:{txt}{lalign 24:Trader Visits per Sale}{res}{center 10:1,276.00}{res}{center 7:-4.22}{res}{center 8:139.98}{res}{center 11:-5,000.33}{res}{center 11:0.00}}
+{center:{txt}{lalign 24:Trader Visits per Sale}{res}{center 10:1,276.00}{res}{center 7:-0.30}{res}{center 8:0.61}{res}{center 11:-5.00}{res}{center 11:0.00}}
 {center:{txt}{lalign 24:Time Passed}{res}{center 10:1,276.00}{res}{center 7:0.79}{res}{center 8:2.16}{res}{center 11:0.00}{res}{center 11:30.00}}
 {center:{txt}{lalign 24:Transportation Costs}{res}{center 10:1,276.00}{res}{center 7:23.14}{res}{center 8:701.05}{res}{center 11:0.00}{res}{center 11:25,000.00}}
-{center:{txt}{lalign 24:Sale Costs Index}{res}{center 10:1,276.00}{res}{center 7:-0.08}{res}{center 8:0.80}{res}{center 11:-24.13}{res}{center 11:0.09}}
+{center:{txt}{lalign 24:Sale Costs Index}{res}{center 10:1,276.00}{res}{center 7:-0.30}{res}{center 8:1.15}{res}{center 11:-9.45}{res}{center 11:0.28}}
 {center:{txt}{lalign 24:Net Goat Income}{res}{center 10:2,448.00}{res}{center 7:51.15}{res}{center 8:295.51}{res}{center 11:-9,867.33}{res}{center 11:1,121.67}}
 {center:{txt}{lalign 24:Net Income per Goat}{res}{center 10:1,214.00}{res}{center 7:62.76}{res}{center 8:72.14}{res}{center 11:-1,233.42}{res}{center 11:723.69}}
 {txt}{center:{hline 73}}
@@ -1812,15 +1885,56 @@
 . 
 {txt}end of do-file
 
-{com}. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD02649.000000"
+{com}. sum EQP4
+{bf}{err}EQP4{sf} ambiguous abbreviation
+{txt}{search r(111), local:r(111);}
+
+{com}. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD01874.000000"
 {txt}
 {com}. clear
 {txt}
-{com}. set more off, perm
-{txt}({cmd:set more} preference recorded)
+{com}. use "$d3/r_CO_Merged_Ind.dta"
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. sum EQP4_1
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 6}EQP4_1 {c |}{res}         90    .8240741    .3775546          0          1
+
+{com}. count if EQP4_1 != 0
+  {res}77
+
+{com}. bysort treat : count if EQP4_1 = 0
+{err}variable {bf}treat{sf} not found
+{txt}{search r(111), local:r(111);}
+
+{com}. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD01874.000000"
+{txt}
+{com}. clear 
+{txt}
+{com}. use "$d3/r_CO_Merged_Ind_treat.dta"
+{txt}( )
 
 {com}. 
-. *log
-. cap log close
-{smcl}
-{com}{sf}{ul off}
+{txt}end of do-file
+
+{com}. bysort treat : count if EQP4_1 = 0
+
+{txt}{hline}
+-> treat = 0
+{err}=exp not allowed
+{txt}{search r(101), local:r(101);}
+
+{com}. bysort treat : count if EQP4_1 == 0
+
+{txt}{hline}
+-> treat = 0
+  {res}8
+{txt}{hline}
+-> treat = 1
+  {res}7
+
+{com}. 

@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP1.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}10 Oct 2018, 11:00:23
+ {txt}opened on:  {res}21 Dec 2018, 11:34:00
 {txt}
 {com}. 
 . use "$d3/Baseline_Merged.dta", clear
@@ -28,16 +28,6 @@
 . set seed 62184  // random seed to generate different treatment assignment
 {txt}
 {com}. 
-. /*
-> * Region
-> tab region
-> *# of members
-> MAN3
-> * Co-op Goat Revenue
-> REV4
-> * HH Goat Revenue
-> LS9
-> */
 . 
 . * Region - HH Goat Rev
 . gen bin=. 
