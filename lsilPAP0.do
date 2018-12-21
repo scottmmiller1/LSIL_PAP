@@ -553,11 +553,9 @@ drop *merge*
 
 * Create per member measures of revenue and cost
 destring REC7, replace
-replace REC7 = REC7/1000
-lab var REC7 "Total co-op cost, 1000 Rs"
+lab var REC7 "Total co-op cost"
 destring REV4, replace
-replace REV4 = REV4/1000
-lab var REV4 "Total co-op revenue, 1000 Rs"
+lab var REV4 "Total co-op revenue"
 
 gen totrev_member = REV4 / MAN3
 gen totcost_mem = REC7 / MAN3
