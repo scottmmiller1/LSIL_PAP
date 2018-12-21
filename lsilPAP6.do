@@ -255,9 +255,8 @@ iebaltab COM3 COM8 index_HH_comm ///
 		visits_sale time_passed transp_cost index_salecost ///
 		index_dTRN ///
 		HHR14 HSE5 HSE10  ///
-		MGT5 COM3 COM5 ///
-		BR1 BR BR2 ///
-		BR3 GP21, rowvarlabels ///
+		MGT5 ///
+		BR BR2, rowvarlabels ///
 		grpvar(treat) vce(cluster idx)  ///
 		savetex("/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/iebaltab2_nobanke_PAP.tex") replace
 		
