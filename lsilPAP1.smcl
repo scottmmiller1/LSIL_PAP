@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP1.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}21 Dec 2018, 11:34:00
+ {txt}opened on:  {res} 4 Jan 2019, 11:04:54
 {txt}
 {com}. 
 . use "$d3/Baseline_Merged.dta", clear
@@ -24,7 +24,7 @@
 {txt}(1 observation deleted)
 
 {com}. 
-. * true treatment status: seed 3581 *
+. * true treatment status: seed 3581 * random seed = 62184 
 . set seed 62184  // random seed to generate different treatment assignment
 {txt}
 {com}. 
@@ -106,7 +106,7 @@
                {txt}r(mean) =  {res}558.6383647798742
                 {txt}r(Var) =  {res}131741.5812019567
                  {txt}r(sd) =  {res}362.9622310956839
-           {txt}r(skewness) =  {res}1.954209511053203
+           {txt}r(skewness) =  {res}1.954209511053202
            {txt}r(kurtosis) =  {res}10.80543487936791
                 {txt}r(sum) =  {res}59215.66666666666
                 {txt}r(min) =  {res}11

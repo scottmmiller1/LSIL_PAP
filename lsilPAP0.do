@@ -276,24 +276,26 @@ foreach v of var * {
 	cap label val `v' "`ll`v''"
 }
 		
-		
+*******************************************		
 * Top code LS9 -- obvious outliers
 g price = LS9/LS8
 
 g n = _n
 
-*scatter LS9 price, mlabel(n)
+scatter LS9 price, mlabel(n)
 
-*br n LS8 LS9 price if n == 1035 | n == 10 | n == 11 | n == 1222 | n == 1199
+*br n LS8 LS9 price if n == 658 | n == 859 | n == 833 | n == 521 | n == 577
 
 su price, d
-replace LS9 = r(p50)*LS8 if n == 1035 | n == 10 | n == 11 | n == 1222 | n == 1199
+replace LS9 = r(p50)*LS8 if n == 658 | n == 859 | n == 833 | n == 521 | n == 577
 
 drop n price
 
 su *LS8, d
 replace LS8 = r(p50) if LS8 > 25 & ///
 LS8 < . // Replaces outliers with median
+********************************************
+
 
 save "$d3/Livestocksales_collapse.dta", replace
 
@@ -355,7 +357,7 @@ foreach v of varlist TRN* {
 save "$d3/Household_edit.dta", replace
 
 
-* create single merge variable "___index" for all modules
+* create single merge variable "___index" for all HH modules
 * -----------------------------------------------
 use "$d3/Borrowing.dta"
 rename A__parent_index ___index
@@ -537,6 +539,7 @@ foreach v of var * {
 
 drop if idx == "" | idx == "2"
 
+
 save "$d3/Household_Collapsed.dta", replace
 
 
@@ -569,12 +572,6 @@ save "$d3/Baseline_Merged.dta", replace
 
  
  *********************************************
-
-
-
-
-
-
 
 
 

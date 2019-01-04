@@ -203,6 +203,7 @@ foreach v of var * {
 }
 lab var COM3 "No. of times in past 6 months receive info about livestock sales"
 
+
 * Winsorize LS9 by treatment status
 sum LS9, d
 

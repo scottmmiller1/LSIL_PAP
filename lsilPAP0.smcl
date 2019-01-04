@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP0.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}21 Dec 2018, 11:32:45
+ {txt}opened on:  {res} 4 Jan 2019, 10:59:15
 {txt}
 {com}. 
 . 
@@ -5005,13 +5005,11 @@
 {com}.         
 . * Change blank cells in strings to missing values
 . ds, has(type string) 
-{txt}{col 1}SID{col 15}REC7{col 29}COMM6{col 43}MAN7_30{col 57}SERV8_1
-{col 1}ID2{col 15}EQP3_1_1{col 29}COMM7{col 43}MAN15_1{col 57}GTT4_11
-{col 1}idx{col 15}EQP3_1_2{col 29}BM_GTT4{col 43}MAN18_1a{col 57}role_CPCol~t
-{col 1}ID5_1{col 15}EQP3_1_3{col 29}BM_GTT4_11{col 43}MAN18_1b{col 57}district
-{col 1}ID6{col 15}EQP3_1_4{col 29}MAN7{col 43}MAN18_1c{col 57}region
-{col 1}MEM4_10{col 15}EQP3_1_5{col 29}MAN7_10{col 43}MAN18_1d
-{col 1}REV4{col 15}EQP15_1_1{col 29}MAN7_20{col 43}MAN18_1e
+{txt}{col 1}SID{col 15}MEM4_10{col 29}EQP3_1_3{col 43}COMM7{col 57}MAN7_20{col 71}MAN18_1c{col 85}role_CPCol~t
+{col 1}ID2{col 15}REV4{col 29}EQP3_1_4{col 43}BM_GTT4{col 57}MAN7_30{col 71}MAN18_1d{col 85}district
+{col 1}idx{col 15}REC7{col 29}EQP3_1_5{col 43}BM_GTT4_11{col 57}MAN15_1{col 71}MAN18_1e{col 85}region
+{col 1}ID5_1{col 15}EQP3_1_1{col 29}EQP15_1_1{col 43}MAN7{col 57}MAN18_1a{col 71}SERV8_1
+{col 1}ID6{col 15}EQP3_1_2{col 29}COMM6{col 43}MAN7_10{col 57}MAN18_1b{col 71}GTT4_11
 
 {com}. quietly foreach v in `r(varlist)' {c -(} 
 {txt}
@@ -5051,85 +5049,58 @@ MAN18e was {res:double} now {res:str2}
 . ** Collapse to 1-row per co-op
 . * strings
 . ds *ID* *MEM* *role* *IND* *REC* *REV* *EQP* *FAL* PNG* *EAA* *COMM* *GTT* *MAN* *SER* *GPR* CO_TRN* region district ___index, has(type string)
-{txt}{col 1}SID{col 15}EQP3_1_2{col 29}COMM8c{col 43}MAN7_20{col 57}MAN18d
-{col 1}ID2{col 15}EQP3_1_3{col 29}COMM8d{col 43}MAN7_30{col 57}MAN18_1d
-{col 1}ID5_1{col 15}EQP3_1_4{col 29}COMM8e{col 43}MAN15_1{col 57}MAN18e
-{col 1}ID6{col 15}EQP3_1_5{col 29}COMM8f{col 43}MAN18a{col 57}MAN18_1e
-{col 1}MEM4_10{col 15}EQP15_1_1{col 29}BM_GTT4{col 43}MAN18_1a{col 57}SERV8_1
-{col 1}role_CPCol~t{col 15}COMM6{col 29}BM_GTT4_11{col 43}MAN18b{col 57}region
-{col 1}REC7{col 15}COMM7{col 29}GTT4_11{col 43}MAN18_1b{col 57}district
-{col 1}REV4{col 15}COMM8a{col 29}MAN7{col 43}MAN18c
-{col 1}EQP3_1_1{col 15}COMM8b{col 29}MAN7_10{col 43}MAN18_1c
+{txt}{col 1}SID{col 15}REC7{col 29}EQP3_1_5{col 43}COMM8c{col 57}GTT4_11{col 71}MAN18a{col 85}MAN18d{col 99}district
+{col 1}ID2{col 15}REV4{col 29}EQP15_1_1{col 43}COMM8d{col 57}MAN7{col 71}MAN18_1a{col 85}MAN18_1d
+{col 1}ID5_1{col 15}EQP3_1_1{col 29}COMM6{col 43}COMM8e{col 57}MAN7_10{col 71}MAN18b{col 85}MAN18e
+{col 1}ID6{col 15}EQP3_1_2{col 29}COMM7{col 43}COMM8f{col 57}MAN7_20{col 71}MAN18_1b{col 85}MAN18_1e
+{col 1}MEM4_10{col 15}EQP3_1_3{col 29}COMM8a{col 43}BM_GTT4{col 57}MAN7_30{col 71}MAN18c{col 85}SERV8_1
+{col 1}role_CPCol~t{col 15}EQP3_1_4{col 29}COMM8b{col 43}BM_GTT4_11{col 57}MAN15_1{col 71}MAN18_1c{col 85}region
 
 {com}. local Co_opstrings = "`r(varlist)'"
 {txt}
 {com}. 
 . * numerics
 . ds *ID* *MEM* *role* *IND* *REC* *REV* *EQP* *FAL* PNG* *EAA* *COMM* *GTT* *MAN* *SER* *GPR* CO_TRN* region district ___index, has(type numeric)
-{txt}{col 1}ID1{col 15}REC7_5{col 29}EQP12_2{col 43}COMM7_7{col 57}SER1
-{col 1}ID3{col 15}REC7_6{col 29}EQP12_3{col 43}COMM7_8{col 57}SER2
-{col 1}MEM4{col 15}REC7_7{col 29}EQP13_1{col 43}COMM7_97{col 57}SER3
-{col 1}MEM4_1{col 15}REC7_8{col 29}EQP13_2{col 43}BM_GTT1{col 57}SER4
-{col 1}MEM4_2{col 15}REC7_9{col 29}EQP13_3{col 43}BM_GTT2{col 57}SER5
-{col 1}MEM4_3{col 15}REC8{col 29}EQP14_1{col 43}BM_GTT3{col 57}SER6
-{col 1}MEM4_4{col 15}EQP1_1{col 29}EQP14_2{col 43}BM_GTT4_1{col 57}SER7
-{col 1}MEM4_97{col 15}EQP1_2{col 29}EQP14_3{col 43}BM_GTT4_2{col 57}SER8
-{col 1}MEM2{col 15}EQP1_3{col 29}EQP15_1{col 43}BM_GTT4_3{col 57}SER9
-{col 1}role{col 15}EQP2_1{col 29}EQP15_1_2{col 43}BM_GTT4_4{col 57}SER10
-{col 1}role_GMrev~t{col 15}EQP2_2{col 29}EQP15_1_3{col 43}BM_GTT4_5{col 57}SER11a
-{col 1}role_GMeq~ip{col 15}EQP2_3{col 29}EQP15_1_4{col 43}BM_GTT4_6{col 57}SER11b
-{col 1}role_GMeq~om{col 15}EQP2_1X{col 29}EQP15_1_5{col 43}BM_GTT4_7{col 57}SER11c
-{col 1}role_GMeqp~b{col 15}EQP2_2X{col 29}EQP15_2_1{col 43}BM_GTT4_8{col 57}SER11d
-{col 1}role_GMeqp~o{col 15}EQP2_3X{col 29}EQP15_2_2{col 43}BM_GTT4_9{col 57}SER12
-{col 1}role_GMeqp~e{col 15}EQP3_1{col 29}EQP15_2_3{col 43}BM_GTT4_10{col 57}SER13
-{col 1}role_GMequ~a{col 15}EQP3_2_1{col 29}EQP15_2_4{col 43}BM_GTT4_97{col 57}SER14
-{col 1}role_GMequ~s{col 15}EQP3_2_2{col 29}EQP15_2_5{col 43}GTT1{col 57}SER15
-{col 1}role_GMequ~c{col 15}EQP3_2_3{col 29}EQP15_3_1{col 43}GTT2{col 57}SERV2
-{col 1}role_GMequ~e{col 15}EQP3_2_4{col 29}EQP15_3_2{col 43}GTT3{col 57}SERV3
-{col 1}role_GMequ~n{col 15}EQP3_2_5{col 29}EQP15_3_3{col 43}GTT4{col 57}SERV4
-{col 1}role_GMequ~r{col 15}EQP3_3_1{col 29}EQP15_3_4{col 43}GTT4_1{col 57}SER18
-{col 1}role_GMequ~i{col 15}EQP3_3_2{col 29}EQP15_3_5{col 43}GTT4_2{col 57}SERV5
-{col 1}role_GMequ~d{col 15}EQP3_3_3{col 29}EQP16{col 43}GTT4_3{col 57}SERV5_1
-{col 1}role_GMeq~um{col 15}EQP3_3_4{col 29}EQP17{col 43}GTT4_4{col 57}SERV5_2
-{col 1}role_GMequ~o{col 15}EQP3_3_5{col 29}EQP18{col 43}GTT4_5{col 57}SERV5_3
-{col 1}role_GMequ~t{col 15}EQP4_1{col 29}EQP19{col 43}GTT4_6{col 57}SERV5_4
-{col 1}role_GMeq~qp{col 15}EQP4_2{col 29}FAL1{col 43}GTT4_7{col 57}SERV5_5
-{col 1}role_GMFin~l{col 15}EQP4_3{col 29}FAL2{col 43}GTT4_8{col 57}SERV5_6
-{col 1}role_GMpla~l{col 15}EQP5_1{col 29}FAL3{col 43}GTT4_9{col 57}SERV5_97
-{col 1}role_GMeva~t{col 15}EQP5_2{col 29}FAL4{col 43}GTT4_10{col 57}SERV5_99
-{col 1}role_GMtrns{col 15}EQP5_3{col 29}PNG1{col 43}GTT4_97{col 57}SERV5_10
-{col 1}role_GMtra~s{col 15}EQP6_1{col 29}PNG2{col 43}GTT5{col 57}SERV6
-{col 1}role_CPSer~l{col 15}EQP6_2{col 29}PNG3{col 43}MAN1{col 57}SERV7
-{col 1}role_CPColl{col 15}EQP6_3{col 29}PNG4{col 43}MAN2{col 57}SERV8
-{col 1}role_PNG3{col 15}EQP7_1{col 29}EAA1{col 43}MAN3{col 57}GPR1_1
-{col 1}role_PNG4{col 15}EQP7_1_1{col 29}EAA2{col 43}MAN4{col 57}GPR1_2
-{col 1}IND1{col 15}EQP7_1_2{col 29}EAA3{col 43}MAN5{col 57}GPR1_3
-{col 1}IND1_1{col 15}EQP7_1_3{col 29}COMM1a{col 43}MAN6{col 57}GPR3_1
-{col 1}IND2{col 15}EQP7_1_4{col 29}COMM1b{col 43}MAN7_1{col 57}GPR3_2
-{col 1}IND3{col 15}EQP7_1_5{col 29}COMM1c{col 43}MAN7_2{col 57}GPR3_3
-{col 1}IND4{col 15}EQP7_2_1{col 29}COMM1d{col 43}MAN7_3{col 57}GPR5_1a
-{col 1}IND5{col 15}EQP7_2_2{col 29}COMM2a{col 43}MAN7_4{col 57}GPR5_2a
-{col 1}IND6{col 15}EQP7_2_3{col 29}COMM2b{col 43}MAN7_5{col 57}GPR5_3a
-{col 1}IND6_1{col 15}EQP7_2_4{col 29}COMM2c{col 43}MAN7_6{col 57}GPR5_1b
-{col 1}IND6_2{col 15}EQP7_2_5{col 29}COMM2d{col 43}MAN7_7{col 57}GPR5_2b
-{col 1}IND6_3{col 15}EQP7_3_1{col 29}COMM3{col 43}MAN7_8{col 57}GPR5_3b
-{col 1}IND6_4{col 15}EQP7_3_2{col 29}COMM4{col 43}MAN7_9{col 57}GPR5_1c
-{col 1}IND6_97{col 15}EQP7_3_3{col 29}COMM5{col 43}MAN7_40{col 57}GPR5_2c
-{col 1}IND6_10{col 15}EQP7_3_4{col 29}COMM6_1{col 43}MAN8_1{col 57}GPR5_3c
-{col 1}REC1{col 15}EQP7_3_5{col 29}COMM6_2{col 43}MAN8_2{col 57}GPR6_1b
-{col 1}REC2{col 15}EQP8_1{col 29}COMM6_3{col 43}MAN8_3{col 57}GPR6_2b
-{col 1}REC4_1{col 15}EQP8_2{col 29}COMM6_4{col 43}MAN8_4{col 57}GPR6_3b
-{col 1}REC4_2{col 15}CanEQP8_3{col 29}COMM6_5{col 43}MAN8_5{col 57}CO_TRN1
-{col 1}REC4_3{col 15}EQP9_1{col 29}COMM6_6{col 43}MAN8_6{col 57}CO_TRN2
-{col 1}REC4_4{col 15}EQP9_2{col 29}COMM6_7{col 43}MAN8_7{col 57}CO_TRN3
-{col 1}REC4_5{col 15}EQP9_3{col 29}COMM6_8{col 43}MAN8_8{col 57}CO_TRN4
-{col 1}REC4_6{col 15}EQP10_1{col 29}COMM6_97{col 43}MAN8_9{col 57}CO_TRN5
-{col 1}REC4_7{col 15}EQP10_2{col 29}COMM7_1{col 43}MAN9{col 57}CO_TRN6
-{col 1}REC5{col 15}EQP10_3{col 29}COMM7_2{col 43}MAN10{col 57}CO_TRN6a
-{col 1}REC7_1{col 15}EQP11_1{col 29}COMM7_3{col 43}MAN11{col 57}CO_TRN7
-{col 1}REC7_2{col 15}EQP11_2{col 29}COMM7_4{col 43}MAN14{col 57}CO_TRN14
-{col 1}REC7_3{col 15}EQP11_3{col 29}COMM7_5{col 43}MAN15{col 57}CO_TRN15
-{col 1}REC7_4{col 15}EQP12_1{col 29}COMM7_6{col 43}MAN17{col 57}___index
+{txt}{col 1}ID1{col 15}IND3{col 29}EQP3_2_1{col 43}EQP9_3{col 57}PNG2{col 71}BM_GTT4_3{col 85}MAN7_40{col 99}SERV5_2
+{col 1}ID3{col 15}IND4{col 29}EQP3_2_2{col 43}EQP10_1{col 57}PNG3{col 71}BM_GTT4_4{col 85}MAN8_1{col 99}SERV5_3
+{col 1}MEM4{col 15}IND5{col 29}EQP3_2_3{col 43}EQP10_2{col 57}PNG4{col 71}BM_GTT4_5{col 85}MAN8_2{col 99}SERV5_4
+{col 1}MEM4_1{col 15}IND6{col 29}EQP3_2_4{col 43}EQP10_3{col 57}EAA1{col 71}BM_GTT4_6{col 85}MAN8_3{col 99}SERV5_5
+{col 1}MEM4_2{col 15}IND6_1{col 29}EQP3_2_5{col 43}EQP11_1{col 57}EAA2{col 71}BM_GTT4_7{col 85}MAN8_4{col 99}SERV5_6
+{col 1}MEM4_3{col 15}IND6_2{col 29}EQP3_3_1{col 43}EQP11_2{col 57}EAA3{col 71}BM_GTT4_8{col 85}MAN8_5{col 99}SERV5_97
+{col 1}MEM4_4{col 15}IND6_3{col 29}EQP3_3_2{col 43}EQP11_3{col 57}COMM1a{col 71}BM_GTT4_9{col 85}MAN8_6{col 99}SERV5_99
+{col 1}MEM4_97{col 15}IND6_4{col 29}EQP3_3_3{col 43}EQP12_1{col 57}COMM1b{col 71}BM_GTT4_10{col 85}MAN8_7{col 99}SERV5_10
+{col 1}MEM2{col 15}IND6_97{col 29}EQP3_3_4{col 43}EQP12_2{col 57}COMM1c{col 71}BM_GTT4_97{col 85}MAN8_8{col 99}SERV6
+{col 1}role{col 15}IND6_10{col 29}EQP3_3_5{col 43}EQP12_3{col 57}COMM1d{col 71}GTT1{col 85}MAN8_9{col 99}SERV7
+{col 1}role_GMrev~t{col 15}REC1{col 29}EQP4_1{col 43}EQP13_1{col 57}COMM2a{col 71}GTT2{col 85}MAN9{col 99}SERV8
+{col 1}role_GMeq~ip{col 15}REC2{col 29}EQP4_2{col 43}EQP13_2{col 57}COMM2b{col 71}GTT3{col 85}MAN10{col 99}GPR1_1
+{col 1}role_GMeq~om{col 15}REC4_1{col 29}EQP4_3{col 43}EQP13_3{col 57}COMM2c{col 71}GTT4{col 85}MAN11{col 99}GPR1_2
+{col 1}role_GMeqp~b{col 15}REC4_2{col 29}EQP5_1{col 43}EQP14_1{col 57}COMM2d{col 71}GTT4_1{col 85}MAN14{col 99}GPR1_3
+{col 1}role_GMeqp~o{col 15}REC4_3{col 29}EQP5_2{col 43}EQP14_2{col 57}COMM3{col 71}GTT4_2{col 85}MAN15{col 99}GPR3_1
+{col 1}role_GMeqp~e{col 15}REC4_4{col 29}EQP5_3{col 43}EQP14_3{col 57}COMM4{col 71}GTT4_3{col 85}MAN17{col 99}GPR3_2
+{col 1}role_GMequ~a{col 15}REC4_5{col 29}EQP6_1{col 43}EQP15_1{col 57}COMM5{col 71}GTT4_4{col 85}SER1{col 99}GPR3_3
+{col 1}role_GMequ~s{col 15}REC4_6{col 29}EQP6_2{col 43}EQP15_1_2{col 57}COMM6_1{col 71}GTT4_5{col 85}SER2{col 99}GPR5_1a
+{col 1}role_GMequ~c{col 15}REC4_7{col 29}EQP6_3{col 43}EQP15_1_3{col 57}COMM6_2{col 71}GTT4_6{col 85}SER3{col 99}GPR5_2a
+{col 1}role_GMequ~e{col 15}REC5{col 29}EQP7_1{col 43}EQP15_1_4{col 57}COMM6_3{col 71}GTT4_7{col 85}SER4{col 99}GPR5_3a
+{col 1}role_GMequ~n{col 15}REC7_1{col 29}EQP7_1_1{col 43}EQP15_1_5{col 57}COMM6_4{col 71}GTT4_8{col 85}SER5{col 99}GPR5_1b
+{col 1}role_GMequ~r{col 15}REC7_2{col 29}EQP7_1_2{col 43}EQP15_2_1{col 57}COMM6_5{col 71}GTT4_9{col 85}SER6{col 99}GPR5_2b
+{col 1}role_GMequ~i{col 15}REC7_3{col 29}EQP7_1_3{col 43}EQP15_2_2{col 57}COMM6_6{col 71}GTT4_10{col 85}SER7{col 99}GPR5_3b
+{col 1}role_GMequ~d{col 15}REC7_4{col 29}EQP7_1_4{col 43}EQP15_2_3{col 57}COMM6_7{col 71}GTT4_97{col 85}SER8{col 99}GPR5_1c
+{col 1}role_GMeq~um{col 15}REC7_5{col 29}EQP7_1_5{col 43}EQP15_2_4{col 57}COMM6_8{col 71}GTT5{col 85}SER9{col 99}GPR5_2c
+{col 1}role_GMequ~o{col 15}REC7_6{col 29}EQP7_2_1{col 43}EQP15_2_5{col 57}COMM6_97{col 71}MAN1{col 85}SER10{col 99}GPR5_3c
+{col 1}role_GMequ~t{col 15}REC7_7{col 29}EQP7_2_2{col 43}EQP15_3_1{col 57}COMM7_1{col 71}MAN2{col 85}SER11a{col 99}GPR6_1b
+{col 1}role_GMeq~qp{col 15}REC7_8{col 29}EQP7_2_3{col 43}EQP15_3_2{col 57}COMM7_2{col 71}MAN3{col 85}SER11b{col 99}GPR6_2b
+{col 1}role_GMFin~l{col 15}REC7_9{col 29}EQP7_2_4{col 43}EQP15_3_3{col 57}COMM7_3{col 71}MAN4{col 85}SER11c{col 99}GPR6_3b
+{col 1}role_GMpla~l{col 15}REC8{col 29}EQP7_2_5{col 43}EQP15_3_4{col 57}COMM7_4{col 71}MAN5{col 85}SER11d{col 99}CO_TRN1
+{col 1}role_GMeva~t{col 15}EQP1_1{col 29}EQP7_3_1{col 43}EQP15_3_5{col 57}COMM7_5{col 71}MAN6{col 85}SER12{col 99}CO_TRN2
+{col 1}role_GMtrns{col 15}EQP1_2{col 29}EQP7_3_2{col 43}EQP16{col 57}COMM7_6{col 71}MAN7_1{col 85}SER13{col 99}CO_TRN3
+{col 1}role_GMtra~s{col 15}EQP1_3{col 29}EQP7_3_3{col 43}EQP17{col 57}COMM7_7{col 71}MAN7_2{col 85}SER14{col 99}CO_TRN4
+{col 1}role_CPSer~l{col 15}EQP2_1{col 29}EQP7_3_4{col 43}EQP18{col 57}COMM7_8{col 71}MAN7_3{col 85}SER15{col 99}CO_TRN5
+{col 1}role_CPColl{col 15}EQP2_2{col 29}EQP7_3_5{col 43}EQP19{col 57}COMM7_97{col 71}MAN7_4{col 85}SERV2{col 99}CO_TRN6
+{col 1}role_PNG3{col 15}EQP2_3{col 29}EQP8_1{col 43}FAL1{col 57}BM_GTT1{col 71}MAN7_5{col 85}SERV3{col 99}CO_TRN6a
+{col 1}role_PNG4{col 15}EQP2_1X{col 29}EQP8_2{col 43}FAL2{col 57}BM_GTT2{col 71}MAN7_6{col 85}SERV4{col 99}CO_TRN7
+{col 1}IND1{col 15}EQP2_2X{col 29}CanEQP8_3{col 43}FAL3{col 57}BM_GTT3{col 71}MAN7_7{col 85}SER18{col 99}CO_TRN14
+{col 1}IND1_1{col 15}EQP2_3X{col 29}EQP9_1{col 43}FAL4{col 57}BM_GTT4_1{col 71}MAN7_8{col 85}SERV5{col 99}CO_TRN15
+{col 1}IND2{col 15}EQP3_1{col 29}EQP9_2{col 43}PNG1{col 57}BM_GTT4_2{col 71}MAN7_9{col 85}SERV5_1{col 99}___index
 
 {com}. local Co_opnumeric = "`r(varlist)'"
 {txt}
@@ -5309,16 +5280,12 @@ MAN18e was {res:double} now {res:str2}
 {txt}co_opgoatno already numeric; no {res}replace
 {txt}
 {com}. ds *, has(type numeric)
-{txt}{col 1}LS3{col 15}LS10{col 29}LS28{col 43}LS37{col 57}LS45
-{col 1}LS5{col 15}LS12{col 29}LS29{col 43}LS38{col 57}LS46
-{col 1}LS6A{col 15}LS13{col 29}LS30{col 43}LS39{col 57}LS47
-{col 1}LS6B{col 15}LS14{col 29}LS31{col 43}LS40{col 57}___index
-{col 1}LS6C{col 15}LS15{col 29}LS32{col 43}LS41{col 57}co_opsalev~e
-{col 1}LS6D{col 15}LS16{col 29}LS32_1{col 43}LS42{col 57}co_opgoatno
-{col 1}LS6X{col 15}LS17{col 29}LS33{col 43}LS43_Head
-{col 1}LS7{col 15}LS25{col 29}LS34{col 43}LS43_a
-{col 1}LS8{col 15}LS26{col 29}LS35{col 43}LS43_b
-{col 1}LS9{col 15}LS27{col 29}LS36{col 43}LS44
+{txt}{col 1}LS3{col 15}LS6X{col 29}LS13{col 43}LS26{col 57}LS32{col 71}LS37{col 85}LS43_Head{col 99}LS47
+{col 1}LS5{col 15}LS7{col 29}LS14{col 43}LS27{col 57}LS32_1{col 71}LS38{col 85}LS43_a{col 99}___index
+{col 1}LS6A{col 15}LS8{col 29}LS15{col 43}LS28{col 57}LS33{col 71}LS39{col 85}LS43_b{col 99}co_opsalev~e
+{col 1}LS6B{col 15}LS9{col 29}LS16{col 43}LS29{col 57}LS34{col 71}LS40{col 85}LS44{col 99}co_opgoatno
+{col 1}LS6C{col 15}LS10{col 29}LS17{col 43}LS30{col 57}LS35{col 71}LS41{col 85}LS45
+{col 1}LS6D{col 15}LS12{col 29}LS25{col 43}LS31{col 57}LS36{col 71}LS42{col 85}LS46
 
 {com}. local numeric = "`r(varlist)'"          
 {txt}
@@ -5460,19 +5427,26 @@ MAN18e was {res:double} now {res:str2}
 {txt}  4{com}. {c )-}
 {txt}
 {com}.                 
-.                 
-. * Top code LS9 -- obvious outliers
-. g price = LS9/LS8
+. 
+{txt}end of do-file
+
+{com}. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD01678.000000"
+{txt}
+{com}. g price = LS9/LS8
 {txt}(66 missing values generated)
 
 {com}. 
 . g n = _n
 {txt}
 {com}. 
-. *scatter LS9 price, mlabel(n)
-. 
-. *br n LS8 LS9 price if n == 1035 | n == 10 | n == 11 | n == 1222 | n == 1199
-. 
+. scatter LS9 price, mlabel(n)
+{res}{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD01678.000000"
+{txt}
+{com}. 
 . su price, d
 
                             {txt}price
@@ -5490,7 +5464,7 @@ MAN18e was {res:double} now {res:str2}
 {txt}95%    {res}    15000          65000       {txt}Skewness      {res} 3.938644
 {txt}99%    {res}    22000          75000       {txt}Kurtosis      {res} 50.15303
 {txt}
-{com}. replace LS9 = r(p50)*LS8 if n == 1035 | n == 10 | n == 11 | n == 1222 | n == 1199
+{com}. replace LS9 = r(p50)*LS8 if n == 658 | n == 859 | n == 833 | n == 521 | n == 577
 {txt}(5 real changes made)
 
 {com}. 
@@ -5519,11 +5493,21 @@ MAN18e was {res:double} now {res:str2}
 {txt}(9 real changes made)
 
 {com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD01678.000000"
+{txt}
+{com}. 
+. 
 . save "$d3/Livestocksales_collapse.dta", replace
 {txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline aug 20 2018/Livestocksales_collapse.dta saved
 
 {com}. 
-. 
+{txt}end of do-file
+
+{com}. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD01678.000000"
+{txt}
+{com}. 
 . 
 . ** Merge separate modules into Household
 . 
@@ -5639,7 +5623,7 @@ MAN18e was {res:double} now {res:str2}
 
 {com}. 
 . 
-. * create single merge variable "___index" for all modules
+. * create single merge variable "___index" for all HH modules
 . * -----------------------------------------------
 . use "$d3/Borrowing.dta"
 {txt}
@@ -9240,6 +9224,7 @@ double now)
 {txt}(0 observations deleted)
 
 {com}. 
+. 
 . save "$d3/Household_Collapsed.dta", replace
 {txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline aug 20 2018/Household_Collapsed.dta saved
 
@@ -9328,17 +9313,6 @@ double now)
 {com}. 
 .  
 .  *********************************************
-. 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
-. 
 . 
 . 
 {txt}end of do-file

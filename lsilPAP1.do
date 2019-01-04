@@ -18,7 +18,7 @@ replace treat = 1 if HH_IDIDX == "Lekhbesi SEWC 1" // Pilot co-op
 drop if idx == "Lekhbesi SEWC 1" // Pilot co-op
 drop if idx =="Karmath SEWC 2"
 
-* true treatment status: seed 3581 *
+* true treatment status: seed 3581 * random seed = 62184 
 set seed 62184  // random seed to generate different treatment assignment
 
 

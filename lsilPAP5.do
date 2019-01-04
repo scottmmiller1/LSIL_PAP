@@ -53,7 +53,7 @@ rtitle("HH info sales"\"HH info activities"\"HH level index") replace
 * Goat Sales
 
 ** HH vars
-gl hh_goatsales LS8 LS9 co_opgoatno co_opsalevalue ///
+gl hh_goatsales LS8 LS9_w co_opgoatno co_opsalevalue ///
 				net_goat_income index_HH_goatsales ///
 				visits_sale time_passed transp_cost index_salecost ///
 

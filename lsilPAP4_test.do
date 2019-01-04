@@ -26,25 +26,27 @@ encode region, gen(n_region) // create numerical region variable for regression
 
 ** Winsorize LS9
 * -----------------------------------------------
+gen LS9_w = LS9
+
 * treatment
-sum LS9 if r_treat == 1, d
+sum LS9_w if r_treat == 1, d
 scalar t_99 = r(p99)
 
-replace LS9 = t_99 if LS9 > t_99 & !missing(LS9) & r_treat == 1
+replace LS9_w = t_99 if LS9_w > t_99 & !missing(LS9_w) & r_treat == 1
 
 *control
-sum LS9 if r_treat == 0, d
+sum LS9_w if r_treat == 0, d
 scalar c_99 = r(p99)
 
-replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & r_treat == 0
+replace LS9_w = c_99 if LS9_w > c_99 & !missing(LS9_w) & r_treat == 0
 
 
 ** Replace Missing values with zero 
 * LS9 , 
-replace LS9 = 0 if LS9 ==.
+replace LS9_w = 0 if LS9_w ==.
 replace co_opsalevalue = 0 if co_opsalevalue ==.
 * -----------------------------------------------
-
+*/
 
 
 ** Communication **
@@ -187,7 +189,7 @@ gen visits_sale = -1*(LS40 / LS_n_sales)
 gen time_passed = -1*(LS41)
 gen transp_cost = -1*(LS42*(0.0099))
 
-local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue
+local local_HH_goatsales LS8 LS9_w co_opgoatno co_opsalevalue
 make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
 
 local local_salecost visits_sale time_passed transp_cost
@@ -209,7 +211,7 @@ foreach v of varlist LSE12 LSE15 LSE16 LSE17a LSE17b LSE18 {
 	}
 
 gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
-gen net_goat_income = LS9*(0.0099) - goat_costs
+gen net_goat_income = LS9_w*(0.0099) - goat_costs
 gen netincome_goat = net_goat_income / LS8
 
 
@@ -253,29 +255,31 @@ encode region, gen(n_region) // create numerical region variable for regression
 
 ** Winsorize LS9
 * -----------------------------------------------
+gen LS9_w = LS9
+
 * treatment
-sum LS9 if r_treat == 1, d
+sum LS9_w if r_treat == 1, d
 scalar t_99 = r(p99)
 
-replace LS9 = t_99 if LS9 > t_99 & !missing(LS9) & r_treat == 1
+replace LS9_w = t_99 if LS9_w > t_99 & !missing(LS9_w) & r_treat == 1
 
 *control
-sum LS9 if r_treat == 0, d
+sum LS9_w if r_treat == 0, d
 scalar c_99 = r(p99)
 
-replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & r_treat == 0
+replace LS9_w = c_99 if LS9_w > c_99 & !missing(LS9_w) & r_treat == 0
 * -----------------------------------------------
 
 
 ** Replace Missing values with zero
 * ----------------------------------------------- 
 * LS9 , 
-replace LS9 = 0 if LS9 ==.
+replace LS9_w = 0 if LS9_w ==.
 replace LS8 = 0 if LS8 ==.
 replace co_opsalevalue = 0 if co_opsalevalue ==.
 replace co_opgoatno = 0 if co_opgoatno ==.
 * -----------------------------------------------
-
+*/
 
 ** Communication **
 
@@ -370,7 +374,7 @@ replace co_opshare = co_opgoatno / LS8 if LS8 != 0
 gen visits_sale = -1*(LS40 / LS_n_sales)
 gen time_passed = -1*(LS41)
 gen transp_cost = -1*(LS42*(0.0099))
-replace LS9 = LS9*(0.0099)
+replace LS9_w = LS9_w*(0.0099)
 replace co_opsalevalue = co_opsalevalue*(0.0099)
 
 
@@ -383,11 +387,11 @@ foreach v of varlist LSE12 LSE15 LSE16 LSE17a LSE17b LSE18 {
 	}
 
 gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
-gen net_goat_income = LS9 - goat_costs
+gen net_goat_income = LS9_w - goat_costs
 gen netincome_goat = net_goat_income / LS8
 
 
-local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue net_goat_income
+local local_HH_goatsales LS8 LS9_w co_opgoatno co_opsalevalue net_goat_income
 make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
 
 local local_salecost visits_sale time_passed transp_cost
