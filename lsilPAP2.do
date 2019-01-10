@@ -5,6 +5,7 @@ set more off, perm
 cap log close
 log using "$d1/lsilPAP2.smcl", replace
 
+
 ** create merged dataset at HH level **
 cd "$d3"
 

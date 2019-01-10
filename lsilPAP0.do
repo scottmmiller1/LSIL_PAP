@@ -5,22 +5,37 @@ set more off, perm
 cap log close
 log using "$d1/lsilPAP0.smcl", replace
 
+/*******************************************************************************
+lsilPAP0.d0		
+					
+- Clean datasets 							
+- Create Co-op dataset that is collapsed		
+	at the co-op level						
+- Create HH dataset that is collapsed at	
+	at the co-op level						
+- Merge Co-op & HH datasets to create a 	
+	single dataset at the co-op level	
+	
+*******************************************************************************/
 
-** Create co-op dataset from clean data **
 
-******************************
-** Co-op dataset
+* Load Co-op dataset 
 clear
 use "$d3/Cooperative.dta"
 
 
+** Clean Co-op data **
+
 * drop data collection notes & time stamps
 drop *start* *end* *note* consent *GPS* ____version metainstanceID ///
 		___id ___parent* ___tags ___uuid ___sub*
+		
 * rename variables with invalid names	
 rename role_CPSerLiv_rel_serLive_rel_se role_CPSerLiv_rel_serLive_rel
+
 * rename co-op variable to match HH & Co-op dataset
 rename IDX idx
+
 
 ** Assign district & region names
 destring ID1, replace
@@ -60,35 +75,10 @@ replace region = "Terai" if district=="Banke" | district =="Bardiya" | district 
 	district=="Rautahat" | district =="Rupandehi" | district=="Sarlahi" | district =="Surkhet" | ///
 	district =="Chitwan" | district =="Dang"
 	
-	
+
 ** save labels and value labels in macros
 foreach v of var * {
-	cap local vv = subinstr("`v'", "CPManagement", "CPMgt",.) // names too long for macros
-	if _rc == 0 {
-		rename `v' `vv'
-		local v `vv'
-	}
-	cap local vv = subinstr("`v'", "CPServices", "CPSer",.)
-	if _rc == 0 {
-		rename `v' `vv'
-		local v `vv'
-	}
-	cap local vv = subinstr("`v'", "transactions", "trans",.)
-	if _rc == 0 {
-		rename `v' `vv'
-		local v `vv'
-	}
-	cap local vv = subinstr("`v'", "Collection", "Coll",.)
-	if _rc == 0 {
-		rename `v' `vv'
-		local v `vv'
-	}
 	cap local vv = subinstr("`v'", "GMequipment", "GMeqpmt",.) // names too long for macros
-	if _rc == 0 {
-		rename `v' `vv'
-		local v `vv'
-	}
-	cap local vv = subinstr("`v'", "GMEquipment", "GMEqpmt",.) // names too long for macros
 	if _rc == 0 {
 		rename `v' `vv'
 		local v `vv'
@@ -197,24 +187,19 @@ save "$d3/Cooperative_collapse.dta", replace
 * ------------------------------------------------------------------------
 
 
-** Merge separate HH modules into single dataset **
-** Collapse to one row per co-op **
+/**************************************************
+
+HH dataset has several separated modules. 
+Merge separate HH modules into single dataset 
+
+**************************************************/
 
 
-* Livestock Sales Module
+** Load Livestock Sales Module
 clear
 use "$d3/Livestocksales.dta"
 
 
-** save labels and value labels in macros
-foreach v of var * {
-	cap local vv = subinstr("`v'", "Livestock_Saleslivestock", "Livestock_Sales",.) // names too long for macros
-	if _rc == 0 {
-		rename `v' `vv'
-		local v `vv'
-	}
-}
- 
 * drop data collection notes & time stamps 
 drop LS2 LS6 LS6_1 ___id ___uuid ___submission_time ///
 		___parent_table_name ___tags ___notes LS4 
@@ -239,7 +224,7 @@ ds *, has(type numeric)
 local numeric = "`r(varlist)'"		
 recode `numeric' (99=.) (98=.) (97=.)
 
-* make 1/2 variables binary
+* make 1-2 variables binary
 foreach v of varlist LS3 ///
 		LS39 LS44 ///
 		LS45 {
@@ -247,7 +232,13 @@ foreach v of varlist LS3 ///
 	quietly replace `v'=. if `v'==97
 	quietly replace `v'=0 if `v'==2
 }
- 
+
+* generate variable for # of sales
+bysort ___parent_index: egen LS_n_sales=count(___parent_index)
+
+
+** Collapse to 1-row per HH
+
 ** save labels and value labels in macros 
 foreach v of var * {
 	cap local vv = subinstr("`v'", "Livestock_Sales", "Livestock_Sales",.) // names too long for macros
@@ -262,28 +253,26 @@ foreach v of var * {
 	}
 }
 
-* # of sales
-bysort ___parent_index: egen LS_n_sales=count(___parent_index)
-
+* collapse
 collapse (firstnm) LS_n_sales (mean) LS3 *LS6* LS7 (sum) LS8 LS9 LS10 LS12 LS13 LS14 LS15 LS16 ///
 		LS17 LS25 LS26 LS27 LS28 LS29 LS30 LS31 *LS32* LS33 LS34 LS35 LS36 LS37 ///
 		LS38 LS39 LS40 LS41 LS42 *LS43* LS44 LS45 LS46 ///
 		LS47 co_opsalevalue co_opgoatno , by(___parent_index)
 
-** save labels and value labels in macros
+** re-assign labels post-collapse
 foreach v of var * {
 	label var `v' "`l`v''"
 	cap label val `v' "`ll`v''"
 }
 		
-*******************************************		
-* Top code LS9 -- obvious outliers
-g price = LS9/LS8
+		
+	
+** Top code LS9 -- obvious outliers
 
+g price = LS9/LS8
 g n = _n
 
-scatter LS9 price, mlabel(n)
-
+*scatter LS9 price, mlabel(n)
 *br n LS8 LS9 price if n == 658 | n == 859 | n == 833 | n == 521 | n == 577
 
 su price, d
@@ -294,16 +283,16 @@ drop n price
 su *LS8, d
 replace LS8 = r(p50) if LS8 > 25 & ///
 LS8 < . // Replaces outliers with median
-********************************************
+
 
 
 save "$d3/Livestocksales_collapse.dta", replace
 
-
+* ------------------------------------------------------------------------
 
 ** Merge separate modules into Household
 
-*household
+* Load household dataset
 clear
 use"$d3/Household.dta"
 
@@ -405,9 +394,11 @@ use "$d3/modules_merged.dta", clear
 merge m:m ___index using "$d3/Livestocksales_collapse_edit.dta", force
 save "$d3/Household_Merged.dta", replace
  
-  
+
+* ------------------------------------------------------------------------ 
+
  
-** Prepare Household_Merged to be collapsed by Co-op **
+** Clean Household_Merged to be collapsed to the co-op level
 clear
 use "$d3/Household_Merged.dta"
  
@@ -553,6 +544,8 @@ use "$d3/Household_Collapsed.dta"
 merge 1:1 idx using "$d3/Cooperative_collapse.dta", force
 
 drop *merge*
+
+
 
 * Create per member measures of revenue and cost
 destring REC7, replace

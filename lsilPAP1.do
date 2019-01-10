@@ -5,7 +5,17 @@ set more off, perm
 cap log close
 log using "$d1/lsilPAP1.smcl", replace
 
+
+/*******************************************************************************
+lsilPAP1.d0		
+					
+- Generate a random permutation of treatment status to be used for MDE's
+	
+*******************************************************************************/
+
+** Load merged baseline dataset
 use "$d3/Baseline_Merged.dta", clear
+
 
 * drop all variables associated with original randomization
 *`drop treat _merge n random random2 bin sub_bin strata
@@ -79,6 +89,7 @@ tab sub_sub_bin region
 drop random n
 
 rename sub_sub_bin strata 
+
 
  * Randomization
  
