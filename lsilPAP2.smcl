@@ -3,12 +3,13 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP2.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 4 Jan 2019, 11:09:18
+ {txt}opened on:  {res}15 Jan 2019, 10:55:33
 {txt}
 {com}. 
+. 
 . ** create merged dataset at HH level **
 . cd "$d3"
-{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline aug 20 2018
+{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline clean
 {txt}
 {com}. 
 . 
@@ -16,6 +17,10 @@
 . clear
 {txt}
 {com}. use "r_Baseline_Merged_Str.dta"
+{txt}( )
+
+{com}. 
+. drop _merge
 {txt}
 {com}.                 
 . save r_CO_Merged_PAP.dta, replace
@@ -3557,12 +3562,16 @@ str12 now)
 
 {col 5}Result{col 38}# of obs.
 {col 5}{hline 41}
-{col 5}not matched{col 30}{res}              48
-{txt}{col 9}from master{col 30}{res}              48{txt}  (_merge==1)
+{col 5}not matched{col 30}{res}             384
+{txt}{col 9}from master{col 30}{res}             384{txt}  (_merge==1)
 {col 9}from using{col 30}{res}               0{txt}  (_merge==2)
 
-{col 5}matched{col 30}{res}           2,808{txt}  (_merge==3)
+{col 5}matched{col 30}{res}           2,472{txt}  (_merge==3)
 {col 5}{hline 41}
+
+{com}. 
+. drop if _merge == 1 // banke district in HH data
+{txt}(384 observations deleted)
 
 {com}. 
 . save r_HH_Merged_PAP.dta, replace
@@ -3643,7 +3652,7 @@ str12 now)
 {com}. 
 {txt}end of do-file
 
-{com}. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD01678.000000"
+{com}. do "/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP4_test.do"
 {txt}
 {com}. clear
 {txt}

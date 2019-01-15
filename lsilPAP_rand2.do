@@ -4,13 +4,12 @@ cd "$d1"
 
 log using "$d1/lsilPAP_rand2.smcl", replace
 
-use "$d4/Merged/Baseline_Merged.dta", clear
+use "$d4/Merged/Baseline_Merged_Str.dta", clear
 
-/* gen treat = 0
 
-replace treat = 1 if HH_IDIDX == "Lekhbesi SEWC 1" // Pilot co-op
-*/
-drop if HH_IDIDX == "Lekhbesi SEWC 1" // Pilot co-op
+* drop original randomization variables
+drop bin sub_bin strata random n random2
+
 
 
 * true treatment status: seed 3581 * random seed = 62184 
@@ -89,29 +88,29 @@ bysort strata: gen random2=uniform() // used to randomly assign odd-numbered str
  
 levelsof strata, local(stratums) 
 
-gen treat = 0
+gen r_treat = 0
  
 foreach i in `stratums' {
 	count if strata==`i' 
 	if r(N)==4 | r(N)==6 {
 		sum n if strata==`i', d
-		replace treat=1 if n <= r(p50) & strata==`i'
+		replace r_treat=1 if n <= r(p50) & strata==`i'
 	}
 	else {
 		su random2 if strata == `i'
 		scalar mu = r(mean) // local macros don't handle decimals well
 		if mu < 0.5 {
-			replace treat=1 if n <= 3 & strata==`i'
+			replace r_treat=1 if n <= 3 & strata==`i'
 		}
 		if mu >= 0.5 {
-			replace treat=1 if n <= 2 & strata==`i'
+			replace r_treat=1 if n <= 2 & strata==`i'
 		}		
 	}
 
 }
 
-tab strata treat
+tab strata r_treat
 
-bysort region: tab strata treat
-save "$d4/Merged/Baseline_Merged_Str.dta", replace
+bysort region: tab strata r_treat
+save "$d4/Merged/r_Baseline_Merged_Str.dta", replace
  

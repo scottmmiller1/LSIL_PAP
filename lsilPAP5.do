@@ -13,6 +13,20 @@ clear
 use "$d3/r_HH_Merged_Ind.dta"
 encode idx, gen(idx_n)
 
+* generate strata variable that excludes 4th strata (due to data error)
+gen str = 11 if strata == 111 | strata == 112
+replace str = 12 if strata == 121 | strata == 122
+replace str = 21 if strata == 211 | strata == 212
+replace str = 22 if strata == 221 | strata == 222
+replace str = 31 if strata == 311 | strata == 312
+replace str = 32 if strata == 321 | strata == 322
+replace str = 41 if strata == 411 | strata == 412
+replace str = 42 if strata == 421 | strata == 422
+replace str = 51 if strata == 511 | strata == 512
+replace str = 52 if strata == 521 | strata == 522
+replace str = 61 if strata == 611 | strata == 612
+replace str = 62 if strata == 621 | strata == 622
+
 
 * Communication
 
@@ -20,7 +34,7 @@ encode idx, gen(idx_n)
 local varlist COM3 COM8 index_HH_comm
 foreach v in `varlist' {
 	
-	reg `v' r_treat i.strata, cluster(idx_n)
+	reg `v' r_treat i.str, cluster(idx_n)
 	
 	quietly { 
 		ereturn list
@@ -45,9 +59,9 @@ quietly {
 	}
 
 * Strata table
-frmttable using MDE.doc, statmat(A) sdec(4) title("Communication") ///
+frmttable using MDE_3.doc, statmat(A) sdec(4) title("Communication") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
-rtitle("HH info sales"\"HH info activities"\"HH level index") replace
+rtitle("HH info sales"\"HH info activities"\"HH level index")
 
 
 * Goat Sales
@@ -65,7 +79,7 @@ tokenize $hh_goatsales
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata, cluster(idx)
+	reg ``i'' r_treat i.str, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -88,7 +102,7 @@ forv i = 2/`listsize' { // appends into single matrix
 }
 
 * Table
-frmttable using MDE.doc, statmat(A) sdec(4) coljust(l;c;l;l) title("Goat Sales") ///
+frmttable using MDE_3.doc, statmat(A) sdec(4) coljust(l;c;l;l) title("Goat Sales") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
 rtitle("Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"Net Goat Income"\"HH Goat Sales Index"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index") ///
 note("Currency measured in USD") addtable replace
@@ -103,7 +117,7 @@ tokenize $hh_trn_d
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata, cluster(idx)
+	reg ``i'' r_treat i.str, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -126,7 +140,7 @@ forv i = 2/`listsize' { // appends into single matrix
 }
 
 * Strata table
-frmttable using MDE.doc, statmat(A) sdec(4) title("Transparency") ///
+frmttable using MDE_3.doc, statmat(A) sdec(4) title("Transparency") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
 rtitle("Discrepancy Index") addtable replace
 
@@ -152,7 +166,7 @@ tokenize $co_PNG
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata
+	reg ``i'' r_treat i.str
 	
 	quietly {
 		ereturn list
@@ -175,7 +189,7 @@ forv i = 2/`listsize' { // appends into single matrix
 }
 
 * Table
-frmttable using MDE.doc, statmat(A) sdec(4) title("Planning and Goals") ///
+frmttable using MDE_3.doc, statmat(A) sdec(4) title("Planning and Goals") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
 rtitle("Business Plan"\"Planning Time Horizon"\"Expected Goats Sold"\"Expected Rev."\"PNG Index") addtable replace
 

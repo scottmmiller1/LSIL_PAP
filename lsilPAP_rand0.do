@@ -115,6 +115,7 @@ merge 1:1 ___index using "$d4/Co-op/role_CP_Collectionpoint_collapsed.dta"
  
 save "$d4/Co-op/Cooperative1.dta", replace
 
+
 ****************************************
 ** Merge Cooperative & Household Data **
 ****************************************
