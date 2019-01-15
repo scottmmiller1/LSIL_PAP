@@ -26,7 +26,7 @@ clear
 use "$d4/Merged/r_Baseline_Merged_Str.dta"
 recast str99 idx // idx is str99 in Baseline_Merged
 
-keep idx treat r_treat
+keep idx treat r_treat strata
 
 save "$d3/treat.dta", replace
 

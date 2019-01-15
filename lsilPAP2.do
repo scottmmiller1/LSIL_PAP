@@ -13,6 +13,8 @@ cd "$d3"
 * co-op data with treatment status
 clear
 use "r_Baseline_Merged_Str.dta"
+
+drop _merge
 		
 save r_CO_Merged_PAP.dta, replace
 
@@ -75,6 +77,8 @@ foreach v of var * {
 
 * Merge and save dataset
 merge m:m idx using "r_CO_Merged_PAP.dta", force
+
+drop if _merge == 1 // banke district in HH data
 
 save r_HH_Merged_PAP.dta, replace
 

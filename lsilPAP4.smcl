@@ -1,13 +1,13 @@
 {smcl}
 {com}{sf}{ul off}{txt}{.-}
       name:  {res}<unnamed>
-       {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP4.smcl
+       {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP4_test.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}19 Nov 2018, 15:31:47
+ {txt}opened on:  {res}15 Jan 2019, 11:03:40
 {txt}
 {com}. 
 . cd "$d3" 
-{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline aug 20 2018
+{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline clean
 {txt}
 {com}. 
 . 
@@ -15,11 +15,12 @@
 . clear
 {txt}
 {com}. use "r_CO_Merged_PAP.dta"
-{txt}
+{txt}( )
+
 {com}. 
 . * Drop Banke District & Pilot Co-op
 . drop if district == "Banke"
-{txt}(14 observations deleted)
+{txt}(0 observations deleted)
 
 {com}. drop if r_treat ==.
 {txt}(0 observations deleted)
@@ -37,68 +38,73 @@
 . encode region, gen(n_region) // create numerical region variable for regression
 {txt}
 {com}. 
+. 
 . ** Winsorize LS9
+. * -----------------------------------------------
+. gen LS9_w = LS9
+{txt}
+{com}. 
 . * treatment
-. sum LS9 if r_treat == 1, d
+. sum LS9_w if r_treat == 1, d
 
-     {txt}LS9 How much did you earn in total from this sale?
+                            {txt}LS9_w
 {hline 61}
       Percentiles      Smallest
- 1%    {res} 9594.595       9594.595
-{txt} 5%    {res} 10083.33        9975.61
-{txt}10%    {res} 10318.27       10083.33       {txt}Obs         {res}         46
-{txt}25%    {res} 12773.68       10208.41       {txt}Sum of Wgt. {res}         46
+ 1%    {res} 4865.857       4865.857
+{txt} 5%    {res} 9594.595           5885
+{txt}10%    {res} 9975.609       9594.595       {txt}Obs         {res}         46
+{txt}25%    {res} 11251.85       9857.143       {txt}Sum of Wgt. {res}         46
 
-{txt}50%    {res} 16727.13                      {txt}Mean          {res} 17912.88
-                        {txt}Largest       Std. Dev.     {res} 7183.817
-{txt}75%    {res} 22508.85       26539.14
-{txt}90%    {res}    26300       27211.86       {txt}Variance      {res} 5.16e+07
-{txt}95%    {res} 27211.86          40040       {txt}Skewness      {res} 1.644055
-{txt}99%    {res} 44044.44       44044.44       {txt}Kurtosis      {res} 6.502127
+{txt}50%    {res} 16779.13                      {txt}Mean          {res} 16889.71
+                        {txt}Largest       Std. Dev.     {res}  6298.32
+{txt}75%    {res}  22689.6          26250
+{txt}90%    {res} 24371.43          26300       {txt}Variance      {res} 3.97e+07
+{txt}95%    {res}    26300       27681.82       {txt}Skewness      {res} .2687124
+{txt}99%    {res} 32828.79       32828.79       {txt}Kurtosis      {res} 2.418001
 {txt}
 {com}. scalar t_99 = r(p99)
 {txt}
 {com}. 
-. replace LS9 = t_99 if LS9 > t_99 & !missing(LS9) & r_treat == 1
+. replace LS9_w = t_99 if LS9_w > t_99 & !missing(LS9_w) & r_treat == 1
 {txt}(0 real changes made)
 
 {com}. 
 . *control
-. sum LS9 if r_treat == 0, d
+. sum LS9_w if r_treat == 0, d
 
-     {txt}LS9 How much did you earn in total from this sale?
+                            {txt}LS9_w
 {hline 61}
       Percentiles      Smallest
- 1%    {res} 4865.857       4865.857
-{txt} 5%    {res} 8730.769           5885
-{txt}10%    {res} 9857.143       8730.769       {txt}Obs         {res}         46
-{txt}25%    {res} 11906.25       9808.333       {txt}Sum of Wgt. {res}         46
+ 1%    {res}  8730.77        8730.77
+{txt} 5%    {res} 10828.57       9808.333
+{txt}10%    {res} 11509.38       10828.57       {txt}Obs         {res}         46
+{txt}25%    {res} 12773.68       10992.68       {txt}Sum of Wgt. {res}         46
 
-{txt}50%    {res} 14718.45                      {txt}Mean          {res} 17002.02
-                        {txt}Largest       Std. Dev.     {res} 8848.293
-{txt}75%    {res} 19731.91          26250
-{txt}90%    {res}  25806.8       27681.82       {txt}Variance      {res} 7.83e+07
-{txt}95%    {res} 27681.82          35955       {txt}Skewness      {res} 2.727105
-{txt}99%    {res} 60121.95       60121.95       {txt}Kurtosis      {res} 13.62087
+{txt}50%    {res} 14784.64                      {txt}Mean          {res} 17610.12
+                        {txt}Largest       Std. Dev.     {res} 9146.532
+{txt}75%    {res}    18850       27211.87
+{txt}90%    {res} 26539.14          35955       {txt}Variance      {res} 8.37e+07
+{txt}95%    {res}    35955       44044.45       {txt}Skewness      {res} 2.927083
+{txt}99%    {res} 60121.95       60121.95       {txt}Kurtosis      {res} 12.68691
 {txt}
 {com}. scalar c_99 = r(p99)
 {txt}
 {com}. 
-. replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & r_treat == 0
+. replace LS9_w = c_99 if LS9_w > c_99 & !missing(LS9_w) & r_treat == 0
 {txt}(0 real changes made)
 
 {com}. 
 . 
 . ** Replace Missing values with zero 
 . * LS9 , 
-. replace LS9 = 0 if LS9 ==.
+. replace LS9_w = 0 if LS9_w ==.
 {txt}(0 real changes made)
 
 {com}. replace co_opsalevalue = 0 if co_opsalevalue ==.
 {txt}(0 real changes made)
 
-{com}. 
-. 
+{com}. * -----------------------------------------------
+. */
 . 
 . 
 . ** Communication **
@@ -134,8 +140,69 @@
 . local local_CO_comm_full contact COM3 COM8
 {txt}
 {com}. make_index_gr CO_comm_full wgt stdgroup `local_CO_comm_full' 
-{res}  938
+{res}  935
 {txt}
+{com}. 
+. * factors that limit communication
+.         * principal components index
+. 
+. 
+. ** Transparency **
+. 
+. /* Variables
+> Mandate : Co_opTransparencyTRN1
+> Annual Report : Co_opTransparencyTRN2
+> Annual Budget : Co_opTransparencyTRN3
+> Financial Report: Co_opTransparencyTRN4 
+> Meeting minutes : Co_opTransparencyTRN5
+> Election Results : Co_opTransparencyTRN6
+> Sale Records : Co_opTransparencyTRN7
+> Evaluations : Co_opTransparencyTRN8
+> */
+.         
+. ** Co-op Transparency   
+. local local_CO_TRN CO_TRN1 CO_TRN2 ///
+>         CO_TRN3 CO_TRN4 CO_TRN5 ///
+>         CO_TRN6 CO_TRN7
+{txt}
+{com}. make_index_gr CO_TRN wgt stdgroup `local_CO_TRN' 
+{res}  936
+{txt}
+{com}. 
+. 
+. ** Household Awareness
+. local local_HH_TRN HH_TRN1 HH_TRN2 ///
+>         HH_TRN3 HH_TRN4 HH_TRN5 ///
+>         HH_TRN6 HH_TRN7
+{txt}
+{com}. make_index_gr HH_TRN wgt stdgroup `local_HH_TRN' 
+{res}  937
+{txt}
+{com}. 
+. 
+. ** Discrepancy
+.         forvalues i=1/7 {c -(} 
+{txt}  2{com}.                 gen dTRN`i' = -(CO_TRN`i' - HH_TRN`i')^2
+{txt}  3{com}.                 {c )-}
+{txt}(2 missing values generated)
+(2 missing values generated)
+(2 missing values generated)
+(2 missing values generated)
+(2 missing values generated)
+(2 missing values generated)
+(2 missing values generated)
+
+{com}.                 
+. local local_dTRN dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7
+{txt}
+{com}. make_index_gr dTRN wgt stdgroup `local_dTRN' 
+{res}  945
+{txt}
+{com}. 
+. * average discrepancy
+. egen avg_dTRN = rowmean(dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7)
+{txt}(2 missing values generated)
+
 {com}. 
 . 
 . ** Cooperative Finances **
@@ -151,7 +218,7 @@
 . 
 . * Convert to USD as of 1/1/18
 . 
-. gen revenue = REV4*(0.0099) // names too long for macros
+. gen revenue = REV4*(0.0099)
 {txt}(2 missing values generated)
 
 {com}. gen costs = REC7*(0.0099)
@@ -214,6 +281,40 @@
 
 {com}. 
 . 
+. ** Goat Sales ** 
+. 
+. /* Variables 
+> # of goats sold : REC1
+> goat revenue : REC4_1
+> # of organized sales at collection points : GTT1
+> Members : MAN3
+> Goat revenue per member : goatrev_member
+> Trader visits per sale
+> Time passed
+> Transportation costs
+> */
+. 
+. ** co-op level vars
+. gen goats_sold = REC1
+{txt}(2 missing values generated)
+
+{com}. gen goats_sold_member = REC1 / MAN3
+{txt}(2 missing values generated)
+
+{com}. * goatrev
+. * revenue per goat sold
+. gen goatrev_sold = goatrev / REC1
+{txt}(22 missing values generated)
+
+{com}. gen col_points = GTT1
+{txt}
+{com}. 
+. local local_CO_goatsales goats_sold goatrev col_points
+{txt}
+{com}. make_index_gr CO_goatsales wgt stdgroup `local_CO_goatsales' 
+{res}  965
+{txt}
+{com}. 
 . 
 . ** household level vars
 . gen co_opshare = 0
@@ -228,16 +329,16 @@
 {com}. gen transp_cost = -1*(LS42*(0.0099))
 {txt}
 {com}. 
-. local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue
+. local local_HH_goatsales LS8 LS9_w co_opgoatno co_opsalevalue
 {txt}
 {com}. make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
-{res}  957
+{res}  970
 {txt}
 {com}. 
 . local local_salecost visits_sale time_passed transp_cost
 {txt}
 {com}. make_index_gr salecost wgt stdgroup `local_salecost' 
-{res}  958
+{res}  971
 {txt}
 {com}. 
 . 
@@ -251,16 +352,25 @@
 > Amount spent on shelters : LSE18
 > */
 . 
-. gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
-{txt}(16 missing values generated)
-
-{com}. gen net_goat_income = LS9*(0.0099) - goat_costs
-{txt}(16 missing values generated)
-
-{com}. gen netincome_goat = net_goat_income / LS8
-{txt}(16 missing values generated)
+. foreach v of varlist LSE12 LSE15 LSE16 LSE17a LSE17b LSE18 {c -(}
+{txt}  2{com}.         replace `v' = 0 if `v'==.
+{txt}  3{com}.         {c )-}
+{txt}(16 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 
 {com}. 
+. gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
+{txt}
+{com}. gen net_goat_income = LS9_w*(0.0099) - goat_costs
+{txt}
+{com}. gen netincome_goat = net_goat_income / LS8
+{txt}
+{com}. 
+. 
 . 
 . 
 . ** Planning and Goals **
@@ -275,15 +385,18 @@
 . gen expected_rev = PNG4*(0.0099)
 {txt}(2 missing values generated)
 
+{com}. replace PNG2 =. if PNG2 == 99
+{txt}(1 real change made, 1 to missing)
+
 {com}. 
 . local local_PNG PNG1 PNG2 PNG3 expected_rev
 {txt}
 {com}. make_index_gr PNG wgt stdgroup `local_PNG'
-{res}  963
+{res}  976
 {txt}
 {com}. 
 . save "$d3/r_CO_Merged_Ind.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline aug 20 2018/r_CO_Merged_Ind.dta saved
+{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline clean/r_CO_Merged_Ind.dta saved
 
 {com}. 
 . 
@@ -297,10 +410,10 @@
 {com}. 
 . * Drop Banke District & Pilot Co-op
 . drop if district == "Banke"
-{txt}(360 observations deleted)
+{txt}(24 observations deleted)
 
 {com}. drop if r_treat == .
-{txt}(48 observations deleted)
+{txt}(0 observations deleted)
 
 {com}. drop if idx == "" 
 {txt}(0 observations deleted)
@@ -317,60 +430,67 @@
 {com}. 
 . 
 . ** Winsorize LS9
+. * -----------------------------------------------
+. gen LS9_w = LS9
+{txt}(1,172 missing values generated)
+
+{com}. 
 . * treatment
-. sum LS9 if r_treat == 1, d
+. sum LS9_w if r_treat == 1, d
 
-     {txt}LS9 How much did you earn in total from this sale?
-{hline 61}
-      Percentiles      Smallest
- 1%    {res}        0              0
-{txt} 5%    {res}     2000              0
-{txt}10%    {res}     4100              0       {txt}Obs         {res}        670
-{txt}25%    {res}     8000              0       {txt}Sum of Wgt. {res}        670
-
-{txt}50%    {res}    14000                      {txt}Mean          {res} 19408.81
-                        {txt}Largest       Std. Dev.     {res} 21055.66
-{txt}75%    {res}    24000         135000
-{txt}90%    {res}    38000         145000       {txt}Variance      {res} 4.43e+08
-{txt}95%    {res}    50000         235000       {txt}Skewness      {res} 5.149765
-{txt}99%    {res}    90000         260000       {txt}Kurtosis      {res} 47.77864
-{txt}
-{com}. scalar t_99 = r(p99)
-{txt}
-{com}. 
-. replace LS9 = t_99 if LS9 > t_99 & !missing(LS9) & r_treat == 1
-{txt}(6 real changes made)
-
-{com}. 
-. *control
-. sum LS9 if r_treat == 0, d
-
-     {txt}LS9 How much did you earn in total from this sale?
+                            {txt}LS9_w
 {hline 61}
       Percentiles      Smallest
  1%    {res}        0              0
 {txt} 5%    {res}        0              0
-{txt}10%    {res}     4000              0       {txt}Obs         {res}        606
-{txt}25%    {res}     7000              0       {txt}Sum of Wgt. {res}        606
+{txt}10%    {res}     4000              0       {txt}Obs         {res}        677
+{txt}25%    {res}     8000              0       {txt}Sum of Wgt. {res}        677
 
-{txt}50%    {res}    12500                      {txt}Mean          {res} 18580.66
-                        {txt}Largest       Std. Dev.     {res} 26927.11
-{txt}75%    {res}    22500         155600
-{txt}90%    {res}    35000         195000       {txt}Variance      {res} 7.25e+08
-{txt}95%    {res}    50000         220500       {txt}Skewness      {res} 8.796708
-{txt}99%    {res}   113300         450000       {txt}Kurtosis      {res} 120.7191
+{txt}50%    {res}    13000                      {txt}Mean          {res} 18980.29
+                        {txt}Largest       Std. Dev.     {res} 22068.73
+{txt}75%    {res}    24000         131420
+{txt}90%    {res}    37000         144000       {txt}Variance      {res} 4.87e+08
+{txt}95%    {res}    50000         145000       {txt}Skewness      {res} 6.746726
+{txt}99%    {res}   113300       353191.3       {txt}Kurtosis      {res}  85.4021
+{txt}
+{com}. scalar t_99 = r(p99)
+{txt}
+{com}. 
+. replace LS9_w = t_99 if LS9_w > t_99 & !missing(LS9_w) & r_treat == 1
+{txt}(6 real changes made)
+
+{com}. 
+. *control
+. sum LS9_w if r_treat == 0, d
+
+                            {txt}LS9_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}     1800              0
+{txt}10%    {res}     4000              0       {txt}Obs         {res}        599
+{txt}25%    {res}     8000              0       {txt}Sum of Wgt. {res}        599
+
+{txt}50%    {res}    13000                      {txt}Mean          {res}  18286.3
+                        {txt}Largest       Std. Dev.     {res} 20265.42
+{txt}75%    {res}    23000         135000
+{txt}90%    {res}    36000         155600       {txt}Variance      {res} 4.11e+08
+{txt}95%    {res}    50000         195000       {txt}Skewness      {res} 4.583672
+{txt}99%    {res}   110000         220500       {txt}Kurtosis      {res} 35.34747
 {txt}
 {com}. scalar c_99 = r(p99)
 {txt}
 {com}. 
-. replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & r_treat == 0
-{txt}(6 real changes made)
+. replace LS9_w = c_99 if LS9_w > c_99 & !missing(LS9_w) & r_treat == 0
+{txt}(5 real changes made)
 
-{com}. 
+{com}. * -----------------------------------------------
 . 
-. ** Replace Missing values with zero 
+. 
+. ** Replace Missing values with zero
+. * ----------------------------------------------- 
 . * LS9 , 
-. replace LS9 = 0 if LS9 ==.
+. replace LS9_w = 0 if LS9_w ==.
 {txt}(1,172 real changes made)
 
 {com}. replace LS8 = 0 if LS8 ==.
@@ -382,21 +502,24 @@
 {com}. replace co_opgoatno = 0 if co_opgoatno ==.
 {txt}(1,172 real changes made)
 
-{com}. 
+{com}. * -----------------------------------------------
+. */
 . 
 . ** Communication **
 . 
 . * Variables 
+. 
 .         * Total # of times HH is contacted
 .         gen HHcontact = COM3 + COM8
 {txt}(1,241 missing values generated)
 
 {com}. 
+. 
 . * HH comm index
 . local local_HH_comm COM3 COM8
 {txt}
 {com}. make_index_gr HH_comm wgt stdgroup `local_HH_comm' 
-{res}  936
+{res}  933
 {txt}
 {com}. 
 . * factors that limit communication
@@ -431,7 +554,7 @@
 >         CO_TRN6 CO_TRN7
 {txt}
 {com}. make_index_gr CO_TRN wgt stdgroup `local_CO_TRN'                
-{res}  937
+{res}  934
 {txt}
 {com}. 
 . ** Household Awareness
@@ -440,7 +563,7 @@
 >         HH_TRN6 HH_TRN7
 {txt}
 {com}. make_index_gr HH_TRN wgt stdgroup `local_HH_TRN' 
-{res}  938
+{res}  935
 {txt}
 {com}. 
 .         
@@ -470,7 +593,7 @@
 . local local_dTRN dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7
 {txt}
 {com}. make_index_gr dTRN wgt stdgroup `local_dTRN' 
-{res}  946
+{res}  943
 {txt}
 {com}. 
 . * average discrepancy
@@ -478,7 +601,6 @@
 {txt}(356 missing values generated)
 
 {com}. 
-. 
 . 
 . ** Goat Sales ** 
 . 
@@ -491,6 +613,13 @@
 > trader visits home : Livestock_SalesLS40
 > time passed before sale : Livestock_SalesLS41
 > transportation cost : Livestock_SalesLS42
+> */
+. /* Costs
+> Amount spent purchasing goats: LSE12
+> Amount spent on feed/fodder : LSE15
+> Amount spent on vet care : LSE16
+> Amount spent on breeding fees : LSE17a * LSE17b
+> Amount spent on shelters : LSE18
 > */
 . 
 . 
@@ -509,311 +638,75 @@
 {com}. gen transp_cost = -1*(LS42*(0.0099))
 {txt}(1,172 missing values generated)
 
+{com}. replace LS9_w = LS9_w*(0.0099)
+{txt}(1,218 real changes made)
+
+{com}. replace co_opsalevalue = co_opsalevalue*(0.0099)
+{txt}(262 real changes made)
+
 {com}. 
 . 
-. /* Costs
-> Amount spent purchasing goats: LSE12
-> Amount spent on feed/fodder : LSE15
-> Amount spent on vet care : LSE16
-> Amount spent on breeding fees : LSE17a * LSE17b
-> Amount spent on shelters : LSE18
-> */
-. 
+. * replace obvious outlier with sample median (median = 0)
+. replace visits_sale = 0 if visits_sale <= -5000
+{txt}(1 real change made)
+
+{com}. 
+. * replace missing values with zero
+. foreach v of varlist LSE12 LSE15 LSE16 LSE17a LSE17b LSE18 {c -(}
+{txt}  2{com}.         replace `v' = 0 if `v'==.
+{txt}  3{com}.         {c )-}
+{txt}(2,191 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(539 real changes made)
+(0 real changes made)
+
+{com}. 
 . gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
-{txt}(2,273 missing values generated)
-
-{com}. gen net_goat_income = LS9*(0.0099) - goat_costs
-{txt}(2,273 missing values generated)
-
+{txt}
+{com}. gen net_goat_income = LS9_w - goat_costs
+{txt}
 {com}. gen netincome_goat = net_goat_income / LS8
-{txt}(2,361 missing values generated)
+{txt}(1,234 missing values generated)
 
 {com}. 
 . 
-. local local_HH_goatsales LS8 LS9 co_opgoatno co_opsalevalue net_goat_income
+. local local_HH_goatsales LS8 LS9_w co_opgoatno co_opsalevalue net_goat_income
 {txt}
 {com}. make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
-{res}  955
+{res}  952
 {txt}
 {com}. 
 . local local_salecost visits_sale time_passed transp_cost
 {txt}
 {com}. make_index_gr salecost wgt stdgroup `local_salecost' 
-{res}  956
+{res}  953
 {txt}
 {com}. 
 . 
 . save "$d3/r_HH_Merged_Ind.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline aug 20 2018/r_HH_Merged_Ind.dta saved
+{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline clean/r_HH_Merged_Ind.dta saved
 
 {com}. 
-. 
-. 
 . 
 . 
 . 
 {txt}end of do-file
 
-{com}. do "/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP5_MDE_summary.do"
-{txt}
-{com}. 
-. clear
-{txt}
-{com}. set more off, perm
-{txt}({cmd:set more} preference recorded)
-
-{com}. cd "$d2"
-{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data
-{txt}
-{com}. 
-. ** Co-op level dataset
-. ********************************************* 
-. clear
-{txt}
-{com}. use "$d3/r_CO_Merged_Ind.dta"
-{txt}
-{com}. 
-. 
-. ** Co-op indicators **
-. 
-. gl co_summ MAN3 revenue costs net_rev rev_member net_rev_member ///
->                 PNG1 PNG2 PNG3 expected_rev index_PNG CO_TRN1 CO_TRN2 ///
->                 CO_TRN3 CO_TRN4 CO_TRN5 CO_TRN6 CO_TRN7
-{txt}
-{com}. 
-. local listsize : list sizeof global(co_summ)
-{txt}
-{com}. tokenize $co_summ
-{txt}
-{com}. 
-. forv i = 1/`listsize' {c -(}
-{txt}  2{com}.                 
-.         quietly {c -(}
-{txt}  3{com}.                 sum ``i''
-{txt}  4{com}.                 return list
-{txt}  5{com}.                 scalar N_``i'' = r(N) // N
-{txt}  6{com}.                 scalar mean_``i'' = r(mean) // mean
-{txt}  7{com}.                 scalar sd_``i'' = r(sd)  // sd
-{txt}  8{com}.                 scalar min_``i'' = r(min)  // sd
-{txt}  9{com}.                 scalar max_``i'' = r(max)  // sd
-{txt} 10{com}.                 
-.         * matrix for table
-.                 matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
-{txt} 11{com}.                 {c )-}
-{txt} 12{com}. {c )-}
-{txt}
-{com}. matrix A = mat_1
-{txt}
-{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
-{txt}  2{com}.         matrix A = A \ mat_`i'
-{txt}  3{com}. {c )-}
-{txt}
-{com}. 
-. * Table
-. frmttable using CO_summary.tex, tex statmat(A) sdec(2) coljust(l;c;l;l) title("Cooperative Indicators - Summmary Statistics") ///
-> ctitle("","N","Mean","sd","Min","Max") ///
-> rtitle("\# of Members"\"Revenue (USD)"\"Costs (USD)"\"Net Revenue (USD)"\"Revenue per Member (USD)"\"Net Revenue per Member (USD)"\"Co-op has a Business Plan"\"Planning Time Horizon (Years)"\"Expected Goats Sold"\"Expected Revenue (USD)"\"Planning \& Goals Summmary Index"\"Transparency: Mandate"\"Transparency: Annual Report"\"Transparency: Annual Budget"\"Transparency: Financial Report"\"Transparency: Meeting Minutes"\"Transparency: Election Results"\"Transparency: Sale Records")replace
-{res}
-{txt}{center:Cooperative Indicators - Summmary Statistics}
-{txt}{center:{hline 81}}
-{center:{txt}{lalign 34:}{txt}{center 7:N}{txt}{center 10:Mean}{txt}{center 10:sd}{txt}{center 7:Min}{txt}{center 11:Max}}
-{txt}{center:{hline 81}}
-{center:{txt}{lalign 34:\# of Members}{res}{center 7:92.00}{res}{center 10:553.36}{res}{center 10:376.42}{res}{center 7:11.00}{res}{center 11:2,600.00}}
-{center:{txt}{lalign 34:Revenue (USD)}{res}{center 7:92.00}{res}{center 10:3.78}{res}{center 10:8.01}{res}{center 7:0.00}{res}{center 11:65.71}}
-{center:{txt}{lalign 34:Costs (USD)}{res}{center 7:92.00}{res}{center 10:0.38}{res}{center 10:1.64}{res}{center 7:0.00}{res}{center 11:10.96}}
-{center:{txt}{lalign 34:Net Revenue (USD)}{res}{center 7:90.00}{res}{center 10:3.47}{res}{center 10:8.25}{res}{center 7:-7.93}{res}{center 11:65.55}}
-{center:{txt}{lalign 34:Revenue per Member (USD)}{res}{center 7:92.00}{res}{center 10:0.01}{res}{center 10:0.01}{res}{center 7:0.00}{res}{center 11:0.06}}
-{center:{txt}{lalign 34:Net Revenue per Member (USD)}{res}{center 7:90.00}{res}{center 10:0.01}{res}{center 10:0.01}{res}{center 7:-0.01}{res}{center 11:0.06}}
-{center:{txt}{lalign 34:Co-op has a Business Plan}{res}{center 7:90.00}{res}{center 10:0.52}{res}{center 10:0.49}{res}{center 7:0.00}{res}{center 11:1.00}}
-{center:{txt}{lalign 34:Planning Time Horizon (Years)}{res}{center 7:90.00}{res}{center 10:2.35}{res}{center 10:10.35}{res}{center 7:0.00}{res}{center 11:99.00}}
-{center:{txt}{lalign 34:Expected Goats Sold}{res}{center 7:90.00}{res}{center 10:271.74}{res}{center 10:363.26}{res}{center 7:0.00}{res}{center 11:2,500.00}}
-{center:{txt}{lalign 34:Expected Revenue (USD)}{res}{center 7:90.00}{res}{center 10:1,026.62}{res}{center 10:2,158.46}{res}{center 7:0.00}{res}{center 11:14,850.00}}
-{center:{txt}{lalign 34:Planning \& Goals Summmary Index}{res}{center 7:90.00}{res}{center 10:-0.04}{res}{center 10:0.81}{res}{center 7:-0.92}{res}{center 11:4.68}}
-{center:{txt}{lalign 34:Transparency: Mandate}{res}{center 7:90.00}{res}{center 10:0.81}{res}{center 10:0.38}{res}{center 7:0.00}{res}{center 11:1.00}}
-{center:{txt}{lalign 34:Transparency: Annual Report}{res}{center 7:90.00}{res}{center 10:0.84}{res}{center 10:0.36}{res}{center 7:0.00}{res}{center 11:1.00}}
-{center:{txt}{lalign 34:Transparency: Annual Budget}{res}{center 7:90.00}{res}{center 10:0.82}{res}{center 10:0.38}{res}{center 7:0.00}{res}{center 11:1.00}}
-{center:{txt}{lalign 34:Transparency: Financial Report}{res}{center 7:90.00}{res}{center 10:0.81}{res}{center 10:0.38}{res}{center 7:0.00}{res}{center 11:1.00}}
-{center:{txt}{lalign 34:Transparency: Meeting Minutes}{res}{center 7:90.00}{res}{center 10:0.78}{res}{center 10:0.40}{res}{center 7:0.00}{res}{center 11:1.00}}
-{center:{txt}{lalign 34:Transparency: Election Results}{res}{center 7:90.00}{res}{center 10:0.55}{res}{center 10:0.49}{res}{center 7:0.00}{res}{center 11:1.00}}
-{center:{txt}{lalign 34:Transparency: Sale Records}{res}{center 7:90.00}{res}{center 10:0.76}{res}{center 10:0.43}{res}{center 7:0.00}{res}{center 11:1.00}}
-{txt}{center:{hline 81}}
-
-
-{com}.  
-. 
-. 
-. 
-. 
-. ** communication **
-. gl co_comm comm1 comm2 contact COM3 COM8 index_CO_comm HHcontact
-{txt}
-{com}.         
-. ** Co-op vars
-. local listsize : list sizeof global(co_comm)
-{txt}
-{com}. tokenize $co_comm
-{txt}
-{com}. 
-. forv i = 1/`listsize' {c -(}
-{txt}  2{com}.                 
-.         quietly {c -(}
-{txt}  3{com}.                 sum ``i''
-{txt}  4{com}.                 return list
-{txt}  5{com}.                 scalar N_``i'' = r(N) // N
-{txt}  6{com}.                 scalar mean_``i'' = r(mean) // mean
-{txt}  7{com}.                 scalar sd_``i'' = r(sd)  // sd
-{txt}  8{com}.                 scalar min_``i'' = r(min)  // sd
-{txt}  9{com}.                 scalar max_``i'' = r(max)  // sd
-{txt} 10{com}.                 
-.         * matrix for table
-.                 matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
-{txt} 11{com}.                 {c )-}
-{txt} 12{com}. {c )-}
-{txt}
-{com}. matrix A = mat_1
-{txt}
-{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
-{txt}  2{com}.         matrix A = A \ mat_`i'
-{txt}  3{com}. {c )-}
-{txt}
-{com}. 
-. * Table
-. frmttable using MDE_summary.doc, statmat(A) sdec(2) coljust(l;c;l;l) title("Co-op Level - Communication: Summmary Stats") ///
-> ctitle("","N","Mean","sd","Min","Max") ///
-> rtitle("Contacted SHG"\"Contacted by SHG"\"Total Co-op Contact"\"HH info sales"\"HH info activities"\"co-op level index"\"Total HH Contact") replace
-{res}{txt:(note: file MDE_summary.doc not found)}
-{txt}{center:Co-op Level - Communication: Summmary Stats}
-{txt}{center:{hline 59}}
-{center:{txt}{lalign 21:}{txt}{center 7:N}{txt}{center 7:Mean}{txt}{center 7:sd}{txt}{center 7:Min}{txt}{center 8:Max}}
-{txt}{center:{hline 59}}
-{center:{txt}{lalign 21:Contacted SHG}{res}{center 7:90.00}{res}{center 7:9.54}{res}{center 7:12.90}{res}{center 7:0.00}{res}{center 8:90.00}}
-{center:{txt}{lalign 21:Contacted by SHG}{res}{center 7:90.00}{res}{center 7:7.45}{res}{center 7:13.66}{res}{center 7:0.00}{res}{center 8:100.00}}
-{center:{txt}{lalign 21:Total Co-op Contact}{res}{center 7:90.00}{res}{center 7:16.99}{res}{center 7:25.46}{res}{center 7:0.00}{res}{center 8:190.00}}
-{center:{txt}{lalign 21:HH info sales}{res}{center 7:78.00}{res}{center 7:1.11}{res}{center 7:0.90}{res}{center 7:0.00}{res}{center 8:3.50}}
-{center:{txt}{lalign 21:HH info activities}{res}{center 7:92.00}{res}{center 7:1.04}{res}{center 7:1.16}{res}{center 7:0.00}{res}{center 8:8.10}}
-{center:{txt}{lalign 21:co-op level index}{res}{center 7:76.00}{res}{center 7:-0.08}{res}{center 7:0.78}{res}{center 7:-1.16}{res}{center 8:3.64}}
-{center:{txt}{lalign 21:Total HH Contact}{res}{center 7:78.00}{res}{center 7:2.18}{res}{center 7:1.65}{res}{center 7:0.00}{res}{center 8:9.58}}
-{txt}{center:{hline 59}}
-
-
-{com}.  
-.  
-. * ------------------------------------------- 
-.  
-.  
-. ** finance **
-. gl co_finance revenue rev_member costs cost_member ///
->         assets assets_member liabilities liab_member goatrev goatrev_member ///
->         net_rev net_rev_member net_finances net_finances_member
-{txt}
-{com}.         
-. ** Co-op vars
-. local listsize : list sizeof global(co_finance)
-{txt}
-{com}. tokenize $co_finance
-{txt}
-{com}. 
-. forv i = 1/`listsize' {c -(}
-{txt}  2{com}.                 
-.         quietly {c -(}
-{txt}  3{com}.                 sum ``i''
-{txt}  4{com}.                 return list
-{txt}  5{com}.                 scalar N_``i'' = r(N) // N
-{txt}  6{com}.                 scalar mean_``i'' = r(mean) // mean
-{txt}  7{com}.                 scalar sd_``i'' = r(sd)  // sd
-{txt}  8{com}.                 scalar min_``i'' = r(min)  // sd
-{txt}  9{com}.                 scalar max_``i'' = r(max)  // sd
-{txt} 10{com}.                 
-.         * matrix for table
-.                 matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
-{txt} 11{com}.                 {c )-}
-{txt} 12{com}. {c )-}
-{txt}
-{com}. matrix A = mat_1
-{txt}
-{com}. forv i = 2/`listsize' {c -(} // appends into single matrix
-{txt}  2{com}.         matrix A = A \ mat_`i'
-{txt}  3{com}. {c )-}
-{txt}
-{com}. 
-. * Table
-. frmttable using MDE_summary.doc, statmat(A) sdec(2) coljust(l;c;l;l) title("Co-op Level - Finances: Summmary Stats") ///
-> ctitle("","N","Mean","sd","Min","Max") ///
-> rtitle("Revenue"\"Rev. per Member"\"Costs"\"Costs per Mem."\"Assets"\"Assets per Mem."\"Liabilities"\"Liabilities per Mem."\"Goat Revenue"\"Goat Rev. per Mem."\"Net Revenue"\"Net Rev. per Mem."\"Net Finances"\"Net Fin. per Mem.") ///
-> note("Currency measured in USD") addtable replace
-{res}
-{txt}{center:Co-op Level - Finances: Summmary Stats}
-{txt}{center:{hline 77}}
-{center:{txt}{lalign 22:}{txt}{center 7:N}{txt}{center 11:Mean}{txt}{center 11:sd}{txt}{center 12:Min}{txt}{center 12:Max}}
-{txt}{center:{hline 77}}
-{center:{txt}{lalign 22:Revenue}{res}{center 7:92.00}{res}{center 11:3.78}{res}{center 11:8.01}{res}{center 12:0.00}{res}{center 12:65.71}}
-{center:{txt}{lalign 22:Rev. per Member}{res}{center 7:92.00}{res}{center 11:0.01}{res}{center 11:0.01}{res}{center 12:0.00}{res}{center 12:0.06}}
-{center:{txt}{lalign 22:Costs}{res}{center 7:92.00}{res}{center 11:0.38}{res}{center 11:1.64}{res}{center 12:0.00}{res}{center 12:10.96}}
-{center:{txt}{lalign 22:Costs per Mem.}{res}{center 7:92.00}{res}{center 11:0.00}{res}{center 11:0.00}{res}{center 12:0.00}{res}{center 12:0.02}}
-{center:{txt}{lalign 22:Assets}{res}{center 7:90.00}{res}{center 11:33,020.56}{res}{center 11:40,397.44}{res}{center 12:0.00}{res}{center 12:257,985.61}}
-{center:{txt}{lalign 22:Assets per Mem.}{res}{center 7:90.00}{res}{center 11:107.53}{res}{center 11:379.45}{res}{center 12:0.00}{res}{center 12:3,600.00}}
-{center:{txt}{lalign 22:Liabilities}{res}{center 7:90.00}{res}{center 11:7,041.03}{res}{center 11:18,065.10}{res}{center 12:0.00}{res}{center 12:86,877.45}}
-{center:{txt}{lalign 22:Liabilities per Mem.}{res}{center 7:90.00}{res}{center 11:13.78}{res}{center 11:36.17}{res}{center 12:0.00}{res}{center 12:217.19}}
-{center:{txt}{lalign 22:Goat Revenue}{res}{center 7:90.00}{res}{center 11:111.86}{res}{center 11:203.73}{res}{center 12:0.00}{res}{center 12:1,029.40}}
-{center:{txt}{lalign 22:Goat Rev. per Mem.}{res}{center 7:90.00}{res}{center 11:0.22}{res}{center 11:0.46}{res}{center 12:0.00}{res}{center 12:3.02}}
-{center:{txt}{lalign 22:Net Revenue}{res}{center 7:90.00}{res}{center 11:3.47}{res}{center 11:8.25}{res}{center 12:-7.93}{res}{center 12:65.55}}
-{center:{txt}{lalign 22:Net Rev. per Mem.}{res}{center 7:90.00}{res}{center 11:0.01}{res}{center 11:0.01}{res}{center 12:-0.01}{res}{center 12:0.06}}
-{center:{txt}{lalign 22:Net Finances}{res}{center 7:90.00}{res}{center 11:25,982.99}{res}{center 11:46,455.02}{res}{center 12:-77,457.15}{res}{center 12:257,992.86}}
-{center:{txt}{lalign 22:Net Fin. per Mem.}{res}{center 7:90.00}{res}{center 11:93.76}{res}{center 11:384.31}{res}{center 12:-193.64}{res}{center 12:3,600.00}}
-{txt}{center:{hline 77}}
-{txt}{center:Currency measured in USD}
-
-
-{com}.         
-.         
-. * ------------------------------------------- 
-. 
-. 
-. ** goat sales **
-. 
-. ** Co-op vars
-. gl co_goatsales goats_sold goats_sold_member goatrev goatrev_member goatrev_sold ///
->                                 col_points index_CO_goatsales
-{txt}
-{com}. 
-. ** HH vars
-. gl hh_goatsales LS8 LS9 co_opgoatno co_opsalevalue ///
->                                 co_opshare visits_sale time_passed transp_cost index_salecost ///
->                                 net_goat_income netincome_goat
-{txt}
-{com}.         
-. ** Co-op vars
-. local listsize : list sizeof global(co_goatsales)
-{txt}
-{com}. tokenize $co_goatsales
-{txt}
-{com}. 
-. forv i = 1/`listsize' {c -(}
-{txt}  2{com}.                 
-.         quietly {c -(}
-{txt}  3{com}.                 sum ``i''
-{txt}  4{com}.                 return list
-{txt}  5{com}.                 scalar N_``i'' = r(N) // N
-{txt}  6{com}.                 scalar mean_``i'' = r(mean) // mean
-{txt}  7{com}.                 scalar sd_``i'' = r(sd)  // sd
-{txt}  8{com}.                 scalar min_``i'' = r(min)  // sd
-{txt}  9{com}.                 scalar max_``i'' = r(max)  // sd
-{txt} 10{com}.                 
-.         * matrix for table
-.                 matrix mat_`i' = (N_``i'',mean_``i'',sd_``i'',min_``i'',max_``i'')
-{txt} 11{com}.                 {c )-}
-{txt} 12{com}. {c )-}
-{err}variable {bf}goats_sold{sf} not found
-{txt}{search r(111), local:r(111);}
-
-end of do-file
-
-{search r(111), local:r(111);}
-
-{com}. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD01068.000000"
+{com}. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD01582.000000"
 {txt}
 {com}. clear
 {txt}
+{com}. use "$d3/r_HH_Merged_Ind.dta"
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD01582.000000"
+{txt}
+{com}. clear all
+{res}{txt}
 {com}. set more off, perm
 {txt}({cmd:set more} preference recorded)
 

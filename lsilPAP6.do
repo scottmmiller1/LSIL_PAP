@@ -2,24 +2,6 @@
 clear 
 use "$d3/r_CO_Merged_Ind.dta"
 
-* ---------------------------------------------------
-** Add true treatment status to this dataset
-* Merge treatment status from original randomization
-
-* Original dataset
-clear
-use "/Users/scottmiller/Dropbox (UFL)/LSIL/Data/Previous Versions/Baseline/Merged/Baseline_Merged_Str.dta", clear
-recast str99 idx // idx is str99 in r_Baseline_Merged_Str
-
-keep idx treat
-
-save "$d3/treat.dta", replace
-
-merge 1:1 idx using "$d3/r_CO_Merged_Ind.dta"
-drop if _merge == 1 // banke district in original treatment status
-
-save "$d3/r_CO_Merged_Ind_treat.dta", replace
-* ---------------------------------------------------
 
 * Balance tables after dropping Banke district
 clear 
@@ -142,23 +124,10 @@ iebaltab revenue rev_member costs cost_mem net_rev net_rev_member ///
 		GTT1 GTT2 GTT3, rowvarlabels grpvar(treat) ///
 		savetex("/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/iebaltab1_nobanke_PAP.tex") replace
 
-
-* ---------------------------------------------------
-** Add true treatment status to this dataset
-* Merge treatment status from original randomization
-* Original dataset
-clear
-use "$d3/r_HH_Merged_Ind.dta"
-drop _merge
-
-merge m:1 idx using "$d3/treat.dta"
-drop if _merge == 1 // banke district in original treatment status
-drop if idx == "Karmath SEWC 2" | idx == "Lekhbesi SEWC 1"
-
-save "$d3/r_HH_Merged_Ind_treat.dta", replace
-* ---------------------------------------------------		
+	
+* ------------------------------------------------
 		
-		
+* Household Data		
 clear
 use "$d3/r_HH_Merged_Ind_treat.dta"
 
@@ -204,7 +173,8 @@ foreach v of var * {
 lab var COM3 "No. of times in past 6 months receive info about livestock sales"
 
 
-* Winsorize LS9 by treatment status
+* ----------------------------------------------------------
+* Winsorize LS9 by true treatment status
 sum LS9, d
 
 * treatment
@@ -223,6 +193,7 @@ replace LS9 = c_99 if LS9 > c_99 & !missing(LS9) & treat == 0
 * LS9 , 
 replace LS9 = 0 if LS9 ==.
 replace co_opsalevalue = 0 if co_opsalevalue ==.
+* ---------------------------------------------------------
 
 
 foreach v of var * {

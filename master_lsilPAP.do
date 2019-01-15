@@ -29,8 +29,9 @@ lsilPAP0:
 	creates collapsed co-op and HH datasets
 
 lsilPAP1: 
-	Runs a random permutation of treatment status
-
+	Merges true and randomized treatment status from lsilPAP_rand1/2
+	into clean datasets to be used for power calculations
+	
 lsilPAP2: 
 	Generates a merged dataset at the HH level
 	Collapses HH data from ind. level to HH level
@@ -63,22 +64,20 @@ clear all
 *ssc install ietoolkit
 
 *pathways
-** original datasets **
-gl d2_rand = "/Users/scottmiller/Dropbox (UFL)/LSIL/Data/Previous Versions/Baseline" // initial data sets stored here
 
 ** clean datasets **
 gl d1 = "/Users/scottmiller/Documents/GitHub/LSIL_PAP" // do files stored here
 gl d2 = "/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data" // used to store output
 gl d3 = "$d2/LSIL-DATA_scott/VCC baseline clean" // clean data folder - saved separately to preserve original data
-gl d4 = "$d2/LSIL_DATA_scott/baseline original" // original data
+gl d4 = "$d2/LSIL-DATA_scott/baseline original" // original data
 
 /* To run all do files
 
-foreach i in 0 1 2 {
+forv i in 0/2 {
 	do "$d1/lsilPAP_rand`i'"
 }
 
-foreach i in 0 1 2 3 4 5 {
+forv i in 0/5 {
 	do "$d1/lsilPAP`i'"
 }
 
