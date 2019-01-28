@@ -189,6 +189,15 @@ gen visits_sale = -1*(LS40 / LS_n_sales)
 gen time_passed = -1*(LS41)
 gen transp_cost = -1*(LS42*(0.0099))
 
+* replace obvious outlier with sample median (median = 0)
+replace visits_sale = 0 if visits_sale <= -5000
+
+* replace missing values with zero
+foreach v of varlist LSE12 LSE15 LSE16 LSE17a LSE17b LSE18 {
+	replace `v' = 0 if `v'==.
+	}
+
+
 local local_HH_goatsales LS8 LS9_w co_opgoatno co_opsalevalue
 make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
 
@@ -206,9 +215,7 @@ Amount spent on breeding fees : LSE17a * LSE17b
 Amount spent on shelters : LSE18
 */
 
-foreach v of varlist LSE12 LSE15 LSE16 LSE17a LSE17b LSE18 {
-	replace `v' = 0 if `v'==.
-	}
+
 
 gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
 gen net_goat_income = LS9_w*(0.0099) - goat_costs
@@ -229,7 +236,8 @@ Expected Rev. : PNG4
 gen expected_rev = PNG4*(0.0099)
 replace PNG2 =. if PNG2 == 99
 
-local local_PNG PNG1 PNG2 PNG3 expected_rev
+
+local local_PNG PNG1 PNG2 PNG3 expected_rev_w
 make_index_gr PNG wgt stdgroup `local_PNG'
 
 save "$d3/r_CO_Merged_Ind.dta", replace

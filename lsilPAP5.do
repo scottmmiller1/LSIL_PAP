@@ -14,22 +14,13 @@ use "$d3/r_HH_Merged_Ind.dta"
 encode idx, gen(idx_n)
 
 
-* generate strata variable that excludes 4th strata (due to data error)
-* ------------------------------------------------------
-gen str = . 
-
-foreach i in 11 12 21 22 31 32 41 42 51 52 61 62 {
-	replace str = `i' if strata == `i'1 | strata ==`i'2
-}
-* ------------------------------------------------------
-
 * Communication
 
 *** Strata dummies - No interaction
 local varlist COM3 COM8 index_HH_comm
 foreach v in `varlist' {
 	
-	reg `v' r_treat i.str, cluster(idx_n)
+	reg `v' r_treat i.strata, cluster(idx_n)
 	
 	quietly { 
 		ereturn list
@@ -54,7 +45,7 @@ quietly {
 	}
 
 * Strata table
-frmttable using MDE_3.doc, statmat(A) sdec(4) title("Communication") ///
+frmttable using MDE_2.doc, statmat(A) sdec(4) title("Communication") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
 rtitle("HH info sales"\"HH info activities"\"HH level index") replace
 
@@ -97,7 +88,7 @@ forv i = 2/`listsize' { // appends into single matrix
 }
 
 * Table
-frmttable using MDE_3.doc, statmat(A) sdec(4) coljust(l;c;l;l) title("Goat Sales") ///
+frmttable using MDE_2.doc, statmat(A) sdec(4) coljust(l;c;l;l) title("Goat Sales") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
 rtitle("Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"Net Goat Income"\"HH Goat Sales Index"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index") ///
 note("Currency measured in USD") addtable replace
@@ -112,7 +103,7 @@ tokenize $hh_trn_d
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.str, cluster(idx)
+	reg ``i'' r_treat i.strata, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -135,7 +126,7 @@ forv i = 2/`listsize' { // appends into single matrix
 }
 
 * Strata table
-frmttable using MDE_3.doc, statmat(A) sdec(4) title("Transparency") ///
+frmttable using MDE_2.doc, statmat(A) sdec(4) title("Transparency") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
 rtitle("Discrepancy Index") addtable replace
 
@@ -149,13 +140,7 @@ clear
 use "$d3/r_CO_Merged_Ind.dta"
 
 * generate strata variable that excludes 4th strata (due to data error)
-* ------------------------------------------------------
-gen str = . 
 
-foreach i in 11 12 21 22 31 32 41 42 51 52 61 62 {
-	replace str = `i' if strata == `i'1 | strata ==`i'2
-}
-* ------------------------------------------------------
 
 * Planning and Goals
 
@@ -169,7 +154,7 @@ tokenize $co_PNG
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.str
+	reg ``i'' r_treat i.strata
 	
 	quietly {
 		ereturn list
@@ -192,7 +177,7 @@ forv i = 2/`listsize' { // appends into single matrix
 }
 
 * Table
-frmttable using MDE_3.doc, statmat(A) sdec(4) title("Planning and Goals") ///
+frmttable using MDE_2.doc, statmat(A) sdec(4) title("Planning and Goals") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
 rtitle("Business Plan"\"Planning Time Horizon"\"Expected Goats Sold"\"Expected Rev."\"PNG Index") addtable replace
 
