@@ -69,7 +69,7 @@ clear all
 *pathways
 
 ** clean datasets **
-gl d1 = "/Users/scottmiller/Documents/GitHub/LSIL_PAP" // do files stored here
+gl d1 = "/Users/scottmiller/GitHub/LSIL_PAP" // do files stored here
 gl d2 = "/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data" // used to store output
 gl d3 = "$d2/LSIL-DATA_scott/VCC baseline clean" // clean data folder - saved separately to preserve original data
 gl d4 = "$d2/LSIL-DATA_scott/baseline original" // original data

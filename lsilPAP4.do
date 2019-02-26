@@ -237,8 +237,18 @@ gen expected_rev = PNG4*(0.0099)
 replace PNG2 =. if PNG2 == 99
 
 
-local local_PNG PNG1 PNG2 PNG3 expected_rev_w
+local local_PNG PNG1 PNG2 PNG3 expected_rev
 make_index_gr PNG wgt stdgroup `local_PNG'
+
+
+
+
+** IHS transformations **
+
+gen PNG3_ln = log(PNG3 + sqrt(PNG3^2 + 1))
+gen expected_rev_ln = log(expected_rev + sqrt(expected_rev^2 + 1))
+
+
 
 save "$d3/r_CO_Merged_Ind.dta", replace
 
@@ -404,6 +414,16 @@ make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales'
 
 local local_salecost visits_sale time_passed transp_cost
 make_index_gr salecost wgt stdgroup `local_salecost' 
+
+
+
+** IHS transformations **
+
+gen LS9_w_ln = log(LS9_w + sqrt(LS9_w^2 + 1))
+gen co_opsalevalue_ln = log(co_opsalevalue + sqrt(co_opsalevalue^2 + 1))
+gen net_goat_income_ln = log(net_goat_income + sqrt(net_goat_income^2 + 1))
+
+
 
 
 save "$d3/r_HH_Merged_Ind.dta", replace
