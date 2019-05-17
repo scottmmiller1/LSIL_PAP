@@ -2,9 +2,9 @@ version 15.1
 /*******************************************************************************
 DO FILE DIRECTORY 
 
-	** Using original (pre-cleaned) datasets **
+	** Randomized cooperatives into treatment & control **
 	
-lsilPAP_rand0:  	(Coding / data error happens here)
+lsilPAP_rand0:  															   *
 	Collapses livestock sales data for hh into one row per hh
 	
 	Merges household and cooperative data. Top codes total goats sold and total
@@ -22,8 +22,9 @@ lsilPAP_rand2:
 	minimum detectable effect calculations
 	
 	
------------------------------------------------
-	** Using cleaned datasets **
+-------------------------------------------------------------------------
+	** Cleans data, creates indicator variables, summary statistics, 
+		power calulations, and balance tables **
 	
 lsilPAP0:
 	creates collapsed co-op and HH datasets
