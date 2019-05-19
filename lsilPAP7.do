@@ -3,6 +3,16 @@ clear
 use "$d3/r_CO_Merged_Ind.dta"
 
 
+/*******************************************************************************
+lsilPAP7.d0		
+					
+- Calculates balance tables
+	
+*******************************************************************************/
+
+
+
+
 * Balance tables after dropping Banke district
 clear 
 use "$d3/r_CO_Merged_Ind_treat.dta"
@@ -224,7 +234,6 @@ lab var index_dTRN "Transparency Discrepancy Summary Index"
 iebaltab COM3 COM8 index_HH_comm ///
 		LS8 LS9 co_opgoatno co_opsalevalue ///
 		net_goat_income index_HH_goatsales ///
-		visits_sale time_passed transp_cost index_salecost ///
 		index_dTRN ///
 		HHR14 HSE5 HSE10  ///
 		MGT5 ///

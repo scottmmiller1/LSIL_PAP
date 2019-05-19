@@ -140,25 +140,28 @@ foreach v of varlist TRN* {
 	rename `v' CO_`v'
 	}	
 	
-* Change blank cells in strings to missing values
-ds, has(type string) 
-quietly foreach v in `r(varlist)' { 
-	replace `v' = trim(`v')
-	}
 
 * Change COMM8 to string
 foreach v of varlist COMM8a COMM8b ///
 COMM8c COMM8d COMM8e ///
 COMM8f {
 	tostring `v', replace force
+	replace `v' ="" if `v' == "." 
 }	
 
 * Change MAN18 to string
 foreach v of varlist MAN18a MAN18b ///
 MAN18c MAN18d MAN18e {
 	tostring `v', replace force
-	replace `v' ="." if `v' == "97" 
+	replace `v' ="" if `v' == "97" 
 }	
+
+* Change blank cells in strings to missing values
+ds, has(type string) 
+quietly foreach v in `r(varlist)' { 
+	replace `v' = trim(`v')
+	replace `v' ="" if `v' == "."
+	}
 	
 ** Collapse to 1-row per co-op
 * strings
@@ -216,6 +219,7 @@ lab var co_opgoatno "Total goats sold through co-op"
 ds, has(type string) 
 quietly foreach v in `r(varlist)' { 
 	replace `v' = trim(`v')
+	replace `v' ="" if `v' == "."
 	}
 
 * destring all variables in module

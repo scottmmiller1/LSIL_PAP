@@ -5,8 +5,20 @@ set more off, perm
 cap log close
 log using "$d1/lsilPAP4.smcl", replace
 
-cd "$d3" 
 
+/*******************************************************************************
+lsilPAP4.d0		
+					
+- Creates indicator variables & ICW Summary Indices from
+	r_CO_Merged_PAP.dta (co-op level dataset)
+	and r_HH_Merged_PAP.dta (HH level dataset)
+	Saves new datasets respectively as: 
+	r_CO_Merged_Ind.dta
+	r_HH_Merged_Ind.dta
+	
+*******************************************************************************/
+
+cd "$d3" 
 
 ** co-op dataset **
 clear

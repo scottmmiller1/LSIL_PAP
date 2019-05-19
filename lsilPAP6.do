@@ -3,6 +3,17 @@ clear
 set more off, perm
 cd "$d2"
 
+
+/*******************************************************************************
+lsilPAP6.d0		
+					
+- Generates summary statistic tables
+	
+*******************************************************************************/
+
+
+
+
 ** Co-op level dataset
 ********************************************* 
 clear
@@ -279,15 +290,10 @@ use "$d3/r_HH_Merged_Ind.dta"
 
 
 ** HH indicators **
-gen p_visits_sale = -1*visits_sale
-gen p_time_passed = -1*time_passed
-gen p_transp_cost = -1*transp_cost
-
 
 gl hh_summ COM3 COM8 index_HH_comm ///
 				LS8 LS9_w co_opgoatno co_opsalevalue ///
 				net_goat_income index_HH_goatsales ///
-				p_visits_sale p_time_passed p_transp_cost index_salecost ///
 				index_dTRN ///
 				
 
@@ -317,9 +323,8 @@ forv i = 2/`listsize' { // appends into single matrix
 * Table
 frmttable using HH_summary.tex, tex statmat(A) sdec(2) coljust(l;c;l;l) title("Household Indicators - Summmary Statistics") ///
 ctitle("","N","Mean","sd","Min","Max") ///
-rtitle("HH info sales"\"HH info activities"\"HH communication index"\"Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"Net Goat Income"\"HH Goat Sales Index"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index"\"Transparency Discrepancy Index")replace
+rtitle("HH info sales"\"HH info activities"\"HH communication index"\"Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"Net Goat Income"\"HH Goat Sales Index"\"Transparency Discrepancy Index")replace
  
-drop p_visits_sale p_time_passed p_transp_cost
 
 
 ** communication **

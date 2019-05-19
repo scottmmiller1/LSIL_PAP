@@ -8,6 +8,15 @@
 
 ***********************************************/
 
+
+/*******************************************************************************
+lsilPAP3.d0		
+					
+- Creates command for ICW Summary Indices
+	(published by Cyrus Samii, NYU, December 2017) 
+	
+*******************************************************************************/
+
 capture program drop make_index_gr
 capture mata: mata drop icwxmata()
 program make_index_gr

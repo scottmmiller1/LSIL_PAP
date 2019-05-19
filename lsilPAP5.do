@@ -5,6 +5,15 @@ set more off, perm
 cap log close
 log using "$d1/lsilPAP5.smcl", replace
 
+
+/*******************************************************************************
+lsilPAP5.d0		
+					
+- Calculates MDEs for each indicator
+	
+*******************************************************************************/
+
+
 cd "$d2"
 
 ** HH level dataset
@@ -132,43 +141,6 @@ rtitle("Discrepancy Index") addtable replace
 
 
 
-* IHS transformed variables
-** HH vars
-gl hh_IHS LS9_w_ln co_opsalevalue_ln net_goat_income_ln
-
-local listsize : list sizeof global(hh_IHS)
-tokenize $hh_IHS
-
-forv i = 1/`listsize' {
-
-	reg ``i'' r_treat i.strata, cluster(idx)
-	
-	quietly {
-		ereturn list
-		scalar t_a = invttail(`e(df_r)',0.025) // alpha t-value
-		scalar t_b = invttail(`e(df_r)',0.2) // beta t-value
-		scalar mde_``i'' = (t_a + t_b)*_se[r_treat]
-		
-	* Calculate MDE as % of mean & # of standard deviations
-		sum ``i''
-		scalar mean_``i'' = mde_``i'' / r(mean) // % of treatment mean
-		scalar sd_``i'' = mde_``i'' / r(sd)  // # of treatment sd's
-
-	* matrix for table
-		matrix mat_`i' = (mde_``i'',mean_``i'',sd_``i'')
-		}
-}
-matrix A = mat_1
-forv i = 2/`listsize' { // appends into single matrix
-	matrix A = A \ mat_`i'
-}
-
-* Strata table
-frmttable using MDE_1.doc, statmat(A) sdec(4) title("HH - IHS Variables") ///
-ctitle("","MDE","% of mean","# of sd's.") ///
-rtitle("Ln(Goat Rev.)"\"Ln(Rev. through Co-op)"\"Ln(Net Goat Income)") addtable replace
-
-
 
 ** Co-op level dataset
 ********************************************* 
@@ -216,44 +188,6 @@ forv i = 2/`listsize' { // appends into single matrix
 frmttable using MDE_1.doc, statmat(A) sdec(4) title("Planning and Goals") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
 rtitle("Business Plan"\"Planning Time Horizon"\"Expected Goats Sold"\"Expected Rev."\"PNG Index") addtable replace
-
-
-* IHS transformed variables
-** CO vars
-gl co_IHS PNG3_ln expected_rev_ln
-
-local listsize : list sizeof global(co_IHS)
-tokenize $co_IHS
-
-forv i = 1/`listsize' {
-
-	reg ``i'' r_treat i.strata, cluster(idx)
-	
-	quietly {
-		ereturn list
-		scalar t_a = invttail(`e(df_r)',0.025) // alpha t-value
-		scalar t_b = invttail(`e(df_r)',0.2) // beta t-value
-		scalar mde_``i'' = (t_a + t_b)*_se[r_treat]
-		
-	* Calculate MDE as % of mean & # of standard deviations
-		sum ``i''
-		scalar mean_``i'' = mde_``i'' / r(mean) // % of treatment mean
-		scalar sd_``i'' = mde_``i'' / r(sd)  // # of treatment sd's
-
-	* matrix for table
-		matrix mat_`i' = (mde_``i'',mean_``i'',sd_``i'')
-		}
-}
-matrix A = mat_1
-forv i = 2/`listsize' { // appends into single matrix
-	matrix A = A \ mat_`i'
-}
-
-* Strata table
-frmttable using MDE_1.doc, statmat(A) sdec(4) title("CO - IHS Variables") ///
-ctitle("","MDE","% of mean","# of sd's.") ///
-rtitle("Ln(Expected Goats Sold)"\"Ln(Expected Rev.)") addtable replace
-
 
 
 

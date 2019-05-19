@@ -6,6 +6,17 @@ cap log close
 log using "$d1/lsilPAP2.smcl", replace
 
 
+/*******************************************************************************
+lsilPAP2.d0		
+					
+- Generates a merged dataset at the HH level
+	Collapses HH data from ind. level to HH level
+	Saves respective datasets as r_CO_Merged_PAP.dta
+	and r_HH_Merged_PAP.dta
+	
+*******************************************************************************/
+
+
 ** create merged dataset at HH level **
 cd "$d3"
 

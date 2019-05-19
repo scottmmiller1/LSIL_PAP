@@ -1,11 +1,22 @@
 {smcl}
 {com}{sf}{ul off}{txt}{.-}
       name:  {res}<unnamed>
-       {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP2.smcl
+       {txt}log:  {res}/Users/scottmiller/GitHub/LSIL_PAP/lsilPAP2.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}15 Jan 2019, 10:55:33
+ {txt}opened on:  {res}17 May 2019, 14:44:03
 {txt}
 {com}. 
+. 
+. /*******************************************************************************
+> lsilPAP2.d0             
+>                                         
+> - Generates a merged dataset at the HH level
+>         Collapses HH data from ind. level to HH level
+>         Saves respective datasets as r_CO_Merged_PAP.dta
+>         and r_HH_Merged_PAP.dta
+>         
+> *******************************************************************************/
+. 
 . 
 . ** create merged dataset at HH level **
 . cd "$d3"
@@ -3283,84 +3294,109 @@
 
 {com}. 
 . ds *HHR* *ID* *LND* *HSE* *MEM* *SER* *MGT* *COM* *GTT* *TRN* *SV* *BR* *FC* *EMP* *LS* *GP* region district idx, has(type string)
-{txt}{col 1}HHR7_calc{col 15}HH_IDSID{col 29}ID5_2{col 43}EMP3{col 57}Live_rel_~P8{col 71}Live_rel_~14{col 85}LS48E{col 99}region
-{col 1}HHR9{col 15}HH_IDEID{col 29}MGT3{col 43}EMP4{col 57}Live_rel_~P9{col 71}LS48A{col 85}LS48F{col 99}district
-{col 1}HHR10{col 15}HH_IDSHG{col 29}BR4{col 43}Live_rel_~P5{col 57}Live_rel~P10{col 71}LS48B{col 85}LS48G{col 99}idx
-{col 1}HHR16{col 15}ID5{col 29}EMP1{col 43}Live_rel_~P6{col 57}Live_rel~P11{col 71}LS48C{col 85}LS48X
-{col 1}HH_IDMID{col 15}ID5_1{col 29}EMP2{col 43}Live_rel_~P7{col 57}Live_rel~P12{col 71}LS48D{col 85}GP17
+{txt}{col 1}HHR7_calc{col 15}HH_IDSHG{col 29}EMP2{col 43}Live_rel_~P9{col 57}LS48C{col 71}region
+{col 1}HHR9{col 15}ID5{col 29}EMP3{col 43}Live_rel~P10{col 57}LS48D{col 71}district
+{col 1}HHR10{col 15}ID5_1{col 29}EMP4{col 43}Live_rel~P11{col 57}LS48E{col 71}idx
+{col 1}HHR16{col 15}ID5_2{col 29}Live_rel_~P5{col 43}Live_rel~P12{col 57}LS48F
+{col 1}HH_IDMID{col 15}MGT3{col 29}Live_rel_~P6{col 43}Live_rel_~14{col 57}LS48G
+{col 1}HH_IDSID{col 15}BR4{col 29}Live_rel_~P7{col 43}LS48A{col 57}LS48X
+{col 1}HH_IDEID{col 15}EMP1{col 29}Live_rel_~P8{col 43}LS48B{col 57}GP17
 
 {com}. local HHstrings = "`r(varlist)'"
 {txt}
 {com}. ds *HHR* *ID* *LND* *HSE* *MEM* *SER* *MGT* *COM* *GTT* *TRN* *SV* *BR* *FC* *EMP* *LS* *GP* region district idx, has(type numeric)
-{txt}{col 1}HHR7{col 15}SER13{col 29}GTT4_8{col 43}FC3A_9{col 57}EMP1X{col 71}EMP9D{col 85}LSE7_2d{col 99}LS41
-{col 1}HHR20{col 15}SER14{col 29}GTT4_9{col 43}FC1B{col 57}EMP2A{col 71}EMP9E{col 85}LSE9_2{col 99}LS42
-{col 1}HHR21{col 15}SER15{col 29}GTT4_10{col 43}FC3B_1{col 57}EMP2B{col 71}EMP9F{col 85}LSE2_3{col 99}LS43_Head
-{col 1}HHR3{col 15}SER16{col 29}Co_opGoa~497{col 43}FC3B_2{col 57}EMP2C{col 71}EMP9G{col 85}LSE3_3{col 99}LS43_a
-{col 1}HHR4{col 15}SER17{col 29}HH_TRN1{col 43}FC3B_3{col 57}EMP2D{col 71}EMP9X{col 85}LSE4_3{col 99}LS43_b
-{col 1}HHR5{col 15}SER18{col 29}HH_TRN2{col 43}FC3B_4{col 57}EMP2E{col 71}EMP9a_A{col 85}LSE5_3{col 99}LS44
-{col 1}HHR8{col 15}SER19{col 29}HH_TRN3{col 43}FC3B_5{col 57}EMP2F{col 71}EMP10A{col 85}LSE5_3a{col 99}LS45
-{col 1}HHR11{col 15}SER20{col 29}HH_TRN4{col 43}FC3B_6{col 57}EMP2G{col 71}EMP10B{col 85}LSE6_3{col 99}LS46
-{col 1}HHR12{col 15}SER21{col 29}HH_TRN5{col 43}FC1C{col 57}EMP2X{col 71}EMP10C{col 85}LSE7_3{col 99}LS47
-{col 1}HHR13{col 15}SER22{col 29}HH_TRN6{col 43}FC3C_1{col 57}EMP2a_A{col 71}EMP10D{col 85}LSE7_3a{col 99}GP2
-{col 1}HHR14{col 15}SER24{col 29}HH_TRN7{col 43}FC3C_2{col 57}EMP3A{col 71}EMP10E{col 85}LSE7_3b{col 99}GP3_1
-{col 1}HHR15{col 15}SER25{col 29}HH_TRN8{col 43}FC3C_3{col 57}EMP3B{col 71}EMP10F{col 85}LSE7_3c{col 99}GP3_2
-{col 1}HHR17{col 15}SER26{col 29}HH_TRN9{col 43}FC3C_4{col 57}EMP3C{col 71}EMP10G{col 85}LSE7_3d{col 99}GP3_3
-{col 1}HHR18{col 15}SER27{col 29}HH_TRN10{col 43}FC3C_5{col 57}EMP3D{col 71}EMP10X{col 85}LSE9_3{col 99}GP4_2
-{col 1}HHR19{col 15}SER28{col 29}HH_TRN11{col 43}FC3C_6{col 57}EMP3E{col 71}EMP10a_A{col 85}LSE11_A{col 99}GP4_3
-{col 1}ID1{col 15}SER29{col 29}HH_TRN12{col 43}FC3C_7{col 57}EMP3F{col 71}EMP11A{col 85}LSE12_A{col 99}GP4_97
-{col 1}ID2{col 15}SER30{col 29}HH_TRN13{col 43}FC3C_8{col 57}EMP3G{col 71}EMP11B{col 85}LSE13_A{col 99}Goat_Prod_~1
-{col 1}ID3{col 15}SER31{col 29}SV2A{col 43}FC1D{col 57}EMP3X{col 71}EMP11C{col 85}LSE14_A{col 99}GP5
-{col 1}ID4{col 15}SER32{col 29}SV2B{col 43}FC3D_1{col 57}EMP3I{col 71}EMP11D{col 85}LSE15{col 99}GP6
-{col 1}ID6{col 15}SER33{col 29}SV2C{col 43}FC3D_2{col 57}EMP3a_A{col 71}EMP11E{col 85}LSE16{col 99}GP7
-{col 1}ID7{col 15}MGT1{col 29}SV2D{col 43}FC3D_3{col 57}EMP4A{col 71}EMP11F{col 85}LSE17a{col 99}GP8
-{col 1}ID8{col 15}MGT2{col 29}SV2E{col 43}FC3D_4{col 57}EMP4B{col 71}EMP11G{col 85}LSE17b{col 99}GP9
-{col 1}ID10{col 15}MGT3_1{col 29}SV2F{col 43}FC3D_5{col 57}EMP4C{col 71}EMP11X{col 85}LSE18{col 99}GP10
-{col 1}LND1{col 15}MGT4{col 29}SV2G{col 43}FC3D_6{col 57}EMP4D{col 71}EMP11a_A{col 85}LSE19{col 99}GP11
-{col 1}LND2{col 15}MGT5{col 29}SV2H{col 43}FC3D_7{col 57}EMP4E{col 71}EMP12A{col 85}LSE20{col 99}GP12A
-{col 1}LND3{col 15}MGT6{col 29}SV2I{col 43}FC1E{col 57}EMP4F{col 71}EMP12B{col 85}LSE21{col 99}GP12B
-{col 1}HSE1{col 15}COM1A{col 29}SV2J{col 43}FC3E_1{col 57}EMP4G{col 71}EMP12C{col 85}LSE22A{col 99}GP12C
-{col 1}HSE2{col 15}COM1B{col 29}SV2K{col 43}FC3E_2{col 57}EMP4X{col 71}EMP12D{col 85}LSE22B{col 99}GP12D
-{col 1}HSE3{col 15}COM1C{col 29}SV2L{col 43}FC3E_3{col 57}EMP4a_A{col 71}EMP12E{col 85}LSE22C{col 99}GP12E
-{col 1}HSE4{col 15}COM1D{col 29}SV2M{col 43}FC3E_4{col 57}EMP5A{col 71}EMP12F{col 85}LSE22D{col 99}GP13
-{col 1}HSE5{col 15}COM1E{col 29}SV2N{col 43}FC3E_5{col 57}EMP5B{col 71}EMP12G{col 85}LSE22E{col 99}GP14
-{col 1}HSE6{col 15}COM1F{col 29}SV2O{col 43}FC3E_6{col 57}EMP5C{col 71}EMP12X{col 85}LSE22F{col 99}GP16
-{col 1}HSE7{col 15}COM1G{col 29}SV2X{col 43}FC3E_7{col 57}EMP5D{col 71}EMP12a_A{col 85}LSE22G{col 99}GP17_1
-{col 1}HSE8{col 15}COM1X{col 29}SV3{col 43}FC3E_8{col 57}EMP5E{col 71}EMP13a{col 85}LSE22X{col 99}GP17_2
-{col 1}HSE9{col 15}COM2A{col 29}SV4{col 43}FC3E_9{col 57}EMP5F{col 71}EMP13b{col 85}LS1{col 99}GP17_3
-{col 1}HSE10{col 15}COM2B{col 29}SV5{col 43}FC1F{col 57}EMP5G{col 71}EMP14A{col 85}LS_n_sales{col 99}GP18A
-{col 1}HSE11{col 15}COM2C{col 29}SV6{col 43}FC3F_1{col 57}EMP5X{col 71}EMP14B{col 85}LS3{col 99}GP18B
-{col 1}HSE12{col 15}COM2D{col 29}SV7{col 43}FC3F_2{col 57}EMP5I{col 71}EMP14C{col 85}LS6A{col 99}GP18C
-{col 1}HSE13{col 15}COM2E{col 29}SV8{col 43}FC3F_3{col 57}EMP5a_A{col 71}EMP14D{col 85}LS6B{col 99}GP18D
-{col 1}MEM2{col 15}COM2F{col 29}BR1{col 43}FC3F_4{col 57}EMP6A{col 71}EMP14E{col 85}LS6C{col 99}GP18E
-{col 1}MEM2_1{col 15}COM2G{col 29}BR{col 43}FC3F_5{col 57}EMP6B{col 71}EMP14F{col 85}LS6D{col 99}GP18F
-{col 1}MEM2_2{col 15}COM2X{col 29}BR2{col 43}FC3F_6{col 57}EMP6C{col 71}EMP14G{col 85}LS6X{col 99}GP18G
-{col 1}MEM3{col 15}COM3{col 29}BR3{col 43}FC3F_7{col 57}EMP6D{col 71}EMP14X{col 85}LS7{col 99}GP18H
-{col 1}MEM4{col 15}COM4{col 29}BR5A{col 43}FC3F_8{col 57}EMP6E{col 71}LSE1_1{col 85}LS8{col 99}GP18I
-{col 1}MEM5{col 15}COM5{col 29}BR5B{col 43}FC3F_9{col 57}EMP6F{col 71}LSE1_2{col 85}LS9{col 99}GP18J
-{col 1}MEM6{col 15}COM6A{col 29}BR5C{col 43}FC3F_10{col 57}EMP6G{col 71}LSE1_3{col 85}LS10{col 99}GP18K
-{col 1}MEM7{col 15}COM6B{col 29}BR5D{col 43}FC3F_11{col 57}EMP6X{col 71}LSE1_4{col 85}LS12{col 99}GP18L
-{col 1}MEM8{col 15}COM6C{col 29}BR5E{col 43}FC3F_12{col 57}EMP6a_A{col 71}LSE2_1{col 85}LS13{col 99}GP19
-{col 1}MEM9{col 15}COM6D{col 29}BR5F{col 43}FC3F_13{col 57}EMP7A{col 71}LSE3_1{col 85}LS14{col 99}GP20
-{col 1}MEM10_a{col 15}COM6X{col 29}BR5G{col 43}FC3F_14{col 57}EMP7B{col 71}LSE4_1{col 85}LS15{col 99}GP21
-{col 1}MEM10_b{col 15}COM71{col 29}BR5X{col 43}FC3F_15{col 57}EMP7C{col 71}LSE5_1{col 85}LS16{col 99}GP22A
-{col 1}MEM11{col 15}COM72{col 29}BR56A{col 43}FC1G{col 57}EMP7D{col 71}LSE5_1a{col 85}LS17{col 99}GP22B
-{col 1}MEM12{col 15}COM73{col 29}BR56B{col 43}FC3G_1{col 57}EMP7E{col 71}LSE6_1{col 85}LS25{col 99}GP22C
-{col 1}MEM13{col 15}COM74{col 29}BR56C{col 43}FC3G_2{col 57}EMP7F{col 71}LSE7_1{col 85}LS26{col 99}GP22D
-{col 1}MEM14{col 15}COM75{col 29}BR56D{col 43}FC3G_3{col 57}EMP7G{col 71}LSE7_1a{col 85}LS27{col 99}GP22E
-{col 1}MEM15{col 15}COM76{col 29}BR56E{col 43}FC3G_4{col 57}EMP7X{col 71}LSE7_1b{col 85}LS28{col 99}GP24
-{col 1}MEM16{col 15}COM77{col 29}BR56F{col 43}FC3G_5{col 57}EMP7a_A{col 71}LSE7_1c{col 85}LS29{col 99}GP25A
-{col 1}MEM17{col 15}COM8{col 29}BR56G{col 43}FC1H{col 57}EMP8A{col 71}LSE7_1d{col 85}LS30{col 99}GP25B
-{col 1}SER1{col 15}COM10{col 29}BR56X{col 43}FC3H_1{col 57}EMP8B{col 71}LSE9_1{col 85}LS31{col 99}GP25C
-{col 1}SER2{col 15}COM11{col 29}BR7{col 43}FC3H_2{col 57}EMP8C{col 71}LSE2_2{col 85}LS32{col 99}GP25D
-{col 1}SER3{col 15}GTT1{col 29}FC1A{col 43}FC3H_3{col 57}EMP8D{col 71}LSE3_2{col 85}LS32_1{col 99}GP25E
-{col 1}SER4{col 15}GTT2{col 29}FC3A_1{col 43}FC3H_4{col 57}EMP8E{col 71}LSE4_2{col 85}LS33{col 99}GP25F
-{col 1}SER6{col 15}GTT3{col 29}FC3A_2{col 43}EMP1A{col 57}EMP8F{col 71}LSE5_2{col 85}LS34{col 99}GP25G
-{col 1}SER7{col 15}GTT4_2{col 29}FC3A_3{col 43}EMP1B{col 57}EMP8G{col 71}LSE5_2a{col 85}LS35{col 99}GP25X
-{col 1}SER8{col 15}GTT4_3{col 29}FC3A_4{col 43}EMP1C{col 57}EMP8X{col 71}LSE6_2{col 85}LS36{col 99}GPS_latitude
-{col 1}SER9{col 15}GTT4_4{col 29}FC3A_5{col 43}EMP1D{col 57}EMP8a_A{col 71}LSE7_2{col 85}LS37{col 99}GPS_longit~e
-{col 1}SER10{col 15}GTT4_5{col 29}FC3A_6{col 43}EMP1E{col 57}EMP9A{col 71}LSE7_2a{col 85}LS38{col 99}GPS_altitude
-{col 1}SER11{col 15}GTT4_6{col 29}FC3A_7{col 43}EMP1F{col 57}EMP9B{col 71}LSE7_2b{col 85}LS39{col 99}GPS_precis~n
-{col 1}SER12{col 15}GTT4_7{col 29}FC3A_8{col 43}EMP1G{col 57}EMP9C{col 71}LSE7_2c{col 85}LS40
+{txt}{col 1}HHR7{col 15}MGT4{col 29}BR5D{col 43}EMP1X{col 57}EMP11a_A{col 71}LS12
+{col 1}HHR20{col 15}MGT5{col 29}BR5E{col 43}EMP2A{col 57}EMP12A{col 71}LS13
+{col 1}HHR21{col 15}MGT6{col 29}BR5F{col 43}EMP2B{col 57}EMP12B{col 71}LS14
+{col 1}HHR3{col 15}COM1A{col 29}BR5G{col 43}EMP2C{col 57}EMP12C{col 71}LS15
+{col 1}HHR4{col 15}COM1B{col 29}BR5X{col 43}EMP2D{col 57}EMP12D{col 71}LS16
+{col 1}HHR5{col 15}COM1C{col 29}BR56A{col 43}EMP2E{col 57}EMP12E{col 71}LS17
+{col 1}HHR8{col 15}COM1D{col 29}BR56B{col 43}EMP2F{col 57}EMP12F{col 71}LS25
+{col 1}HHR11{col 15}COM1E{col 29}BR56C{col 43}EMP2G{col 57}EMP12G{col 71}LS26
+{col 1}HHR12{col 15}COM1F{col 29}BR56D{col 43}EMP2X{col 57}EMP12X{col 71}LS27
+{col 1}HHR13{col 15}COM1G{col 29}BR56E{col 43}EMP2a_A{col 57}EMP12a_A{col 71}LS28
+{col 1}HHR14{col 15}COM1X{col 29}BR56F{col 43}EMP3A{col 57}EMP13a{col 71}LS29
+{col 1}HHR15{col 15}COM2A{col 29}BR56G{col 43}EMP3B{col 57}EMP13b{col 71}LS30
+{col 1}HHR17{col 15}COM2B{col 29}BR56X{col 43}EMP3C{col 57}EMP14A{col 71}LS31
+{col 1}HHR18{col 15}COM2C{col 29}BR7{col 43}EMP3D{col 57}EMP14B{col 71}LS32
+{col 1}HHR19{col 15}COM2D{col 29}FC1A{col 43}EMP3E{col 57}EMP14C{col 71}LS32_1
+{col 1}ID1{col 15}COM2E{col 29}FC3A_1{col 43}EMP3F{col 57}EMP14D{col 71}LS33
+{col 1}ID2{col 15}COM2F{col 29}FC3A_2{col 43}EMP3G{col 57}EMP14E{col 71}LS34
+{col 1}ID3{col 15}COM2G{col 29}FC3A_3{col 43}EMP3X{col 57}EMP14F{col 71}LS35
+{col 1}ID4{col 15}COM2X{col 29}FC3A_4{col 43}EMP3I{col 57}EMP14G{col 71}LS36
+{col 1}ID6{col 15}COM3{col 29}FC3A_5{col 43}EMP3a_A{col 57}EMP14X{col 71}LS37
+{col 1}ID7{col 15}COM4{col 29}FC3A_6{col 43}EMP4A{col 57}LSE1_1{col 71}LS38
+{col 1}ID8{col 15}COM5{col 29}FC3A_7{col 43}EMP4B{col 57}LSE1_2{col 71}LS39
+{col 1}ID10{col 15}COM6A{col 29}FC3A_8{col 43}EMP4C{col 57}LSE1_3{col 71}LS40
+{col 1}LND1{col 15}COM6B{col 29}FC3A_9{col 43}EMP4D{col 57}LSE1_4{col 71}LS41
+{col 1}LND2{col 15}COM6C{col 29}FC1B{col 43}EMP4E{col 57}LSE2_1{col 71}LS42
+{col 1}LND3{col 15}COM6D{col 29}FC3B_1{col 43}EMP4F{col 57}LSE3_1{col 71}LS43_Head
+{col 1}HSE1{col 15}COM6X{col 29}FC3B_2{col 43}EMP4G{col 57}LSE4_1{col 71}LS43_a
+{col 1}HSE2{col 15}COM71{col 29}FC3B_3{col 43}EMP4X{col 57}LSE5_1{col 71}LS43_b
+{col 1}HSE3{col 15}COM72{col 29}FC3B_4{col 43}EMP4a_A{col 57}LSE5_1a{col 71}LS44
+{col 1}HSE4{col 15}COM73{col 29}FC3B_5{col 43}EMP5A{col 57}LSE6_1{col 71}LS45
+{col 1}HSE5{col 15}COM74{col 29}FC3B_6{col 43}EMP5B{col 57}LSE7_1{col 71}LS46
+{col 1}HSE6{col 15}COM75{col 29}FC1C{col 43}EMP5C{col 57}LSE7_1a{col 71}LS47
+{col 1}HSE7{col 15}COM76{col 29}FC3C_1{col 43}EMP5D{col 57}LSE7_1b{col 71}GP2
+{col 1}HSE8{col 15}COM77{col 29}FC3C_2{col 43}EMP5E{col 57}LSE7_1c{col 71}GP3_1
+{col 1}HSE9{col 15}COM8{col 29}FC3C_3{col 43}EMP5F{col 57}LSE7_1d{col 71}GP3_2
+{col 1}HSE10{col 15}COM10{col 29}FC3C_4{col 43}EMP5G{col 57}LSE9_1{col 71}GP3_3
+{col 1}HSE11{col 15}COM11{col 29}FC3C_5{col 43}EMP5X{col 57}LSE2_2{col 71}GP4_2
+{col 1}HSE12{col 15}GTT1{col 29}FC3C_6{col 43}EMP5I{col 57}LSE3_2{col 71}GP4_3
+{col 1}HSE13{col 15}GTT2{col 29}FC3C_7{col 43}EMP5a_A{col 57}LSE4_2{col 71}GP4_97
+{col 1}MEM2{col 15}GTT3{col 29}FC3C_8{col 43}EMP6A{col 57}LSE5_2{col 71}Goat_Prod_~1
+{col 1}MEM2_1{col 15}GTT4_2{col 29}FC1D{col 43}EMP6B{col 57}LSE5_2a{col 71}GP5
+{col 1}MEM2_2{col 15}GTT4_3{col 29}FC3D_1{col 43}EMP6C{col 57}LSE6_2{col 71}GP6
+{col 1}MEM3{col 15}GTT4_4{col 29}FC3D_2{col 43}EMP6D{col 57}LSE7_2{col 71}GP7
+{col 1}MEM4{col 15}GTT4_5{col 29}FC3D_3{col 43}EMP6E{col 57}LSE7_2a{col 71}GP8
+{col 1}MEM5{col 15}GTT4_6{col 29}FC3D_4{col 43}EMP6F{col 57}LSE7_2b{col 71}GP9
+{col 1}MEM6{col 15}GTT4_7{col 29}FC3D_5{col 43}EMP6G{col 57}LSE7_2c{col 71}GP10
+{col 1}MEM7{col 15}GTT4_8{col 29}FC3D_6{col 43}EMP6X{col 57}LSE7_2d{col 71}GP11
+{col 1}MEM8{col 15}GTT4_9{col 29}FC3D_7{col 43}EMP6a_A{col 57}LSE9_2{col 71}GP12A
+{col 1}MEM9{col 15}GTT4_10{col 29}FC1E{col 43}EMP7A{col 57}LSE2_3{col 71}GP12B
+{col 1}MEM10_a{col 15}Co_opGoa~497{col 29}FC3E_1{col 43}EMP7B{col 57}LSE3_3{col 71}GP12C
+{col 1}MEM10_b{col 15}HH_TRN1{col 29}FC3E_2{col 43}EMP7C{col 57}LSE4_3{col 71}GP12D
+{col 1}MEM11{col 15}HH_TRN2{col 29}FC3E_3{col 43}EMP7D{col 57}LSE5_3{col 71}GP12E
+{col 1}MEM12{col 15}HH_TRN3{col 29}FC3E_4{col 43}EMP7E{col 57}LSE5_3a{col 71}GP13
+{col 1}MEM13{col 15}HH_TRN4{col 29}FC3E_5{col 43}EMP7F{col 57}LSE6_3{col 71}GP14
+{col 1}MEM14{col 15}HH_TRN5{col 29}FC3E_6{col 43}EMP7G{col 57}LSE7_3{col 71}GP16
+{col 1}MEM15{col 15}HH_TRN6{col 29}FC3E_7{col 43}EMP7X{col 57}LSE7_3a{col 71}GP17_1
+{col 1}MEM16{col 15}HH_TRN7{col 29}FC3E_8{col 43}EMP7a_A{col 57}LSE7_3b{col 71}GP17_2
+{col 1}MEM17{col 15}HH_TRN8{col 29}FC3E_9{col 43}EMP8A{col 57}LSE7_3c{col 71}GP17_3
+{col 1}SER1{col 15}HH_TRN9{col 29}FC1F{col 43}EMP8B{col 57}LSE7_3d{col 71}GP18A
+{col 1}SER2{col 15}HH_TRN10{col 29}FC3F_1{col 43}EMP8C{col 57}LSE9_3{col 71}GP18B
+{col 1}SER3{col 15}HH_TRN11{col 29}FC3F_2{col 43}EMP8D{col 57}LSE11_A{col 71}GP18C
+{col 1}SER4{col 15}HH_TRN12{col 29}FC3F_3{col 43}EMP8E{col 57}LSE12_A{col 71}GP18D
+{col 1}SER6{col 15}HH_TRN13{col 29}FC3F_4{col 43}EMP8F{col 57}LSE13_A{col 71}GP18E
+{col 1}SER7{col 15}SV2A{col 29}FC3F_5{col 43}EMP8G{col 57}LSE14_A{col 71}GP18F
+{col 1}SER8{col 15}SV2B{col 29}FC3F_6{col 43}EMP8X{col 57}LSE15{col 71}GP18G
+{col 1}SER9{col 15}SV2C{col 29}FC3F_7{col 43}EMP8a_A{col 57}LSE16{col 71}GP18H
+{col 1}SER10{col 15}SV2D{col 29}FC3F_8{col 43}EMP9A{col 57}LSE17a{col 71}GP18I
+{col 1}SER11{col 15}SV2E{col 29}FC3F_9{col 43}EMP9B{col 57}LSE17b{col 71}GP18J
+{col 1}SER12{col 15}SV2F{col 29}FC3F_10{col 43}EMP9C{col 57}LSE18{col 71}GP18K
+{col 1}SER13{col 15}SV2G{col 29}FC3F_11{col 43}EMP9D{col 57}LSE19{col 71}GP18L
+{col 1}SER14{col 15}SV2H{col 29}FC3F_12{col 43}EMP9E{col 57}LSE20{col 71}GP19
+{col 1}SER15{col 15}SV2I{col 29}FC3F_13{col 43}EMP9F{col 57}LSE21{col 71}GP20
+{col 1}SER16{col 15}SV2J{col 29}FC3F_14{col 43}EMP9G{col 57}LSE22A{col 71}GP21
+{col 1}SER17{col 15}SV2K{col 29}FC3F_15{col 43}EMP9X{col 57}LSE22B{col 71}GP22A
+{col 1}SER18{col 15}SV2L{col 29}FC1G{col 43}EMP9a_A{col 57}LSE22C{col 71}GP22B
+{col 1}SER19{col 15}SV2M{col 29}FC3G_1{col 43}EMP10A{col 57}LSE22D{col 71}GP22C
+{col 1}SER20{col 15}SV2N{col 29}FC3G_2{col 43}EMP10B{col 57}LSE22E{col 71}GP22D
+{col 1}SER21{col 15}SV2O{col 29}FC3G_3{col 43}EMP10C{col 57}LSE22F{col 71}GP22E
+{col 1}SER22{col 15}SV2X{col 29}FC3G_4{col 43}EMP10D{col 57}LSE22G{col 71}GP24
+{col 1}SER24{col 15}SV3{col 29}FC3G_5{col 43}EMP10E{col 57}LSE22X{col 71}GP25A
+{col 1}SER25{col 15}SV4{col 29}FC1H{col 43}EMP10F{col 57}LS1{col 71}GP25B
+{col 1}SER26{col 15}SV5{col 29}FC3H_1{col 43}EMP10G{col 57}LS_n_sales{col 71}GP25C
+{col 1}SER27{col 15}SV6{col 29}FC3H_2{col 43}EMP10X{col 57}LS3{col 71}GP25D
+{col 1}SER28{col 15}SV7{col 29}FC3H_3{col 43}EMP10a_A{col 57}LS6A{col 71}GP25E
+{col 1}SER29{col 15}SV8{col 29}FC3H_4{col 43}EMP11A{col 57}LS6B{col 71}GP25F
+{col 1}SER30{col 15}BR1{col 29}EMP1A{col 43}EMP11B{col 57}LS6C{col 71}GP25G
+{col 1}SER31{col 15}BR{col 29}EMP1B{col 43}EMP11C{col 57}LS6D{col 71}GP25X
+{col 1}SER32{col 15}BR2{col 29}EMP1C{col 43}EMP11D{col 57}LS6X{col 71}GPS_latitude
+{col 1}SER33{col 15}BR3{col 29}EMP1D{col 43}EMP11E{col 57}LS7{col 71}GPS_longit~e
+{col 1}MGT1{col 15}BR5A{col 29}EMP1E{col 43}EMP11F{col 57}LS8{col 71}GPS_altitude
+{col 1}MGT2{col 15}BR5B{col 29}EMP1F{col 43}EMP11G{col 57}LS9{col 71}GPS_precis~n
+{col 1}MGT3_1{col 15}BR5C{col 29}EMP1G{col 43}EMP11X{col 57}LS10
 
 {com}. local HHnumeric = "`r(varlist)'"
 {txt}
@@ -3586,7 +3622,7 @@ str12 now)
 . 
 {txt}end of do-file
 
-{com}. do "/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP3.do"
+{com}. do "/Users/scottmiller/GitHub/LSIL_PAP/lsilPAP3.do"
 {txt}
 {com}. /***********************************************
 > *INVERSE COVARIANCE WEIGHTED INDEX V.0.2
@@ -3652,7 +3688,7 @@ str12 now)
 {com}. 
 {txt}end of do-file
 
-{com}. do "/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP4_test.do"
+{com}. do "/Users/scottmiller/GitHub/LSIL_PAP/lsilPAP4.do"
 {txt}
 {com}. clear
 {txt}
