@@ -1,17 +1,23 @@
 {smcl}
 {com}{sf}{ul off}{txt}{.-}
       name:  {res}<unnamed>
-       {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP_rand0.smcl
+       {txt}log:  {res}/Users/scottmiller/GitHub/LSIL_PAP/lsilPAP_rand0.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}15 Jan 2019, 10:09:27
+ {txt}opened on:  {res}30 May 2019, 12:52:37
 {txt}
 {com}. 
+. 
+. * ------------------------------------------------------------------------------
+. ** Collapse livestock sales module to HH level **
+. 
+. * load livestock sales data
 . use "$d4/Household/Livestock_Sales_livestock.dta", clear
 {txt}( )
 
 {com}. 
+. * shorten names that are too long for macros
 . foreach v of var * {c -(}
-{txt}  2{com}.         cap local vv = subinstr("`v'", "Livestock_Saleslivestock", "Livestock_Sales",.) // names too long for macros
+{txt}  2{com}.         cap local vv = subinstr("`v'", "Livestock_Saleslivestock", "Livestock_Sales",.)
 {txt}  3{com}.         if _rc == 0 {c -(}
 {txt}  4{com}.                 rename `v' `vv'
 {txt}  5{com}.                 local v `vv'
@@ -27,41 +33,30 @@
 {res}{txt}  (all {it:newnames}=={it:oldnames})
 
 {com}. 
-. * Livestock Sales Module
-.  
-. drop if ___parent_index ==.
-{txt}(224 observations deleted)
-
-{com}. save "$d4/Household/Livestock_sales_collapse.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Livestock_sales_collapse.dta saved
-
-{com}.  
+. * drop non-data observations / administrative tags / unused variables
 . drop Livestock_SalesLS2 Livestock_SalesLS6 ///
 >                 Livestock_SalesLS6_1 ___id ___uuid ___submission_time ///
->                 ___index ___parent_table_name ___tags ___notes
+>                 ___index ___parent_table_name ___tags ___notes Livestock_SalesLS4 
 {txt}
+{com}. drop if ___parent_index ==.
+{txt}(224 observations deleted)
+
 {com}. 
-. drop Livestock_SalesLS4 
-{txt}
-{com}.                 
-. gen co_opsalevalue = Livestock_SalesLS9 if ///
-> Livestock_SalesLS3=="1"                         
+. * generate 'revenue from goat sales made through co-op'         
+. gen co_opsalevalue = Livestock_SalesLS9 if Livestock_SalesLS3=="1"                      
 {txt}(1,380 missing values generated)
 
 {com}. lab var co_opsalevalue "Total revenue, goats sold through co-op"
 {txt}
 {com}. 
-. gen co_opgoatno = Livestock_SalesLS8 if ///
-> Livestock_SalesLS3=="1"         
+. * generate 'number of goat sales made through co-op'    
+. gen co_opgoatno = Livestock_SalesLS8 if Livestock_SalesLS3=="1"         
 {txt}(1,380 missing values generated)
 
 {com}. lab var co_opgoatno "Total goats sold through co-op"
 {txt}
 {com}. 
-. save "$d4/Household/Livestock_sales_collapse.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Livestock_sales_collapse.dta saved
-
-{com}.  
+. * destring all variables
 . destring *, replace             
 {txt}Livestock_SalesLS3: all characters numeric; {res}replaced {txt}as {res}byte
 {txt}Livestock_SalesLS5: all characters numeric; {res}replaced {txt}as {res}byte
@@ -169,6 +164,7 @@
 (co_opgoatno: 1 changes made)
 
 {com}.  
+. * save variable labels to re-apply post collapse 
 . foreach v of var * {c -(}
 {txt}  2{com}.         cap local vv = subinstr("`v'", "Livestock_Sales", "Livestock_Sales",.) // names too long for macros
 {txt}  3{com}.         if _rc == 0 {c -(}
@@ -229,6 +225,7 @@
 {res}{txt}  (all {it:newnames}=={it:oldnames})
 
 {com}. 
+. * collapse to HH level
 . collapse (mean) Livestock_SalesLS3 *Livestock_SalesLS6* ///
 >                 Livestock_SalesLS7 (sum) Livestock_SalesLS8 Livestock_SalesLS9 ///
 >                 Livestock_SalesLS10 Livestock_SalesLS12 Livestock_SalesLS13 ///
@@ -244,22 +241,20 @@
 >                 Livestock_SalesLS47 co_opsalevalue co_opgoatno , by(___parent_index)
 {txt}
 {com}. 
+. * reapply variable labels               
 . foreach v of var * {c -(}
 {txt}  2{com}.         label var `v' "`l`v''"
 {txt}  3{com}.         cap label val `v' "`ll`v''"
 {txt}  4{com}. {c )-}
 {txt}
 {com}.                 
-. * Top coding
+. ** Top coding obvious outliers
 . g price = Livestock_SalesLS9/Livestock_SalesLS8
 {txt}(58 missing values generated)
 
-{com}. 
-. g n = _n
+{com}. g n = _n
 {txt}
-{com}. 
-. *scatter Livestock_SalesLS9 price, mlabel(n)
-. 
+{com}. *scatter Livestock_SalesLS9 price, mlabel(n)
 . *br n Livestock_SalesLS8 Livestock_SalesLS9 price if n == 1035 | n == 10 | n == 11 | n == 1222 | n == 1199
 . 
 . su price, d
@@ -308,12 +303,15 @@
 {txt}(8 real changes made)
 
 {com}. 
-. save "$d4/Household/Livestock_sales_collapse.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Livestock_sales_collapse.dta saved
-
-{com}.                 
-. * --------------------------------------------------------------------
 . 
+. * save collapsed data
+. save "$d4/Household/Livestock_sales_collapse.dta", replace
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Household/Livestock_sales_collapse.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Household/Livestock_sales_collapse.dta saved
+
+{com}. 
+. 
+. * --------------------------------------------------------------------
 .  * Collection Points Module
 . clear
 {txt}
@@ -343,10 +341,11 @@
 {txt}
 {com}.  
 . save "$d4/Co-op/role_CP_Collectionpoint_collapsed.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Co-op/role_CP_Collectionpoint_collapsed.dta saved
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Co-op/role_CP_Collectionpoint_collapsed.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Co-op/role_CP_Collectionpoint_collapsed.dta saved
 
 {com}.  
-. use "$d4/Co-op/Cooperative1.dta", clear
+. use "$d4/Co-op/Cooperative.dta", clear
 {txt}( )
 
 {com}.  
@@ -357,38 +356,44 @@
 {res}
 {txt}{col 5}Result{col 38}# of obs.
 {col 5}{hline 41}
-{col 5}not matched{col 30}{res}             210
+{col 5}not matched{col 30}{res}             211
 {txt}{col 9}from master{col 30}{res}             210{txt}  (_merge==1)
-{col 9}from using{col 30}{res}               0{txt}  (_merge==2)
+{col 9}from using{col 30}{res}               1{txt}  (_merge==2)
 
-{col 5}matched{col 30}{res}             148{txt}  (_merge==3)
+{col 5}matched{col 30}{res}             147{txt}  (_merge==3)
 {col 5}{hline 41}
 
 {com}.  
 . save "$d4/Co-op/Cooperative1.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Co-op/Cooperative1.dta saved
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Co-op/Cooperative1.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Co-op/Cooperative1.dta saved
 
 {com}. 
 . 
-. ****************************************
+. 
 . ** Merge Cooperative & Household Data **
-. ****************************************
+. * ------------------------------------------------------------------------------
+. ** Create co-op dataset collapsed to 1-row per co-op **
 . 
-. cd "$d4/Co-op/" 
-{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Co-op
+. cd "$d4/Co-op/"  
+{res}/Users/scottmiller/Desktop/PAP Data - Test/Co-op
 {txt}
-{com}. *------------------------------------------------------------------------------ 
-. ** Co-op
-. 
+{com}. 
+. * load co-op data
 . use "$d4/Co-op/Cooperative1.dta", clear
 {txt}( )
 
 {com}. 
+. * generate names for region variable
 . destring ID1, replace
-{txt}ID1 already numeric; no {res}replace
-{txt}
-{com}. *gen region = "Arghakanchhi" if ID1==51
-. replace region = "Arghakanchhi" if ID1==51
+{txt}ID1: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}(1 missing value generated)
+{res}{txt}
+{com}. gen region = "" 
+{txt}(358 missing values generated)
+
+{com}. replace region = "Arghakanchhi" if ID1==51
+{txt}variable {bf}region{sf} was {bf}{res}str1{sf}{txt} now {bf}{res}str12{sf}
 {txt}(6 real changes made)
 
 {com}. replace region = "Baglung" if ID1==45
@@ -460,7 +465,8 @@
 {com}. replace region = "Tanahu" if ID1==38
 {txt}(15 real changes made)
 
-{com}.  
+{com}. 
+. * group regions into "Mid-Hills" and "Terai"
 . replace region = "Mid-Hills" if region=="Arghakanchhi" | region=="Baglung" | ///
 >         region=="Dhading" | region =="Kaski" | region =="Lamjung" | region=="Nuwakot" | ///
 >         region=="Palpa" | region =="Parbat" | region =="Pyuthan" | region =="Salyan" | ///
@@ -476,16 +482,14 @@
 
 {com}. 
 . save "$d4/Co-op/Cooperative1.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Co-op/Cooperative1.dta saved
+{txt}file /Users/scottmiller/Desktop/PAP Data - Test/Co-op/Cooperative1.dta saved
 
-{com}. 
-. *------------------------------------------------------------------------------  
+{com}.   
 .  
-. ** Cooperative ** 
-. *collapse into one row per cooperative
-.  
-. *create separate datasets for each role
-.  
+. * Co-op dataset contains 3-interviews per co-op
+. * create separate datasets for each role
+. 
+. * -------------------------------- 
 . *Role 1 (Chairperson)
 . use "$d4/Co-op/Cooperative1.dta", clear
 {txt}( )
@@ -495,7 +499,6 @@
 {txt}
 {com}. 
 . * save labels and value labels in macros
-. 
 . foreach v of var * {c -(}
 {txt}  2{com}.         cap local vv = subinstr("`v'", "CPManagement", "CPMgt",.) // names too long for macros
 {txt}  3{com}.         if _rc == 0 {c -(}
@@ -1073,7 +1076,7 @@
 {res}{txt}  (all {it:newnames}=={it:oldnames})
 {res}{txt}  (all {it:newnames}=={it:oldnames})
 {res}{txt}  (all {it:newnames}=={it:oldnames})
-{res}{txt}
+
 {com}. 
 . ds *CP* region, has(type string)
 {txt}{col 1}role_CPMgt~p{col 15}role_CPMg~02{col 29}role_CPMg~22{col 43}role_CPMg~31{col 57}role_CPSe~R6{col 71}role_CPSe~e0{col 85}ro~p_servic0{col 99}role_CPSe~02
@@ -1086,11 +1089,9 @@
 {col 1}role_CPMg~00{col 15}role_CPMg~20{col 29}role_CPMg~29{col 43}ro~l_servic3{col 57}role_CPSe~R3{col 71}role_CPSe~18{col 85}role_CPSe~c7
 {col 1}role_CPMg~01{col 15}role_CPMg~21{col 29}role_CPMg~30{col 43}ro~l_servic4{col 57}role_CPSe~R4{col 71}ro~p_service{col 85}role_CPSe~01
 
-{com}. 
-. local CPstrings = "`r(varlist)'"
+{com}. local CPstrings = "`r(varlist)'"
 {txt}
-{com}. 
-. ds *CP*, has(type numeric)
+{com}. ds *CP*, has(type numeric)
 {txt}{col 1}role_CPMg~i0{col 15}role_CPMg~12{col 29}ro~l_service{col 43}role_CPGo~T2{col 57}role_CPGo~47{col 71}role_CPG~1_2{col 85}role_CP~5_1b{col 99}role_CP~6_3b
 {col 1}role_CPMg~i1{col 15}role_CPMg~13{col 29}role_CPSe~od{col 43}role_CPGo~T3{col 57}role_CPGo~48{col 71}role_CPG~1_3{col 85}role_CP~5_2b{col 99}role_CPPla~3
 {col 1}role_CPMg~i2{col 15}role_CPMg~14{col 29}role_CPSe~ed{col 43}role_CPGo~41{col 57}role_CPGo~49{col 71}role_CPG~3_1{col 85}role_CP~5_3b{col 99}role_CPPla~4
@@ -1100,11 +1101,10 @@
 {col 1}role_CPMg~10{col 15}role_CPMg~19{col 29}role_CPSe~00{col 43}role_CPGo~45{col 57}role_CPColl{col 71}role_CPGo~2a{col 85}role_CP~6_1b{col 99}role_CPCol~5
 {col 1}role_CPMg~11{col 15}role_CPSe~te{col 29}role_CPGo~T1{col 43}role_CPGo~46{col 57}role_CPG~1_1{col 71}role_CPGo~3a{col 85}role_CP~6_2b
 
-{com}. 
-. local CPnumeric = "`r(varlist)'"
+{com}. local CPnumeric = "`r(varlist)'"
 {txt}
 {com}. 
-. collapse (firstnm) `CPstrings' (mean) `CPnumeric', by(HH_IDIDX role)
+. collapse (firstnm) `CPstrings' (mean) `CPnumeric', by(idx role)
 {txt}
 {com}. 
 . * re-assign labels post-collapse
@@ -1118,13 +1118,16 @@
 {txt}(213 observations deleted)
 
 {com}. 
-. sort HH_IDIDX
+. sort idx
 {txt}
 {com}. 
 . save "$d4/Co-op/role1.dta", replace 
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Co-op/role1.dta saved
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Co-op/role1.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Co-op/role1.dta saved
 
-{com}.  
+{com}. 
+.  
+. * -------------------------------- 
 . *Role 2 (General Manager)
 . use "$d4/Co-op/Cooperative1.dta", clear
 {txt}( )
@@ -2205,11 +2208,9 @@
 {col 1}role_GM~P1_1{col 15}role_G~3_1_3{col 29}role_GMeqp~Q{col 43}role_GMe~13_{col 57}role_GMEq~18{col 71}role_GMeva~2{col 85}role_GMtr~N5{col 99}region
 {col 1}role_GM~P2_1{col 15}role_G~3_1_4{col 29}role_GMe~8_1{col 43}role_GMeq~o0{col 57}role_GMEq~19{col 71}role_GMeva~3{col 85}role_GMtra~6
 
-{com}. 
-. local GMstrings = "`r(varlist)'"
+{com}. local GMstrings = "`r(varlist)'"
 {txt}
-{com}. 
-. ds *GM*, has(type numeric)
+{com}. ds *GM*, has(type numeric)
 {txt}{col 1}role_GMrev~t{col 15}role_GMr~7_5{col 29}role_GMeq~3X{col 43}role_GMeq~41{col 57}role_GMeqp~6{col 71}role_GMeq~s1{col 85}role_GMeq~o1{col 99}role_G~5_3_3
 {col 1}role_GMre~C1{col 15}role_GMr~7_6{col 29}role_GMeq~fe{col 43}role_GMeq~r_{col 57}role_GMeqp~7{col 71}role_GMeq~ad{col 85}role_GMeq~o2{col 99}role_G~5_3_4
 {col 1}role_GMre~C2{col 15}role_GMr~7_7{col 29}role_G~3_2_1{col 43}role_GMe~5_2{col 57}role_GMeqp~8{col 71}role_GMeq~P0{col 85}role_GMeqp~f{col 99}role_G~5_3_5
@@ -2225,11 +2226,10 @@
 {col 1}role_GMr~7_3{col 15}role_GMeqp~o{col 29}role_GMeq~de{col 43}role_GMeq~E4{col 57}role_GMeqp~h{col 71}role_GMe~131{col 85}role_G~5_3_1{col 99}role_GMtrns
 {col 1}role_GMr~7_4{col 15}role_GMeq~2X{col 29}role_GMeq~40{col 43}role_GMeq~E5{col 57}role_GMeq~s0{col 71}role_GMeq~or{col 85}role_G~5_3_2{col 99}role_GMtra~s
 
-{com}. 
-. local GMnumeric = "`r(varlist)'"
+{com}. local GMnumeric = "`r(varlist)'"
 {txt}
 {com}. 
-. collapse (firstnm) `GMstrings' (mean) `GMnumeric', by(HH_IDIDX role)
+. collapse (firstnm) `GMstrings' (mean) `GMnumeric', by(idx role)
 {txt}
 {com}. 
 . * re-assign labels post-collapse
@@ -2244,9 +2244,12 @@
 
 {com}. 
 . save "$d4/Co-op/role2.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Co-op/role2.dta saved
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Co-op/role2.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Co-op/role2.dta saved
 
 {com}.  
+.  
+. * -------------------------------- 
 . *Role 3 (Board Member)
 . use "$d4/Co-op/Cooperative1.dta", clear
 {txt}( )
@@ -2509,20 +2512,17 @@
 {col 1}role_BMBM~63{col 15}role_BMBM~68{col 29}role_BMBM~73{col 43}role_BMBM~78{col 57}role_BMBM~8d{col 71}role_BMB~BM4{col 85}role_BMBMG~9{col 99}role_BMBM~04
 {col 1}role_BMBM~64{col 15}role_BMB~697{col 29}role_BMBM~74{col 43}role_BMB~797{col 57}role_BMBM~8e{col 71}role_BMBMG~5{col 85}role_BMBM~00{col 99}region
 
-{com}. 
-. local BMstrings = "`r(varlist)'"
+{com}. local BMstrings = "`r(varlist)'"
 {txt}
-{com}. 
-. ds *BM*, has(type numeric)
+{com}. ds *BM*, has(type numeric)
 {txt}{col 1}role_BMBMn~M{col 15}role_BMBM~1b{col 29}role_BMBM~2a{col 43}role_BMBM~2d{col 57}role_BMB~MM5{col 71}role_BMBM~M0{col 85}role_BMBMp~0
 {col 1}role_BMBM~n1{col 15}role_BMBM~1c{col 29}role_BMBM~2b{col 43}role_BMB~MM3{col 57}role_BMBM~n3{col 71}role_BMBM~M1
 {col 1}role_BMBM~1a{col 15}role_BMBM~1d{col 29}role_BMBM~2c{col 43}role_BMB~MM4{col 57}role_BMBMG~_{col 71}role_BMBMp~M
 
-{com}. 
-. local BMnumeric = "`r(varlist)'"
+{com}. local BMnumeric = "`r(varlist)'"
 {txt}
 {com}. 
-. collapse (firstnm) `BMstrings' (mean) `BMnumeric', by(HH_IDIDX role)
+. collapse (firstnm) `BMstrings' (mean) `BMnumeric', by(idx role)
 {txt}
 {com}. 
 . * re-assign labels post-collapse
@@ -2537,46 +2537,49 @@
 
 {com}. 
 . save "$d4/Co-op/role3.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Co-op/role3.dta saved
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Co-op/role3.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Co-op/role3.dta saved
 
-{com}.   
-. *create one merged co-op dataset
+{com}.  
+. * -------------------------------- 
+. * merge separate roles to create one dataset at the co-op level
+. * each co-op (row) will now contain all 3-role interviews
 .  
 . *numeric idx identifiers
 . use "$d4/Co-op/role1.dta", clear
 {txt}( )
 
-{com}. sort HH_IDIDX
+{com}. sort idx
 {txt}
 {com}. *drop idx_n
-. encode HH_IDIDX, gen(idx_n)
+. encode idx, gen(idx_n)
 {txt}
 {com}. save "$d4/Co-op/role1.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Co-op/role1.dta saved
+{txt}file /Users/scottmiller/Desktop/PAP Data - Test/Co-op/role1.dta saved
 
 {com}. 
 . use "$d4/Co-op/role2.dta", clear
 {txt}( )
 
-{com}. sort HH_IDIDX
+{com}. sort idx
 {txt}
 {com}. *drop idx_n
-. encode HH_IDIDX, gen(idx_n)
+. encode idx, gen(idx_n)
 {txt}
 {com}. save "$d4/Co-op/role2.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Co-op/role2.dta saved
+{txt}file /Users/scottmiller/Desktop/PAP Data - Test/Co-op/role2.dta saved
 
 {com}.  
 . use "$d4/Co-op/role3.dta", clear
 {txt}( )
 
-{com}. sort HH_IDIDX
+{com}. sort idx
 {txt}
 {com}. *drop idx_n
-. encode HH_IDIDX, gen(idx_n)
+. encode idx, gen(idx_n)
 {txt}
 {com}. save "$d4/Co-op/role3.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Co-op/role3.dta saved
+{txt}file /Users/scottmiller/Desktop/PAP Data - Test/Co-op/role3.dta saved
 
 {com}.   
 . *merge dataset
@@ -2596,7 +2599,8 @@
 {col 5}{hline 41}
 
 {com}. save "$d4/Co-op/co-op_merged.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Co-op/co-op_merged.dta saved
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Co-op/co-op_merged.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Co-op/co-op_merged.dta saved
 
 {com}. drop _merge
 {txt}
@@ -2622,15 +2626,16 @@
 {com}. rename _merge merge3
 {res}{txt}
 {com}. save "$d4/Co-op/co-op_merged.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Co-op/co-op_merged.dta saved
+{txt}file /Users/scottmiller/Desktop/PAP Data - Test/Co-op/co-op_merged.dta saved
 
 {com}. 
-.  
-. ** Household **
+. 
+. * ------------------------------------------------------------------------------
+. ** Create Household dataset collapsed to 1-row per HH **
 .  
 . ** Merge separate modules into Household
 . cd "$d4/Household/"
-{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household
+{res}/Users/scottmiller/Desktop/PAP Data - Test/Household
 {txt}
 {com}. 
 . *create merge variable 'merge_id'
@@ -2641,7 +2646,9 @@
 {com}. gen merge_id = ___index
 {txt}(328 missing values generated)
 
-{com}. destring HH_IDID1, replace
+{com}. 
+. * generate region variable
+. destring HH_IDID1, replace
 {txt}HH_IDID1: all characters numeric; {res}replaced {txt}as {res}byte
 {txt}
 {com}. gen region = "Arghakanchhi" if HH_IDID1==51
@@ -2731,11 +2738,13 @@
 {txt}(1,512 real changes made)
 
 {com}. 
-. *tab region
+. * save HH dataset       
 . save "$d4/Household/Household1.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Household1.dta saved
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Household/Household1.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Household/Household1.dta saved
 
 {com}. 
+. * --------------------------------
 . *Livestock Sales
 . *clear 
 . use "$d4/Household/Livestock_sales_collapse.dta"
@@ -2745,9 +2754,10 @@
 {txt}(1 missing value generated)
 
 {com}. save "$d4/Household/Livestock_sales_collapse.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Livestock_sales_collapse.dta saved
+{txt}file /Users/scottmiller/Desktop/PAP Data - Test/Household/Livestock_sales_collapse.dta saved
 
 {com}. 
+. * --------------------------------
 . *Borrowing
 . use "$d4/Household/Borrowing.dta", clear
 {txt}( )
@@ -2756,9 +2766,11 @@
 {txt}(285 missing values generated)
 
 {com}. save "$d4/Household/Borrowing1.dta", replace 
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Borrowing1.dta saved
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Household/Borrowing1.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Household/Borrowing1.dta saved
 
 {com}. 
+. * --------------------------------
 . *Number of Children
 . use "$d4/Household/Number of Children.dta", clear
 {txt}( )
@@ -2767,9 +2779,11 @@
 {txt}(837 missing values generated)
 
 {com}. save "$d4/Household/Number of Children1.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Number of Children1.dta saved
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Household/Number of Children1.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Household/Number of Children1.dta saved
 
 {com}. 
+. * --------------------------------
 . *Roster
 . use "$d4/Household/Rooster.dta", clear
 {txt}( )
@@ -2778,10 +2792,14 @@
 {txt}(630 missing values generated)
 
 {com}. save "$d4/Household/Rooster1.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Rooster1.dta saved
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Household/Rooster1.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Household/Rooster1.dta saved
 
 {com}. 
-. *create merged dataset 'modules_merged'
+. 
+. * create merged dataset 'modules_merged'
+. 
+. * --------------------------------
 . *Livestock Sales - Borrowing
 . use "$d4/Household/Household1.dta", clear
 {txt}( )
@@ -2820,9 +2838,11 @@ byte, now int to accommodate using data's values)
 {com}. rename _merge merge1
 {res}{txt}
 {com}. save "$d4/Household/modules_merged.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/modules_merged.dta saved
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Household/modules_merged.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Household/modules_merged.dta saved
 
 {com}. 
+. * --------------------------------
 . *Number of Children
 . use "$d4/Household/modules_merged.dta", clear
 {txt}( )
@@ -2856,9 +2876,10 @@ byte now)
 {com}. rename _merge merge2
 {res}{txt}
 {com}. save "$d4/Household/modules_merged.dta", replace 
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/modules_merged.dta saved
+{txt}file /Users/scottmiller/Desktop/PAP Data - Test/Household/modules_merged.dta saved
 
 {com}. 
+. * --------------------------------
 . *Roster
 . use "$d4/Household/modules_merged.dta", clear
 {txt}( )
@@ -2889,9 +2910,10 @@ byte now)
 {com}. rename _merge merge3
 {res}{txt}
 {com}. save "$d4/Household/modules_merged.dta", replace  
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/modules_merged.dta saved
+{txt}file /Users/scottmiller/Desktop/PAP Data - Test/Household/modules_merged.dta saved
 
 {com}. 
+. * --------------------------------
 . *merge modules_merged into Household
 . use "$d4/Household/modules_merged.dta", clear
 {txt}( )
@@ -2908,12 +2930,13 @@ byte now)
 {col 5}{hline 41}
 
 {com}. save "$d4/Household/Household_Merged.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Household_Merged.dta saved
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Household/Household_Merged.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Household/Household_Merged.dta saved
 
 {com}.  
-.  *------------------------------------------------------------------------------ 
 .  
-.  ** Prepare Household_Merged to be collapsed by Co-op **
+. *------------------------------------------------------------------------------- 
+. ** Prepare Household_Merged to be collapsed by Co-op **
 .  
 . use "$d4/Household/Household_Merged.dta", clear
 {txt}( )
@@ -2945,16 +2968,7 @@ byte now)
 >         Goat_Production_SystemGP22_1 Goat_Production_SystemGP22_2
 {txt}
 {com}. 
-. save "$d4/Household/Household_Merged_Edit.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Household_Merged_Edit.dta saved
-
-{com}.  
-. clear 
-{txt}
-{com}. use "$d4/Household/Household_Merged_Edit.dta" 
-{txt}( )
-
-{com}. 
+. 
 . *drop multi-choice vars with individual dummys already created
 . drop Co_opCommunicationCOM1 Co_opCommunicationCOM2 Co_opCommunicationCOM6 Co_opCommunicationCOM7 ///
 >         Co_opGoat_transactionsGTT4 SavingsSV2 Livestock_related_empowermentEMP Livestock_related_empowermentEM8 ///
@@ -2964,15 +2978,11 @@ byte now)
 >         Livestock_related_empowerment010 Livestock_related_empowerment024 Livestock_EnterprisesLSE22 ///
 >         Goat_Production_SystemGP4 Goat_Production_SystemGP12 Goat_Production_SystemGP18 Goat_Production_SystemGP22 ///
 >         Goat_Production_SystemGP25 Livestock_SalesLS48 Post_questionnairePQ2 BorrowingBorrowBR5 ///
->         Goat_Production_SystemGP3 BorrowingBorrowBR56 BorrowingBorrow_count
+>         Goat_Production_SystemGP3 BorrowingBorrowBR56 BorrowingBorrow_count RosterHHR10_1       
 {txt}
 {com}. 
-. save "$d4/Household/Household_Merged_Edit.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Household_Merged_Edit.dta saved
-
-{com}.  
+.  
 . *create multi-choice dummys for other relevant vars
-. 
 . foreach v of varlist HH_IDID7 HH_IDID8 HH_IDHHR7 HHR7_calc Land_and_homeLND2 ///
 >                 Land_and_homeLND3 Land_and_homeHSE1 Land_and_homeHSE2 Land_and_homeHSE3 ///
 >                 Land_and_homeHSE8 Land_and_homeHSE9 Land_and_homeHSE11 Land_and_homeHSE12 ///
@@ -2983,10 +2993,6 @@ byte now)
 {txt}  3{com}.     drop `v'
 {txt}  4{com}. {c )-}
 {txt}
-{com}. 
-. save "$d4/Household/Household_Merged_Edit.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Household_Merged_Edit.dta saved
-
 {com}. 
 . *Rename Livestock Related Enterprises -----
 . rename Livestock_related_empowermentE08 LSE08 
@@ -3016,74 +3022,47 @@ byte now)
 {com}. rename Livestock_related_empowerment023 LSE023
 {res}{txt}
 {com}. 
-. save "$d4/Household/Household_Merged_Edit.dta", replace 
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Household_Merged_Edit.dta saved
-
-{com}. 
-. * ----------------------------------------
 . 
+. * generate tabbed variables
 . foreach v of varlist LSE08 LSE20 LSE31 LSE43 LSE54 LSE65 LSE76 LSE87 ///
 >                 LSE98 LS009 LSE022 LSE023 {c -(}
 {txt}  2{com}.         quietly tab `v', generate(`v'_)
 {txt}  3{com}.     drop `v'    
 {txt}  4{com}. {c )-}
 {txt}
-{com}. 
-. save "$d4/Household/Household_Merged_Edit.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Household_Merged_Edit.dta saved
-
-{com}.  
-. drop RosterHHR10_1      
-{txt}
-{com}. 
-. save "$d4/Household/Household_Merged_Edit.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Household_Merged_Edit.dta saved
-
-{com}.  
-. foreach v of varlist Goat_Production_SystemGP5 Goat_Production_SystemGP6 ///
+{com}. foreach v of varlist Goat_Production_SystemGP5 Goat_Production_SystemGP6 ///
 >                 Goat_Production_SystemGP8 Goat_Production_SystemGP17 Goat_Production_SystemGP20 ///
 >                 BorrowingBorrowBR7 RosterHHR9 {c -(}
 {txt}  2{com}.     quietly tab `v', generate(`v'_)
 {txt}  3{com}.     drop `v'
 {txt}  4{com}. {c )-}
 {txt}
-{com}. 
-. save "$d4/Household/Household_Merged_Edit.dta", replace         
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Household_Merged_Edit.dta saved
-
-{com}. 
+{com}.         
+. * shorten variable names
 . rename Livestock_SalesLS43LS43 LSS4343
 {res}{txt}
 {com}. rename Livestock_SalesLS43LS40 LSS4340
 {res}{txt}
 {com}. rename Livestock_SalesLS43LS41 LSS4341
 {res}{txt}
-{com}.                 
-.  foreach v of varlist RosterHHR10 RosterHHR16 *Livestock_SalesLS7* *Livestock_SalesLS38* {c -(}
+{com}. 
+. * generate tabbed variables             
+. foreach v of varlist RosterHHR10 RosterHHR16 *Livestock_SalesLS7* *Livestock_SalesLS38* {c -(}
 {txt}  2{com}.     quietly tab `v', generate(`v'_)
 {txt}  3{com}.     drop `v'
-{txt}  4{com}. {c )-}
+{txt}  4{com}. {c )-} 
 {txt}
-{com}. 
-. save "$d4/Household/Household_Merged_Edit.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Household_Merged_Edit.dta saved
-
-{com}.  
-. foreach v of varlist Goat_Production_SystemGP2 Goat_Production_SystemGP14 Goat_Production_SystemGP24 ///
+{com}. foreach v of varlist Goat_Production_SystemGP2 Goat_Production_SystemGP14 Goat_Production_SystemGP24 ///
 >                 BorrowingBorrowBR4 RosterHHR8 {c -(}
 {txt}  2{com}.     quietly tab `v', generate(`v'_)
 {txt}  3{com}.     drop `v'
 {txt}  4{com}. {c )-}
 {txt}
-{com}. 
-. save "$d4/Household/Household_Merged_Edit.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Household_Merged_Edit.dta saved
-
 {com}.  
 .  
-.  * Destring 1-2 dummys -- format to binary
+. * Destring 1-2 dummys -- format to binary
 .         * 2 -> 0  1 -> 1 ------ Most are Y/N --> Y=1 N=0
-.  foreach v of varlist Land_and_homeHSE6 Land_and_homeHSE7 Land_and_homeHSE10 ///
+. foreach v of varlist Land_and_homeHSE6 Land_and_homeHSE7 Land_and_homeHSE10 ///
 >                 Co_opMembershipMEM3 Co_opMembershipMEM6 Co_opMembershipMEM8 Co_opMembershipMEM12 ///
 >                 Co_opMembershipMEM14 Co_opMembershipMEM16 Co_opServiceSER1 Co_opServiceSER2 ///
 >                 Co_opServiceSER3 Co_opServiceSER4 Co_opServiceSER6 Co_opServiceSER7 ///
@@ -3112,14 +3091,8 @@ byte now)
 {txt}  4{com}.         quietly replace `v'=0 if `v'==2
 {txt}  5{com}. {c )-}
 {txt}
-{com}. 
-. save "$d4/Household/Household_Merged_Edit.dta", replace 
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Household_Merged_Edit.dta saved
-
 {com}.  
-.  
-.  * Destring 0-1 dummys
-. 
+. * Destring 0-1 dummys
 . foreach v of varlist * {c -(}
 {txt}  2{com}.         cap local vv = subinstr("`v'", "Livestock_Saleslivestock", "Livestock_Sales", .)
 {txt}  3{com}.         if _rc == 0 {c -(}
@@ -4025,11 +3998,12 @@ byte now)
 {txt}
 {com}. 
 . save "$d4/Household/Household_Merged_Edit.dta", replace  
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Household_Merged_Edit.dta saved
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Household/Household_Merged_Edit.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Household/Household_Merged_Edit.dta saved
 
 {com}.  
-.  *------------------------------------------------------------------------------ 
 .  
+. *------------------------------------------------------------------------------  
 . ** Collapse HH into 1 row per cooperative
 .  
 . use "$d4/Household/Household_Merged_Edit.dta", clear
@@ -4039,6 +4013,7 @@ byte now)
 . rename HH_IDIDX idx
 {res}{txt}
 {com}. 
+. * Shorten names that are too long for macros
 . foreach v of var * {c -(}
 {txt}  2{com}.         cap local vv = subinstr("`v'", "Follow_up_", "Follup",.) // names too long for macros
 {txt}  3{com}.         if _rc == 0 {c -(}
@@ -8291,18 +8266,19 @@ byte now)
 {txt}  4{com}. {c )-}
 {txt}
 {com}. 
-. 
+. * saved collapsed HH data
 . save "$d4/Household/Household_Collapsed.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Household/Household_Collapsed.dta saved
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Household/Household_Collapsed.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Household/Household_Collapsed.dta saved
 
 {com}. 
-.   *------------------------------------------------------------------------------ 
-.  
-.  ** Merge Co-op_merged into HH_Collapsed
 . 
-.  clear 
+. *------------------------------------------------------------------------------  
+. ** Merge Co-op_merged into HH_Collapsed
+. 
+. clear 
 {txt}
-{com}.  use "$d4/Household/Household_Collapsed.dta"  
+{com}. use "$d4/Household/Household_Collapsed.dta"  
 {txt}( )
 
 {com}.  
@@ -8366,16 +8342,17 @@ byte now)
 {txt}
 {com}. 
 . save "$d4/Merged/Baseline_Merged.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Merged/Baseline_Merged.dta saved
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Merged/Baseline_Merged.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Merged/Baseline_Merged.dta saved
 
 {com}.  
 .  *********************************************
 .  
 . log close
       {txt}name:  {res}<unnamed>
-       {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP_rand0.smcl
+       {txt}log:  {res}/Users/scottmiller/GitHub/LSIL_PAP/lsilPAP_rand0.smcl
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}15 Jan 2019, 10:10:15
+ {txt}closed on:  {res}30 May 2019, 12:53:27
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

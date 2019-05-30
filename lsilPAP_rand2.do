@@ -1,3 +1,13 @@
+
+/*******************************************************************************
+lsilPAP_rand0.do		
+					
+- Runs a random permutation of treatment status to be used for 
+	minimum detectable effect calculations
+	
+*******************************************************************************/
+
+
 cap log close
 clear
 cd "$d1"
@@ -9,7 +19,6 @@ use "$d4/Merged/Baseline_Merged_Str.dta", clear
 
 * drop original randomization variables
 drop bin sub_bin strata random n random2
-
 
 
 * true treatment status: seed 3581 * random seed = 62184 

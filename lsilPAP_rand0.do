@@ -1,44 +1,55 @@
+
+/*******************************************************************************
+lsilPAP_rand0.do		
+					
+- Collapses livestock sales data into one row per hh
+	
+- Merges household and cooperative data. Top codes total goats sold and total
+livestock revenue at hh level. 
+	
+*******************************************************************************/
+
 cap log close
 set more off, perm
 
 cd "$d1"
-
 log using "$d1/lsilPAP_rand0.smcl", replace
 
+
+* ------------------------------------------------------------------------------
+** Collapse livestock sales module to HH level **
+
+* load livestock sales data
 use "$d4/Household/Livestock_Sales_livestock.dta", clear
 
+* shorten names that are too long for macros
 foreach v of var * {
-	cap local vv = subinstr("`v'", "Livestock_Saleslivestock", "Livestock_Sales",.) // names too long for macros
+	cap local vv = subinstr("`v'", "Livestock_Saleslivestock", "Livestock_Sales",.)
 	if _rc == 0 {
 		rename `v' `vv'
 		local v `vv'
 	}
 }
 
-* Livestock Sales Module
- 
-drop if ___parent_index ==.
-save "$d4/Household/Livestock_sales_collapse.dta", replace
- 
+* drop non-data observations / administrative tags / unused variables
 drop Livestock_SalesLS2 Livestock_SalesLS6 ///
 		Livestock_SalesLS6_1 ___id ___uuid ___submission_time ///
-		___index ___parent_table_name ___tags ___notes
+		___index ___parent_table_name ___tags ___notes Livestock_SalesLS4 
+drop if ___parent_index ==.
 
-drop Livestock_SalesLS4 
-		
-gen co_opsalevalue = Livestock_SalesLS9 if ///
-Livestock_SalesLS3=="1" 			
+* generate 'revenue from goat sales made through co-op'		
+gen co_opsalevalue = Livestock_SalesLS9 if Livestock_SalesLS3=="1" 			
 lab var co_opsalevalue "Total revenue, goats sold through co-op"
 
-gen co_opgoatno = Livestock_SalesLS8 if ///
-Livestock_SalesLS3=="1"		
+* generate 'number of goat sales made through co-op'	
+gen co_opgoatno = Livestock_SalesLS8 if Livestock_SalesLS3=="1"		
 lab var co_opgoatno "Total goats sold through co-op"
 
-save "$d4/Household/Livestock_sales_collapse.dta", replace
- 
+* destring all variables
 destring *, replace		
 recode * (99=.) (98=.) (97=.)
  
+* save variable labels to re-apply post collapse 
 foreach v of var * {
 	cap local vv = subinstr("`v'", "Livestock_Sales", "Livestock_Sales",.) // names too long for macros
 	if _rc == 0 {
@@ -52,6 +63,7 @@ foreach v of var * {
 	}
 }
 
+* collapse to HH level
 collapse (mean) Livestock_SalesLS3 *Livestock_SalesLS6* ///
 		Livestock_SalesLS7 (sum) Livestock_SalesLS8 Livestock_SalesLS9 ///
 		Livestock_SalesLS10 Livestock_SalesLS12 Livestock_SalesLS13 ///
@@ -66,18 +78,16 @@ collapse (mean) Livestock_SalesLS3 *Livestock_SalesLS6* ///
 		Livestock_SalesLS44 Livestock_SalesLS45 Livestock_SalesLS46 ///
 		Livestock_SalesLS47 co_opsalevalue co_opgoatno , by(___parent_index)
 
+* reapply variable labels		
 foreach v of var * {
 	label var `v' "`l`v''"
 	cap label val `v' "`ll`v''"
 }
 		
-* Top coding
+** Top coding obvious outliers
 g price = Livestock_SalesLS9/Livestock_SalesLS8
-
 g n = _n
-
 *scatter Livestock_SalesLS9 price, mlabel(n)
-
 *br n Livestock_SalesLS8 Livestock_SalesLS9 price if n == 1035 | n == 10 | n == 11 | n == 1222 | n == 1199
 
 su price, d
@@ -89,10 +99,12 @@ su *LS8, d
 replace Livestock_SalesLS8 = r(p50) if Livestock_SalesLS8 > 25 & ///
 Livestock_SalesLS8 < . // Replaces outliers with median
 
-save "$d4/Household/Livestock_sales_collapse.dta", replace
-		
-* --------------------------------------------------------------------
 
+* save collapsed data
+save "$d4/Household/Livestock_sales_collapse.dta", replace
+
+
+* --------------------------------------------------------------------
  * Collection Points Module
 clear
 use "$d4/Co-op/role_CP_Collectionpoint.dta"
@@ -107,7 +119,7 @@ collapse (mean) role_CPCollectionpointCollectio0 (sum) role_CPCollectionpointCol
  
 save "$d4/Co-op/role_CP_Collectionpoint_collapsed.dta", replace
  
-use "$d4/Co-op/Cooperative1.dta", clear
+use "$d4/Co-op/Cooperative.dta", clear
  
 cap drop _merge
  
@@ -116,18 +128,19 @@ merge 1:1 ___index using "$d4/Co-op/role_CP_Collectionpoint_collapsed.dta"
 save "$d4/Co-op/Cooperative1.dta", replace
 
 
-****************************************
+
 ** Merge Cooperative & Household Data **
-****************************************
+* ------------------------------------------------------------------------------
+** Create co-op dataset collapsed to 1-row per co-op **
 
-cd "$d4/Co-op/" 
-*------------------------------------------------------------------------------ 
-** Co-op
+cd "$d4/Co-op/"  
 
+* load co-op data
 use "$d4/Co-op/Cooperative1.dta", clear
 
+* generate names for region variable
 destring ID1, replace
-*gen region = "Arghakanchhi" if ID1==51
+gen region = "" 
 replace region = "Arghakanchhi" if ID1==51
 replace region = "Baglung" if ID1==45
 replace region = "Banke" if ID1==57
@@ -152,7 +165,8 @@ replace region = "Sarlahi" if ID1==19
 replace region = "Sindhuli" if ID1==20
 replace region = "Surkhet" if ID1==59
 replace region = "Tanahu" if ID1==38
- 
+
+* group regions into "Mid-Hills" and "Terai"
 replace region = "Mid-Hills" if region=="Arghakanchhi" | region=="Baglung" | ///
 	region=="Dhading" | region =="Kaski" | region =="Lamjung" | region=="Nuwakot" | ///
 	region=="Palpa" | region =="Parbat" | region =="Pyuthan" | region =="Salyan" | ///
@@ -164,21 +178,18 @@ replace region = "Terai" if region=="Banke" | region =="Bardiya" | region =="Kap
 	region =="Chitwan" | region =="Dang"
 
 save "$d4/Co-op/Cooperative1.dta", replace
+  
+ 
+* Co-op dataset contains 3-interviews per co-op
+* create separate datasets for each role
 
-*------------------------------------------------------------------------------  
- 
-** Cooperative ** 
-*collapse into one row per cooperative
- 
-*create separate datasets for each role
- 
+* -------------------------------- 
 *Role 1 (Chairperson)
 use "$d4/Co-op/Cooperative1.dta", clear
  
 keep *id* *ID* *CP* role region
 
 * save labels and value labels in macros
-
 foreach v of var * {
 	cap local vv = subinstr("`v'", "CPManagement", "CPMgt",.) // names too long for macros
 	if _rc == 0 {
@@ -208,14 +219,11 @@ foreach v of var * {
 }
 
 ds *CP* region, has(type string)
-
 local CPstrings = "`r(varlist)'"
-
 ds *CP*, has(type numeric)
-
 local CPnumeric = "`r(varlist)'"
 
-collapse (firstnm) `CPstrings' (mean) `CPnumeric', by(HH_IDIDX role)
+collapse (firstnm) `CPstrings' (mean) `CPnumeric', by(idx role)
 
 * re-assign labels post-collapse
 foreach v of var * {
@@ -225,10 +233,12 @@ foreach v of var * {
 
 drop if role !="1"
 
-sort HH_IDIDX
+sort idx
 
 save "$d4/Co-op/role1.dta", replace 
+
  
+* -------------------------------- 
 *Role 2 (General Manager)
 use "$d4/Co-op/Cooperative1.dta", clear
 
@@ -274,14 +284,11 @@ foreach v of var * {
 }
 
 ds *GM* region, has(type string)
-
 local GMstrings = "`r(varlist)'"
-
 ds *GM*, has(type numeric)
-
 local GMnumeric = "`r(varlist)'"
 
-collapse (firstnm) `GMstrings' (mean) `GMnumeric', by(HH_IDIDX role)
+collapse (firstnm) `GMstrings' (mean) `GMnumeric', by(idx role)
 
 * re-assign labels post-collapse
 foreach v of var * {
@@ -293,6 +300,8 @@ drop if role !="2"
 
 save "$d4/Co-op/role2.dta", replace
  
+ 
+* -------------------------------- 
 *Role 3 (Board Member)
 use "$d4/Co-op/Cooperative1.dta", clear
 
@@ -323,14 +332,11 @@ foreach v of var * {
 }
 
 ds *BM* region, has(type string)
-
 local BMstrings = "`r(varlist)'"
-
 ds *BM*, has(type numeric)
-
 local BMnumeric = "`r(varlist)'"
 
-collapse (firstnm) `BMstrings' (mean) `BMnumeric', by(HH_IDIDX role)
+collapse (firstnm) `BMstrings' (mean) `BMnumeric', by(idx role)
 
 * re-assign labels post-collapse
 foreach v of var * {
@@ -341,26 +347,28 @@ foreach v of var * {
 drop if role !="3"
 
 save "$d4/Co-op/role3.dta", replace
-  
-*create one merged co-op dataset
+ 
+* -------------------------------- 
+* merge separate roles to create one dataset at the co-op level
+* each co-op (row) will now contain all 3-role interviews
  
 *numeric idx identifiers
 use "$d4/Co-op/role1.dta", clear
-sort HH_IDIDX
+sort idx
 *drop idx_n
-encode HH_IDIDX, gen(idx_n)
+encode idx, gen(idx_n)
 save "$d4/Co-op/role1.dta", replace
 
 use "$d4/Co-op/role2.dta", clear
-sort HH_IDIDX
+sort idx
 *drop idx_n
-encode HH_IDIDX, gen(idx_n)
+encode idx, gen(idx_n)
 save "$d4/Co-op/role2.dta", replace
  
 use "$d4/Co-op/role3.dta", clear
-sort HH_IDIDX
+sort idx
 *drop idx_n
-encode HH_IDIDX, gen(idx_n)
+encode idx, gen(idx_n)
 save "$d4/Co-op/role3.dta", replace
   
 *merge dataset
@@ -376,8 +384,9 @@ merge 1:1 idx_n using role3.dta
 rename _merge merge3
 save "$d4/Co-op/co-op_merged.dta", replace
 
- 
-** Household **
+
+* ------------------------------------------------------------------------------
+** Create Household dataset collapsed to 1-row per HH **
  
 ** Merge separate modules into Household
 cd "$d4/Household/"
@@ -386,6 +395,8 @@ cd "$d4/Household/"
 *household
 use "$d4/Household/Household.dta", clear
 gen merge_id = ___index
+
+* generate region variable
 destring HH_IDID1, replace
 gen region = "Arghakanchhi" if HH_IDID1==51
 replace region = "Baglung" if HH_IDID1==45
@@ -422,57 +433,67 @@ replace region = "Terai" if region=="Banke" | region =="Bardiya" | region =="Kap
 	region=="Rautahat" | region =="Rupandehi" | region=="Sarlahi" | region =="Surkhet" | ///
 	region =="Chitwan" | region =="Dang"
 
-*tab region
+* save HH dataset	
 save "$d4/Household/Household1.dta", replace
 
+* --------------------------------
 *Livestock Sales
 *clear 
 use "$d4/Household/Livestock_sales_collapse.dta"
 gen merge_id = ___parent_index
 save "$d4/Household/Livestock_sales_collapse.dta", replace
 
+* --------------------------------
 *Borrowing
 use "$d4/Household/Borrowing.dta", clear
 gen merge_id = ___parent_index 
 save "$d4/Household/Borrowing1.dta", replace 
 
+* --------------------------------
 *Number of Children
 use "$d4/Household/Number of Children.dta", clear
 gen merge_id = ___parent_index 
 save "$d4/Household/Number of Children1.dta", replace
 
+* --------------------------------
 *Roster
 use "$d4/Household/Rooster.dta", clear
 gen merge_id = ___parent_index   
 save "$d4/Household/Rooster1.dta", replace
 
-*create merged dataset 'modules_merged'
+
+* create merged dataset 'modules_merged'
+
+* --------------------------------
 *Livestock Sales - Borrowing
 use "$d4/Household/Household1.dta", clear
 merge m:m merge_id using Borrowing1.dta, force
 rename _merge merge1
 save "$d4/Household/modules_merged.dta", replace
 
+* --------------------------------
 *Number of Children
 use "$d4/Household/modules_merged.dta", clear
 merge m:m merge_id using "$d4/Household/Number of Children1.dta", force
 rename _merge merge2
 save "$d4/Household/modules_merged.dta", replace 
 
+* --------------------------------
 *Roster
 use "$d4/Household/modules_merged.dta", clear
 merge m:m merge_id using "$d4/Household/Rooster1.dta", force
 rename _merge merge3
 save "$d4/Household/modules_merged.dta", replace  
 
+* --------------------------------
 *merge modules_merged into Household
 use "$d4/Household/modules_merged.dta", clear
 merge m:1 merge_id using "$d4/Household/Livestock_sales_collapse.dta", force
 save "$d4/Household/Household_Merged.dta", replace
  
- *------------------------------------------------------------------------------ 
  
- ** Prepare Household_Merged to be collapsed by Co-op **
+*------------------------------------------------------------------------------- 
+** Prepare Household_Merged to be collapsed by Co-op **
  
 use "$d4/Household/Household_Merged.dta", clear
  
@@ -501,10 +522,6 @@ drop start end HH_IDstartHHID HH_IDendHHID end_rooster Number_children_count ///
 	Livestock_EnterprisesLSE1 Goat_Production_SystemGP22_1 Goat_Production_SystemGP22_2 RosterHHR1 RosterHHR2 ///
 	Goat_Production_SystemGP22_1 Goat_Production_SystemGP22_2
 
-save "$d4/Household/Household_Merged_Edit.dta", replace
- 
-clear 
-use "$d4/Household/Household_Merged_Edit.dta" 
 
 *drop multi-choice vars with individual dummys already created
 drop Co_opCommunicationCOM1 Co_opCommunicationCOM2 Co_opCommunicationCOM6 Co_opCommunicationCOM7 ///
@@ -515,12 +532,10 @@ drop Co_opCommunicationCOM1 Co_opCommunicationCOM2 Co_opCommunicationCOM6 Co_opC
 	Livestock_related_empowerment010 Livestock_related_empowerment024 Livestock_EnterprisesLSE22 ///
 	Goat_Production_SystemGP4 Goat_Production_SystemGP12 Goat_Production_SystemGP18 Goat_Production_SystemGP22 ///
 	Goat_Production_SystemGP25 Livestock_SalesLS48 Post_questionnairePQ2 BorrowingBorrowBR5 ///
-	Goat_Production_SystemGP3 BorrowingBorrowBR56 BorrowingBorrow_count
+	Goat_Production_SystemGP3 BorrowingBorrowBR56 BorrowingBorrow_count RosterHHR10_1	
 
-save "$d4/Household/Household_Merged_Edit.dta", replace
  
 *create multi-choice dummys for other relevant vars
-
 foreach v of varlist HH_IDID7 HH_IDID8 HH_IDHHR7 HHR7_calc Land_and_homeLND2 ///
 		Land_and_homeLND3 Land_and_homeHSE1 Land_and_homeHSE2 Land_and_homeHSE3 ///
 		Land_and_homeHSE8 Land_and_homeHSE9 Land_and_homeHSE11 Land_and_homeHSE12 ///
@@ -530,8 +545,6 @@ foreach v of varlist HH_IDID7 HH_IDID8 HH_IDHHR7 HHR7_calc Land_and_homeLND2 ///
 	quietly tab `v', generate(`v'_)
     drop `v'
 }
-
-save "$d4/Household/Household_Merged_Edit.dta", replace
 
 *Rename Livestock Related Enterprises -----
 rename Livestock_related_empowermentE08 LSE08 
@@ -548,54 +561,40 @@ rename Livestock_related_empowerment020 LSE020
 rename Livestock_related_empowerment022 LSE022
 rename Livestock_related_empowerment023 LSE023
 
-save "$d4/Household/Household_Merged_Edit.dta", replace	
 
-* ----------------------------------------
-
+* generate tabbed variables
 foreach v of varlist LSE08 LSE20 LSE31 LSE43 LSE54 LSE65 LSE76 LSE87 ///
 		LSE98 LS009 LSE022 LSE023 {
 	quietly tab `v', generate(`v'_)
     drop `v'	
 }
-
-save "$d4/Household/Household_Merged_Edit.dta", replace
- 
-drop RosterHHR10_1	
-
-save "$d4/Household/Household_Merged_Edit.dta", replace
- 
 foreach v of varlist Goat_Production_SystemGP5 Goat_Production_SystemGP6 ///
 		Goat_Production_SystemGP8 Goat_Production_SystemGP17 Goat_Production_SystemGP20 ///
 		BorrowingBorrowBR7 RosterHHR9 {
     quietly tab `v', generate(`v'_)
     drop `v'
 }
-
-save "$d4/Household/Household_Merged_Edit.dta", replace		
-
+	
+* shorten variable names
 rename Livestock_SalesLS43LS43 LSS4343
 rename Livestock_SalesLS43LS40 LSS4340
 rename Livestock_SalesLS43LS41 LSS4341
-		
- foreach v of varlist RosterHHR10 RosterHHR16 *Livestock_SalesLS7* *Livestock_SalesLS38* {
+
+* generate tabbed variables		
+foreach v of varlist RosterHHR10 RosterHHR16 *Livestock_SalesLS7* *Livestock_SalesLS38* {
     quietly tab `v', generate(`v'_)
     drop `v'
-}
-
-save "$d4/Household/Household_Merged_Edit.dta", replace
- 
+} 
 foreach v of varlist Goat_Production_SystemGP2 Goat_Production_SystemGP14 Goat_Production_SystemGP24 ///
 		BorrowingBorrowBR4 RosterHHR8 {
     quietly tab `v', generate(`v'_)
     drop `v'
 }
-
-save "$d4/Household/Household_Merged_Edit.dta", replace
  
  
- * Destring 1-2 dummys -- format to binary
+* Destring 1-2 dummys -- format to binary
 	* 2 -> 0  1 -> 1 ------ Most are Y/N --> Y=1 N=0
- foreach v of varlist Land_and_homeHSE6 Land_and_homeHSE7 Land_and_homeHSE10 ///
+foreach v of varlist Land_and_homeHSE6 Land_and_homeHSE7 Land_and_homeHSE10 ///
 		Co_opMembershipMEM3 Co_opMembershipMEM6 Co_opMembershipMEM8 Co_opMembershipMEM12 ///
 		Co_opMembershipMEM14 Co_opMembershipMEM16 Co_opServiceSER1 Co_opServiceSER2 ///
 		Co_opServiceSER3 Co_opServiceSER4 Co_opServiceSER6 Co_opServiceSER7 ///
@@ -623,12 +622,8 @@ save "$d4/Household/Household_Merged_Edit.dta", replace
 	quietly replace `v'=. if `v'==99 | `v'== .
 	quietly replace `v'=0 if `v'==2
 }
-
-save "$d4/Household/Household_Merged_Edit.dta", replace	
  
- 
- * Destring 0-1 dummys
-
+* Destring 0-1 dummys
 foreach v of varlist * {
 	cap local vv = subinstr("`v'", "Livestock_Saleslivestock", "Livestock_Sales", .)
 	if _rc == 0 {
@@ -648,14 +643,15 @@ quietly destring *Goat_Production_SystemGP* Roster_count Livestock_related_empow
 
 save "$d4/Household/Household_Merged_Edit.dta", replace	 
  
- *------------------------------------------------------------------------------ 
  
+*------------------------------------------------------------------------------  
 ** Collapse HH into 1 row per cooperative
  
 use "$d4/Household/Household_Merged_Edit.dta", clear
 
 rename HH_IDIDX idx
 
+* Shorten names that are too long for macros
 foreach v of var * {
 	cap local vv = subinstr("`v'", "Follow_up_", "Follup",.) // names too long for macros
 	if _rc == 0 {
@@ -702,15 +698,15 @@ foreach v of var * {
 	cap label val `v' "`ll`v''"
 }
 
-
+* saved collapsed HH data
 save "$d4/Household/Household_Collapsed.dta", replace
 
-  *------------------------------------------------------------------------------ 
- 
- ** Merge Co-op_merged into HH_Collapsed
 
- clear 
- use "$d4/Household/Household_Collapsed.dta"  
+*------------------------------------------------------------------------------  
+** Merge Co-op_merged into HH_Collapsed
+
+clear 
+use "$d4/Household/Household_Collapsed.dta"  
  
 sort idx
 drop if idx =="Karmath SEWC 2"

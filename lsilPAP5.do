@@ -1,10 +1,3 @@
-clear all
-set more off, perm
-
-*log
-cap log close
-log using "$d1/lsilPAP5.smcl", replace
-
 
 /*******************************************************************************
 lsilPAP5.d0		
@@ -12,6 +5,15 @@ lsilPAP5.d0
 - Calculates MDEs for each indicator
 	
 *******************************************************************************/
+
+
+clear all
+set more off, perm
+
+*log
+cap log close
+log using "$d1/lsilPAP5.smcl", replace
+
 
 
 cd "$d2"
@@ -26,32 +28,35 @@ encode idx, gen(idx_n)
 * Communication
 
 *** Strata dummies - No interaction
-local varlist COM3 COM8 index_HH_comm
-foreach v in `varlist' {
+gl hh_comm COM3 COM8 index_HHcomm
+
+local listsize : list sizeof global(hh_comm)
+tokenize $hh_comm
+
+forv i = 1/`listsize' {
+
+	reg ``i'' r_treat i.str, cluster(idx)
 	
-	reg `v' r_treat i.strata, cluster(idx_n)
-	
-	quietly { 
+	quietly {
 		ereturn list
 		scalar t_a = invttail(`e(df_r)',0.025) // alpha t-value
 		scalar t_b = invttail(`e(df_r)',0.2) // beta t-value
- 
-		scalar mde_`v' = (t_a + t_b)*_se[r_treat]
-		} 
-
+		scalar mde_``i'' = (t_a + t_b)*_se[r_treat]
+		
 	* Calculate MDE as % of mean & # of standard deviations
-	quietly {	
-		sum `v'
-		scalar mean_`v' = mde_`v' / r(mean) // % of treatment mean
-		scalar sd_`v' = mde_`v' / r(sd)  // # of treatment sd's
-		}
-} 
+		sum ``i''
+		scalar mean_``i'' = mde_``i'' / r(mean) // % of treatment mean
+		scalar sd_``i'' = mde_``i'' / r(sd)  // # of treatment sd's
 
-quietly {
-	matrix A = (mde_COM3, mean_COM3, sd_COM3\ ///
-			mde_COM8, mean_COM8, sd_COM8\ ///
-			mde_index_HH_comm, ., sd_index_HH_comm)
-	}
+	* matrix for table
+		matrix mat_`i' = (mde_``i'',mean_``i'',sd_``i'')
+		}
+}
+matrix A = mat_1
+forv i = 2/`listsize' { // appends into single matrix
+	matrix A = A \ mat_`i'
+}
+
 
 * Strata table
 frmttable using MDE_1.doc, statmat(A) sdec(4) title("Communication") ///
@@ -64,7 +69,6 @@ rtitle("HH info sales"\"HH info activities"\"HH level index") replace
 ** HH vars
 gl hh_goatsales LS8 LS9_w co_opgoatno co_opsalevalue ///
 				net_goat_income index_HH_goatsales ///
-				visits_sale time_passed transp_cost index_salecost ///
 
 
 
@@ -99,7 +103,7 @@ forv i = 2/`listsize' { // appends into single matrix
 * Table
 frmttable using MDE_1.doc, statmat(A) sdec(4) coljust(l;c;l;l) title("Goat Sales") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
-rtitle("Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"Net Goat Income"\"HH Goat Sales Index"\"Trader Visits per Sale"\"Time Passed"\"Transportation Costs"\"Sale Costs Index") ///
+rtitle("Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"Net Goat Income"\"HH Goat Sales Index") ///
 note("Currency measured in USD") addtable replace
 
 

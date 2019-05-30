@@ -1,10 +1,3 @@
-clear all
-set more off, perm
-
-*log
-cap log close
-log using "$d1/lsilPAP2.smcl", replace
-
 
 /*******************************************************************************
 lsilPAP2.d0		
@@ -15,6 +8,15 @@ lsilPAP2.d0
 	and r_HH_Merged_PAP.dta
 	
 *******************************************************************************/
+
+
+clear all
+set more off, perm
+
+*log
+cap log close
+log using "$d1/lsilPAP2.smcl", replace
+
 
 
 ** create merged dataset at HH level **

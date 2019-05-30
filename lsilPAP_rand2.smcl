@@ -1,9 +1,9 @@
 {smcl}
 {com}{sf}{ul off}{txt}{.-}
       name:  {res}<unnamed>
-       {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP_rand2.smcl
+       {txt}log:  {res}/Users/scottmiller/GitHub/LSIL_PAP/lsilPAP_rand2.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}15 Jan 2019, 10:20:02
+ {txt}opened on:  {res}30 May 2019, 13:02:47
 {txt}
 {com}. 
 . use "$d4/Merged/Baseline_Merged_Str.dta", clear
@@ -15,7 +15,6 @@
 . drop bin sub_bin strata random n random2
 {txt}
 {com}. 
-. 
 . 
 . * true treatment status: seed 3581 * random seed = 62184 
 . set seed 62184  // random seed to generate different treatment assignment
@@ -701,19 +700,31 @@ no observations
 
 {txt}
 {com}. save "$d4/Merged/r_Baseline_Merged_Str.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Merged/r_Baseline_Merged_Str.dta saved
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Merged/r_Baseline_Merged_Str.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Merged/r_Baseline_Merged_Str.dta saved
 
 {com}.  
 . 
 {txt}end of do-file
 
-{com}. browse idx treat r_treat
-
-. sort idx
-
-. do "/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP0.do"
+{com}. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD01647.000000"
 {txt}
-{com}. clear all
+{com}. 
+. /*******************************************************************************
+> lsilPAP0.d0             
+>                                         
+> - Clean datasets                                                        
+> - Create Co-op dataset that is collapsed                
+>         at the co-op level                                              
+> - Create HH dataset that is collapsed at        
+>         at the co-op level                                              
+> - Merge Co-op & HH datasets to create a         
+>         single dataset at the co-op level       
+>         
+> *******************************************************************************/
+. 
+. 
+. clear all
 {res}{txt}
 {com}. set more off, perm
 {txt}({cmd:set more} preference recorded)

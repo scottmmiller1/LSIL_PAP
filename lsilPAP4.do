@@ -1,10 +1,3 @@
-clear
-set more off, perm
-
-*log
-cap log close
-log using "$d1/lsilPAP4.smcl", replace
-
 
 /*******************************************************************************
 lsilPAP4.d0		
@@ -17,6 +10,15 @@ lsilPAP4.d0
 	r_HH_Merged_Ind.dta
 	
 *******************************************************************************/
+
+
+clear
+set more off, perm
+
+*log
+cap log close
+log using "$d1/lsilPAP4.smcl", replace
+
 
 cd "$d3" 
 

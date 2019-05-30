@@ -1,9 +1,3 @@
-clear all
-set more off, perm
-
-*log
-cap log close
-log using "$d1/lsilPAP0.smcl", replace
 
 /*******************************************************************************
 lsilPAP0.d0		
@@ -17,6 +11,14 @@ lsilPAP0.d0
 	single dataset at the co-op level	
 	
 *******************************************************************************/
+
+
+clear all
+set more off, perm
+
+*log
+cap log close
+log using "$d1/lsilPAP0.smcl", replace
 
 
 * Load Co-op dataset 

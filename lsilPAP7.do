@@ -1,13 +1,10 @@
 
-
 /*******************************************************************************
 lsilPAP7.d0		
 					
 - Generates balance tables
 	
 *******************************************************************************/
-
-
 
 
 * Balance tables after dropping Banke district
@@ -35,8 +32,6 @@ foreach i in seriously somewhat "doesn't" {
 foreach v of varlist COMM8b_1 COMM8d_1 {
 	cap destring `v', replace
 }
-
-
 
 lab var PNG1 "Does the cooperative have a written business plan?"
 lab var PNG2 "Planning Tume Horizon (Years)"
@@ -66,7 +61,7 @@ iebaltab COMM8b_1 COMM8d_1 ///
 		CO_TRN1 CO_TRN2 CO_TRN3 CO_TRN4 CO_TRN5 ///
 		CO_TRN6 CO_TRN7 ///
 		MAN3 goats_sold revenue ICTassets Otherassets, rowvarlabels grpvar(treat) ///
-		savetex("/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/iebaltab1_nobanke_PAP.tex") replace
+		savetex("$d2/iebaltab1_nobanke_PAP.tex") replace
 
 
 * ------------------------------------------------
@@ -134,7 +129,7 @@ iebaltab COM3 COM8 index_HHcomm ///
 		HHR4 HHR14 MEM11  ///
 		MGT4, rowvarlabels ///
 		grpvar(treat) vce(cluster idx)  ///
-		savetex("/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/iebaltab2_nobanke_PAP.tex") replace
+		savetex("$d2/iebaltab2_nobanke_PAP.tex") replace
 		
 		
 		

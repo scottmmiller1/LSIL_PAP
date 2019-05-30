@@ -2,7 +2,9 @@ version 15.1
 /*******************************************************************************
 DO FILE DIRECTORY 
 
-	** Randomized cooperatives into treatment & control **
+	** Randomizes cooperatives into treatment & control **
+	** This section uses the original data that was sent 
+		directly after data collection **
 	
 lsilPAP_rand0:  															   *
 	Collapses livestock sales data for hh into one row per hh
@@ -25,6 +27,9 @@ lsilPAP_rand2:
 -------------------------------------------------------------------------
 	** Cleans data, creates indicator variables, summary statistics, 
 		power calulations, and balance tables **
+	** This section uses the clean data that was sent 
+		after the data collection firm had time to clean the
+		datasets used above **
 	
 lsilPAP0:
 	creates collapsed co-op and HH datasets
@@ -70,20 +75,24 @@ clear all
 *pathways
 
 ** clean datasets **
-gl d1 = "/Users/scottmiller/GitHub/LSIL_PAP" // do files stored here
-gl d2 = "/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data" // used to store output
-gl d3 = "$d2/LSIL-DATA_scott/VCC baseline clean" // clean data folder - saved separately to preserve original data
-gl d4 = "$d2/LSIL-DATA_scott/baseline original" // original data
+*gl d1 = "/Users/scottmiller/GitHub/LSIL_PAP" // do files stored here
+*gl d2 = "/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data" // used to store output
+*gl d3 = "$d2/LSIL-DATA_scott/VCC baseline clean" // clean data folder
+*gl d4 = "$d2/LSIL-DATA_scott/baseline original" // original data
 
-/* To run all do files
+gl d0 = "/Users/scottmiller/Desktop/PAP Master Replication" // master replication file
+gl d1 = "$d0/Stata Files" // do files stored here
+gl d2 = "$d0/Output" // used to store output
+gl d3 = "$d0/Data/Clean Data" // clean data folder
+gl d4 = "$d0/Data/Original Data" // original data
 
-forv i in 0/2 {
-	do "$d1/lsilPAP_rand`i'"
+* To run all do files
+forv i = 0/2 {
+	do "$d1/lsilPAP_rand`i'.do"
 }
 
-forv i in 0/5 {
-	do "$d1/lsilPAP`i'"
+forv i = 0/7 {
+	do "$d1/lsilPAP`i'.do"
 }
 
-*/
 

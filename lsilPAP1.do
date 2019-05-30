@@ -1,10 +1,3 @@
-clear all
-set more off, perm
-
-*log
-cap log close
-log using "$d1/lsilPAP1.smcl", replace
-
 
 /*******************************************************************************
 lsilPAP1.d0		
@@ -13,6 +6,15 @@ lsilPAP1.d0
 	into clean datasets to be used for power calculations
 	
 *******************************************************************************/
+
+
+clear all
+set more off, perm
+
+*log
+cap log close
+log using "$d1/lsilPAP1.smcl", replace
+
 
 ** Load merged baseline dataset
 use "$d3/Baseline_Merged.dta", clear

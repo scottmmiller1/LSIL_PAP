@@ -1,20 +1,21 @@
 {smcl}
-{txt}{sf}{ul off}{.-}
+{com}{sf}{ul off}{txt}{.-}
       name:  {res}<unnamed>
-       {txt}log:  {res}/Users/scottmiller/Documents/GitHub/LSIL_PAP/lsilPAP_rand1.smcl
+       {txt}log:  {res}/Users/scottmiller/GitHub/LSIL_PAP/lsilPAP_rand1.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}15 Jan 2019, 10:10:59
+ {txt}opened on:  {res}30 May 2019, 12:56:01
 {txt}
 {com}. 
 . use "$d4/Merged/Baseline_Merged.dta", clear
 {txt}( )
 
 {com}. 
+. 
 . /* gen treat = 0
 > 
 > replace treat = 1 if HH_IDIDX == "Lekhbesi SEWC 1" // Pilot co-op
 > */
-. drop if HH_IDIDX == "Lekhbesi SEWC 1" // Pilot co-op
+. drop if idx == "Lekhbesi SEWC 1" // Pilot co-op
 {txt}(1 observation deleted)
 
 {com}. 
@@ -700,21 +701,29 @@ no observations
 
 {txt}
 {com}. save "$d4/Merged/Baseline_Merged_Str.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Merged/Baseline_Merged_Str.dta saved
+{txt}(note: file /Users/scottmiller/Desktop/PAP Data - Test/Merged/Baseline_Merged_Str.dta not found)
+file /Users/scottmiller/Desktop/PAP Data - Test/Merged/Baseline_Merged_Str.dta saved
 
 {com}.  
 . 
 {txt}end of do-file
 
-{com}. use "/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/baseline original/Merged/Baseline_Merged_Str.dta"
-{txt}( )
-
 {com}. browse idx treat
 
 . sort idx
 
-. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD01582.000000"
+. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD01647.000000"
 {txt}
-{com}. cap log close
+{com}. 
+. /*******************************************************************************
+> lsilPAP_rand0.do                
+>                                         
+> - Runs a random permutation of treatment status to be used for 
+>         minimum detectable effect calculations
+>         
+> *******************************************************************************/
+. 
+. 
+. cap log close
 {smcl}
 {com}{sf}{ul off}

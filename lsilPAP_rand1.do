@@ -1,3 +1,14 @@
+
+/*******************************************************************************
+lsilPAP_rand0.do		
+					
+- Stratifies co-ops by region, hh livestock revenue (split at 33rd amd 66th 
+	percentiles), number of co-op members (at median), total co-op
+	revenue (at median). 
+	
+*******************************************************************************/
+
+
 cap log close
 clear
 cd "$d1"
@@ -6,11 +17,8 @@ log using "$d1/lsilPAP_rand1.smcl", replace
 
 use "$d4/Merged/Baseline_Merged.dta", clear
 
-/* gen treat = 0
 
-replace treat = 1 if HH_IDIDX == "Lekhbesi SEWC 1" // Pilot co-op
-*/
-drop if HH_IDIDX == "Lekhbesi SEWC 1" // Pilot co-op
+drop if idx == "Lekhbesi SEWC 1" // Pilot co-op
 
 set seed 3581
 
