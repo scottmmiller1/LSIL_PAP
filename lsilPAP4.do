@@ -36,204 +36,26 @@ generate stdgroup = r_treat
 encode region, gen(n_region) // create numerical region variable for regression
 
 
-** Winsorize LS9
-* -----------------------------------------------
-gen LS9_w = LS9
-
-* treatment
-sum LS9_w if r_treat == 1, d
-scalar t_99 = r(p99)
-
-replace LS9_w = t_99 if LS9_w > t_99 & !missing(LS9_w) & r_treat == 1
-
-*control
-sum LS9_w if r_treat == 0, d
-scalar c_99 = r(p99)
-
-replace LS9_w = c_99 if LS9_w > c_99 & !missing(LS9_w) & r_treat == 0
-
-
-** Replace Missing values with zero 
-* LS9 , 
-replace LS9_w = 0 if LS9_w ==.
-replace co_opsalevalue = 0 if co_opsalevalue ==.
-* -----------------------------------------------
-*/
-
-
 ** Communication **
 
-/* Variables 
-# of times initiated contact with SHG : comm1
-# of times SHG initiated contact : comm2
-Factors that limit communication : (not in index - used as control vars)
-*/
-
-	* # of times initiated contact with SHG : comm1
-	gen comm1 = COMM1a + COMM1b ///
-	+ COMM1c + COMM1d
-	* # of times SHG initiated contact : comm2
-	gen comm2 = COMM2a + COMM2b ///
-	+ COMM2c + COMM2d
-	** Total # of times initiated contact
-	gen contact = comm1 + comm2
-	
-	* Total # of times HH is contacted
-	gen HHcontact = COM3 + COM8
-	
-
-* co-op comm index
-local local_CO_comm_full contact COM3 COM8
-make_index_gr CO_comm_full wgt stdgroup `local_CO_comm_full' 
-
 * factors that limit communication
-	* principal components index
+/* Variables
+Mobile Network : COMM8b
+Distance : COMM8d
+*/
 
 
 ** Transparency **
 
 /* Variables
-Mandate : Co_opTransparencyTRN1
-Annual Report : Co_opTransparencyTRN2
-Annual Budget : Co_opTransparencyTRN3
-Financial Report: Co_opTransparencyTRN4 
-Meeting minutes : Co_opTransparencyTRN5
-Election Results : Co_opTransparencyTRN6
-Sale Records : Co_opTransparencyTRN7
-Evaluations : Co_opTransparencyTRN8
+Mandate : CO_TRN1
+Annual Report : CO_TRN2
+Annual Budget : CO_TRN3
+Financial Report: CO_TRN4
+Meeting minutes : CO_TRN5
+Election Results : CO_TRN6
+Sale Records : CO_TRN7
 */
-	
-** Co-op Transparency	
-local local_CO_TRN CO_TRN1 CO_TRN2 ///
-	CO_TRN3 CO_TRN4 CO_TRN5 ///
-	CO_TRN6 CO_TRN7
-make_index_gr CO_TRN wgt stdgroup `local_CO_TRN' 
-
-
-** Household Awareness
-local local_HH_TRN HH_TRN1 HH_TRN2 ///
-	HH_TRN3 HH_TRN4 HH_TRN5 ///
-	HH_TRN6 HH_TRN7
-make_index_gr HH_TRN wgt stdgroup `local_HH_TRN' 
-
-
-** Discrepancy
-	forvalues i=1/7 { 
-		gen dTRN`i' = -(CO_TRN`i' - HH_TRN`i')^2
-		}
-		
-local local_dTRN dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7
-make_index_gr dTRN wgt stdgroup `local_dTRN' 
-
-* average discrepancy
-egen avg_dTRN = rowmean(dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7)
-
-
-** Cooperative Finances **
-
-/* Variables 
-Revenue from all activities : role_GMrevenuandcostREV4
-Costs from all activities : role_GMrevenuandcostcalc_REC7
-Assets : role_GMFinLiabiliteisFAL1
-Liabilities : role_GMFinLiabiliteisFAL2
-Goat Rev : role_GMrevenuandcostREC4_1
-Members : role_CPMgt_and_membershi1
-*/
-
-* Convert to USD as of 1/1/18
-
-gen revenue = REV4*(0.0099)
-gen costs = REC7*(0.0099)
-gen assets = FAL1*(0.0099)
-gen liabilities = FAL2*(0.0099)
-gen goatrev = REC4_1*(0.0099)
-
-gen net_rev = revenue - costs
-gen net_finances = (revenue - costs) ///
-					+ (assets - liabilities)
-
-* per member
-gen rev_member = revenue / MAN3
-gen cost_member =  costs / MAN3
-gen assets_member = assets / MAN3
-gen liab_member = liabilities / MAN3
-gen net_rev_member = net_rev / MAN3
-gen net_finances_member = net_finances / MAN3
-gen goatrev_member = goatrev / MAN3
-
-** Replace Missing values with zero 
-*  , 
-replace revenue = 0 if revenue ==.
-replace rev_member = 0 if rev_member ==.
-replace costs = 0 if costs ==.
-replace cost_mem = 0 if cost_mem ==.		
-
-
-** Goat Sales ** 
-
-/* Variables 
-# of goats sold : REC1
-goat revenue : REC4_1
-# of organized sales at collection points : GTT1
-Members : MAN3
-Goat revenue per member : goatrev_member
-Trader visits per sale
-Time passed
-Transportation costs
-*/
-
-** co-op level vars
-gen goats_sold = REC1
-gen goats_sold_member = REC1 / MAN3
-* goatrev
-* revenue per goat sold
-gen goatrev_sold = goatrev / REC1
-gen col_points = GTT1
-
-local local_CO_goatsales goats_sold goatrev col_points
-make_index_gr CO_goatsales wgt stdgroup `local_CO_goatsales' 
-
-
-** household level vars
-gen co_opshare = 0
-replace co_opshare = co_opgoatno / LS8 if LS8 != 0
-gen visits_sale = -1*(LS40 / LS_n_sales)
-gen time_passed = -1*(LS41)
-gen transp_cost = -1*(LS42*(0.0099))
-
-* replace obvious outlier with sample median (median = 0)
-replace visits_sale = 0 if visits_sale <= -5000
-
-* replace missing values with zero
-foreach v of varlist LSE12 LSE15 LSE16 LSE17a LSE17b LSE18 {
-	replace `v' = 0 if `v'==.
-	}
-
-
-local local_HH_goatsales LS8 LS9_w co_opgoatno co_opsalevalue
-make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
-
-local local_salecost visits_sale time_passed transp_cost
-make_index_gr salecost wgt stdgroup `local_salecost' 
-
-
-* Gross margin -- Net rev. per goat
-
-/* Costs
-Amount spent purchasing goats: LSE12
-Amount spent on feed/fodder : LSE15
-Amount spent on vet care : LSE16
-Amount spent on breeding fees : LSE17a * LSE17b
-Amount spent on shelters : LSE18
-*/
-
-
-
-gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
-gen net_goat_income = LS9_w*(0.0099) - goat_costs
-gen netincome_goat = net_goat_income / LS8
-
-
 
 
 ** Planning and Goals **
@@ -254,11 +76,57 @@ make_index_gr PNG wgt stdgroup `local_PNG'
 
 
 
+** Cooperative Characteristics **
 
-** IHS transformations **
+/* Variables 
+Members : MAN3
+# of goats sold : REC1
+Revenue from all activities : role_GMrevenuandcostREV4
+# of computers owned : EQP1_2
+# of phones owned : EQP2_2
+# of printers owned : EQP2_2X
+# of weighing scales owned : EQP4_2
+# of trucks or vans : EQP5_2
+# of covered collection centers : EQP6_2
+*/
 
-gen PNG3_ln = log(PNG3 + sqrt(PNG3^2 + 1))
-gen expected_rev_ln = log(expected_rev + sqrt(expected_rev^2 + 1))
+gen goats_sold = REC1
+
+* Convert to USD as of 1/1/18
+
+gen revenue = REV4*(0.0099)
+gen costs = REC7*(0.0099)
+gen assets = FAL1*(0.0099)
+gen liabilities = FAL2*(0.0099)
+gen goatrev = REC4_1*(0.0099)
+
+gen net_rev = revenue - costs
+gen net_finances = (revenue - costs) + (assets - liabilities)
+
+* per member
+gen rev_member = revenue / MAN3
+gen cost_member =  costs / MAN3
+gen assets_member = assets / MAN3
+gen liab_member = liabilities / MAN3
+gen net_rev_member = net_rev / MAN3
+gen net_finances_member = net_finances / MAN3
+gen goatrev_member = goatrev / MAN3
+
+** Replace Missing values with zero 
+foreach v of varlist EQP1_2 EQP2_2 EQP2_2X EQP4_2 EQP5_2 EQP6_2 {
+	replace `v' = 0 if `v' ==.
+}
+replace goats_sold = 0 if goats_sold ==.
+replace revenue = 0 if revenue ==.
+
+replace rev_member = 0 if rev_member ==.
+replace costs = 0 if costs ==.
+replace cost_mem = 0 if cost_mem ==.		
+
+
+* ICT and non-ICT assets
+gen ICTassets = EQP1_2 + EQP2_2
+gen Otherassets = EQP2_2X + EQP4_2 + EQP5_2 + EQP6_2
 
 
 
@@ -282,6 +150,69 @@ generate stdgroup = r_treat
 
 encode region, gen(n_region) // create numerical region variable for regression
 
+
+
+** Communication **
+
+/* Variables 
+Total times contacted about livestock sales : COM3
+Total times contacted about livestock activities : COM8
+*/
+
+replace COM3 = 0 if COM3 ==.
+replace COM8 = 0 if COM8 ==.
+
+local local_HHcomm COM3 COM8
+make_index_gr HHcomm wgt stdgroup `local_HHcomm' 
+
+
+** Transparency **
+
+/* Variables
+Mandate : HH_TRN1
+Annual Report : HH_TRN2
+Annual Budget : HH_TRN3
+Financial Report: HH_TRN4 
+Meeting minutes : HH_TRN5
+Election Results : HH_TRN6
+Sale Records : HH_TRN7
+Evaluations : HH_TRN8
+*/
+
+
+	
+** Transparency Discrepancy index
+	forvalues i=1/7 { 
+		gen dTRN`i' = 1 if CO_TRN`i' == HH_TRN`i' ///
+			&  !missing(CO_TRN`i') & !missing(HH_TRN`i')
+		replace dTRN`i' = 0 if CO_TRN`i' != HH_TRN`i' ///
+			&  !missing(CO_TRN`i') & !missing(HH_TRN`i')
+		}
+		
+local local_dTRN dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7
+make_index_gr dTRN wgt stdgroup `local_dTRN' 
+
+
+
+
+** Goat Sales ** 
+
+/* Variables 
+# of goats sold : LS8
+goat revenue : LS9
+goats sold through co-op : co_opgoatno
+goat revenue through co-op : co_opsalevalue
+
+Amount spent purchasing goats: LSE12
+Amount spent on feed/fodder : LSE15
+Amount spent on vet care : LSE16
+Amount spent on breeding fees : LSE17a * LSE17b
+Amount spent on shelters : LSE18
+Net goat income
+*/
+
+
+** household level vars
 
 ** Winsorize LS9
 * -----------------------------------------------
@@ -308,133 +239,37 @@ replace LS9_w = 0 if LS9_w ==.
 replace LS8 = 0 if LS8 ==.
 replace co_opsalevalue = 0 if co_opsalevalue ==.
 replace co_opgoatno = 0 if co_opgoatno ==.
-* -----------------------------------------------
-*/
-
-** Communication **
-
-* Variables 
-
-	* Total # of times HH is contacted
-	gen HHcontact = COM3 + COM8
-
-
-* HH comm index
-local local_HH_comm COM3 COM8
-make_index_gr HH_comm wgt stdgroup `local_HH_comm' 
-
-* factors that limit communication
-	* principal components index
-
-
-
-** Transparency **
-
-/* Variables
-Mandate : Co_opTransparencyTRN1
-Annual Report : Co_opTransparencyTRN2
-Annual Budget : Co_opTransparencyTRN3
-Financial Report: Co_opTransparencyTRN4 
-Meeting minutes : Co_opTransparencyTRN5
-Election Results : Co_opTransparencyTRN6
-Sale Records : Co_opTransparencyTRN7
-Evaluations : Co_opTransparencyTRN8
-*/
-
-	/*
-	forvalues i=1/7 { 
-		destring role_GMtransTRN`i', replace
-		replace role_GMtransTRN`i' = 0 if role_GMtransTRN`i' == 2
-		replace role_GMtransTRN`i' = . if role_GMtransTRN`i' == 97
-		}
-	*/
-	
-** Co-op Transparency	
-local local_CO_TRN CO_TRN1 CO_TRN2 ///
-	CO_TRN3 CO_TRN4 CO_TRN5 ///
-	CO_TRN6 CO_TRN7
-make_index_gr CO_TRN wgt stdgroup `local_CO_TRN' 		
-
-** Household Awareness
-local local_HH_TRN HH_TRN1 HH_TRN2 ///
-	HH_TRN3 HH_TRN4 HH_TRN5 ///
-	HH_TRN6 HH_TRN7
-make_index_gr HH_TRN wgt stdgroup `local_HH_TRN' 
-
-	
-** Transparency Discrepancy index
-	forvalues i=1/7 { 
-		gen dTRN`i' = 1 if CO_TRN`i' == HH_TRN`i' ///
-			&  !missing(CO_TRN`i') & !missing(HH_TRN`i')
-		replace dTRN`i' = 0 if CO_TRN`i' != HH_TRN`i' ///
-			&  !missing(CO_TRN`i') & !missing(HH_TRN`i')
-		}
-		
-local local_dTRN dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7
-make_index_gr dTRN wgt stdgroup `local_dTRN' 
-
-* average discrepancy
-egen avg_dTRN = rowmean(dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7)
-
-
-** Goat Sales ** 
-
-/* Variables 
-# of goats sold : Livestock_SalesLS8
-goat revenue : Livestock_SalesLS9
-goats sold through co-op : co_opgoatno
-goat revenue through co-op : co_opsalevalue
-share through co-op : co_opshare
-trader visits home : Livestock_SalesLS40
-time passed before sale : Livestock_SalesLS41
-transportation cost : Livestock_SalesLS42
-*/
-/* Costs
-Amount spent purchasing goats: LSE12
-Amount spent on feed/fodder : LSE15
-Amount spent on vet care : LSE16
-Amount spent on breeding fees : LSE17a * LSE17b
-Amount spent on shelters : LSE18
-*/
-
-
-** household level vars
-gen co_opshare = 0
-replace co_opshare = co_opgoatno / LS8 if LS8 != 0
-gen visits_sale = -1*(LS40 / LS_n_sales)
-gen time_passed = -1*(LS41)
-gen transp_cost = -1*(LS42*(0.0099))
-replace LS9_w = LS9_w*(0.0099)
-replace co_opsalevalue = co_opsalevalue*(0.0099)
-
-
-* replace obvious outlier with sample median (median = 0)
-replace visits_sale = 0 if visits_sale <= -5000
-
-* replace missing values with zero
 foreach v of varlist LSE12 LSE15 LSE16 LSE17a LSE17b LSE18 {
 	replace `v' = 0 if `v'==.
 	}
+* -----------------------------------------------
 
+
+* covert to USD
+replace LS9_w = LS9_w*(0.0099)
+replace co_opsalevalue = co_opsalevalue*(0.0099)
+
+* generate net income
 gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
 gen net_goat_income = LS9_w - goat_costs
-gen netincome_goat = net_goat_income / LS8
 
 
 local local_HH_goatsales LS8 LS9_w co_opgoatno co_opsalevalue net_goat_income
 make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
 
-local local_salecost visits_sale time_passed transp_cost
-make_index_gr salecost wgt stdgroup `local_salecost' 
 
 
+** Characteristics ** 
 
-** IHS transformations **
+/* Variables 
+Age : HHR4
+Literacy : HHR14
+Total # of SHG meetings attended in past 6 months : MEM11
+Trust co-op leadership : MGT4
+*/
 
-gen LS9_w_ln = log(LS9_w + sqrt(LS9_w^2 + 1))
-gen co_opsalevalue_ln = log(co_opsalevalue + sqrt(co_opsalevalue^2 + 1))
-gen net_goat_income_ln = log(net_goat_income + sqrt(net_goat_income^2 + 1))
-
+replace MEM11 = 0 if MEM11 ==.
+replace HHR14 = . if HHR4 < 18
 
 
 

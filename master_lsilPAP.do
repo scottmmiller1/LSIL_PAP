@@ -54,7 +54,7 @@ lsilPAP4:
 lsilPAP5: 
 	Calculates MDEs for each indicator
 
-lsilPAP7: 
+lsilPAP6: 
 	Generates summary statistic tables
 	
 lsilPAP7: 
