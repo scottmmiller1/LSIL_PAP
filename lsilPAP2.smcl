@@ -1,26 +1,16 @@
 {smcl}
 {com}{sf}{ul off}{txt}{.-}
       name:  {res}<unnamed>
-       {txt}log:  {res}/Users/scottmiller/GitHub/LSIL_PAP/lsilPAP2.smcl
+       {txt}log:  {res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/PAP Master Replication/Stata Files/lsilPAP2.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}17 May 2019, 14:44:03
+ {txt}opened on:  {res} 9 Jun 2019, 10:28:52
 {txt}
 {com}. 
-. 
-. /*******************************************************************************
-> lsilPAP2.d0             
->                                         
-> - Generates a merged dataset at the HH level
->         Collapses HH data from ind. level to HH level
->         Saves respective datasets as r_CO_Merged_PAP.dta
->         and r_HH_Merged_PAP.dta
->         
-> *******************************************************************************/
 . 
 . 
 . ** create merged dataset at HH level **
 . cd "$d3"
-{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline clean
+{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/PAP Master Replication/Data/Clean Data
 {txt}
 {com}. 
 . 
@@ -3622,9 +3612,18 @@ str12 now)
 . 
 {txt}end of do-file
 
-{com}. do "/Users/scottmiller/GitHub/LSIL_PAP/lsilPAP3.do"
-{txt}
-{com}. /***********************************************
+{com}. 
+. /*******************************************************************************
+> lsilPAP3.d0             
+>                                         
+> - Creates command for ICW Summary Indices
+>         (published by Cyrus Samii, NYU, December 2017) 
+>         
+> *******************************************************************************/
+. 
+. 
+. 
+. /***********************************************
 > *INVERSE COVARIANCE WEIGHTED INDEX V.0.2
 > *Cyrus Samii, NYU, December 2017
 > *(cds2083@nyu.edu)
@@ -3633,6 +3632,7 @@ str12 now)
 > *a la Anderson (2008, p. 1485).
 > 
 > ***********************************************/
+. 
 . 
 . capture program drop make_index_gr
 {txt}
@@ -3688,9 +3688,21 @@ str12 now)
 {com}. 
 {txt}end of do-file
 
-{com}. do "/Users/scottmiller/GitHub/LSIL_PAP/lsilPAP4.do"
-{txt}
-{com}. clear
+{com}. 
+. /*******************************************************************************
+> lsilPAP4.d0             
+>                                         
+> - Creates indicator variables & ICW Summary Indices from
+>         r_CO_Merged_PAP.dta (co-op level dataset)
+>         and r_HH_Merged_PAP.dta (HH level dataset)
+>         Saves new datasets respectively as: 
+>         r_CO_Merged_Ind.dta
+>         r_HH_Merged_Ind.dta
+>         
+> *******************************************************************************/
+. 
+. 
+. clear
 {txt}
 {com}. set more off, perm
 {txt}({cmd:set more} preference recorded)

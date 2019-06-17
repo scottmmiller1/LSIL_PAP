@@ -73,19 +73,14 @@ clear all
 *ssc install ietoolkit
 
 *pathways
-
-** clean datasets **
-*gl d1 = "/Users/scottmiller/GitHub/LSIL_PAP" // do files stored here
-*gl d2 = "/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data" // used to store output
-*gl d3 = "$d2/LSIL-DATA_scott/VCC baseline clean" // clean data folder
-*gl d4 = "$d2/LSIL-DATA_scott/baseline original" // original data
-
-gl d0 = "/Users/scottmiller/Desktop/PAP Master Replication" // master replication file
+gl d0 = "/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/PAP Master Replication" // master replication file
+*gl d0 = "C:/Users/Conner/Dropbox/LSIL/Pre-Analysis Plan/PAP Master Replication" // master replication file
 gl d1 = "$d0/Stata Files" // do files stored here
 gl d2 = "$d0/Output" // used to store output
 gl d3 = "$d0/Data/Clean Data" // clean data folder
 gl d4 = "$d0/Data/Original Data" // original data
 
+/*
 * To run all do files
 forv i = 0/2 {
 	do "$d1/lsilPAP_rand`i'.do"
@@ -94,5 +89,10 @@ forv i = 0/2 {
 forv i = 0/7 {
 	do "$d1/lsilPAP`i'.do"
 }
-
+*/
+/*
+forv i = 0/4 {
+	do "$d1/lsilPAP`i'.do"
+}
+*/
 

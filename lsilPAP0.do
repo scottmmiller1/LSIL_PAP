@@ -272,7 +272,7 @@ foreach v of var * {
 }
 		
 		
-	
+/*	
 ** Top code LS9 -- obvious outliers
 
 g price = LS9/LS8
@@ -289,7 +289,7 @@ drop n price
 su *LS8, d
 replace LS8 = r(p50) if LS8 > 25 & ///
 LS8 < . // Replaces outliers with median
-
+*/
 
 
 save "$d3/Livestocksales_collapse.dta", replace

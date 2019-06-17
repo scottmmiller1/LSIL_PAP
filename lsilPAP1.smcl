@@ -1,19 +1,11 @@
 {smcl}
 {com}{sf}{ul off}{txt}{.-}
       name:  {res}<unnamed>
-       {txt}log:  {res}/Users/scottmiller/GitHub/LSIL_PAP/lsilPAP1.smcl
+       {txt}log:  {res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/PAP Master Replication/Stata Files/lsilPAP1.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}17 May 2019, 14:42:29
+ {txt}opened on:  {res} 9 Jun 2019, 10:28:52
 {txt}
 {com}. 
-. 
-. /*******************************************************************************
-> lsilPAP1.d0             
->                                         
-> - Merge true and randomized treatment status from lsilPAP_rand1/2
->         into clean datasets to be used for power calculations
->         
-> *******************************************************************************/
 . 
 . ** Load merged baseline dataset
 . use "$d3/Baseline_Merged.dta", clear
@@ -36,7 +28,7 @@
 {txt}
 {com}. 
 . save "$d3/treat.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline clean/treat.dta saved
+{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/PAP Master Replication/Data/Clean Data/treat.dta saved
 
 {com}. 
 . merge 1:1 idx using "$d3/Baseline_Merged.dta"
@@ -58,16 +50,26 @@
 
 {com}. 
 . save "$d3/r_Baseline_Merged_Str.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline clean/r_Baseline_Merged_Str.dta saved
+{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/PAP Master Replication/Data/Clean Data/r_Baseline_Merged_Str.dta saved
 
 {com}. 
 .  
 . 
 {txt}end of do-file
 
-{com}. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD01875.000000"
-{txt}
-{com}. clear all
+{com}. 
+. /*******************************************************************************
+> lsilPAP2.d0             
+>                                         
+> - Generates a merged dataset at the HH level
+>         Collapses HH data from ind. level to HH level
+>         Saves respective datasets as r_CO_Merged_PAP.dta
+>         and r_HH_Merged_PAP.dta
+>         
+> *******************************************************************************/
+. 
+. 
+. clear all
 {res}{txt}
 {com}. set more off, perm
 {txt}({cmd:set more} preference recorded)

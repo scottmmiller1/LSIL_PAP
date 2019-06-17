@@ -28,7 +28,7 @@ encode idx, gen(idx_n)
 * Communication
 
 *** Strata dummies - No interaction
-gl hh_comm COM3 COM8 index_HHcomm
+gl hh_comm bCOM3 index_dTRN
 
 local listsize : list sizeof global(hh_comm)
 tokenize $hh_comm
@@ -61,18 +61,14 @@ forv i = 2/`listsize' { // appends into single matrix
 * Strata table
 frmttable using MDE_1.doc, statmat(A) sdec(4) title("Communication") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
-rtitle("HH info sales"\"HH info activities"\"HH level index") replace
+rtitle("HH received sale info"\"Transparency index") replace
 
 
 * Goat Sales
 
 ** HH vars
-gl hh_goatsales LS8 LS9_w co_opgoatno co_opsalevalue ///
-				net_goat_income index_HH_goatsales ///
+gl hh_goatsales co_opgoatno_w LS8_w
 
-
-
-** HH vars
 local listsize : list sizeof global(hh_goatsales)
 tokenize $hh_goatsales
 
@@ -103,20 +99,22 @@ forv i = 2/`listsize' { // appends into single matrix
 * Table
 frmttable using MDE_1.doc, statmat(A) sdec(4) coljust(l;c;l;l) title("Goat Sales") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
-rtitle("Goats Sold"\"Goat Revenue"\"# Sold through Co-op"\"Rev. through Co-op"\"Net Goat Income"\"HH Goat Sales Index") ///
+rtitle("Goats Sold through Cooperative"\"Total Goats Sold") ///
 note("Currency measured in USD") addtable replace
 
 
-* Transparency
-** HH vars
-gl hh_trn_d index_dTRN
 
-local listsize : list sizeof global(hh_trn_d)
-tokenize $hh_trn_d
+* Goat Prices
+
+** HH vars
+gl hh_goatprice rev_goat_w rev_co_opgoat_w
+
+local listsize : list sizeof global(hh_goatprice)
+tokenize $hh_goatprice
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata, cluster(idx)
+	reg ``i'' r_treat i.str, cluster(idx)
 	
 	quietly {
 		ereturn list
@@ -138,12 +136,52 @@ forv i = 2/`listsize' { // appends into single matrix
 	matrix A = A \ mat_`i'
 }
 
-* Strata table
-frmttable using MDE_1.doc, statmat(A) sdec(4) title("Transparency") ///
+* Table
+frmttable using MDE_1.doc, statmat(A) sdec(4) coljust(l;c;l;l) title("Goat Price") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
-rtitle("Discrepancy Index") addtable replace
+rtitle("Revenue per Goat"\"Revenue per Cooperative Goat") ///
+note("Currency measured in USD") addtable replace
 
 
+
+
+* Net Goat Income
+
+** HH vars
+gl hh_income rev_goat_w LS8_w net_goat_income_w
+
+local listsize : list sizeof global(hh_income)
+tokenize $hh_income
+
+forv i = 1/`listsize' {
+
+	reg ``i'' r_treat i.str, cluster(idx)
+	
+	quietly {
+		ereturn list
+		scalar t_a = invttail(`e(df_r)',0.025) // alpha t-value
+		scalar t_b = invttail(`e(df_r)',0.2) // beta t-value
+		scalar mde_``i'' = (t_a + t_b)*_se[r_treat]
+		
+	* Calculate MDE as % of mean & # of standard deviations
+		sum ``i''
+		scalar mean_``i'' = mde_``i'' / r(mean) // % of treatment mean
+		scalar sd_``i'' = mde_``i'' / r(sd)  // # of treatment sd's
+
+	* matrix for table
+		matrix mat_`i' = (mde_``i'',mean_``i'',sd_``i'')
+		}
+}
+matrix A = mat_1
+forv i = 2/`listsize' { // appends into single matrix
+	matrix A = A \ mat_`i'
+}
+
+* Table
+frmttable using MDE_1.doc, statmat(A) sdec(4) coljust(l;c;l;l) title("Goat Income") ///
+ctitle("","MDE","% of mean","# of sd's.") ///
+rtitle("Revenue per Goat"\"Goats Sold"\"Net Goat Income") ///
+note("Currency measured in USD") addtable replace
 
 
 ** Co-op level dataset
@@ -151,13 +189,11 @@ rtitle("Discrepancy Index") addtable replace
 clear
 use "$d3/r_CO_Merged_Ind.dta"
 
-* generate strata variable that excludes 4th strata (due to data error)
-
 
 * Planning and Goals
 
 ** Co-op vars
-gl co_PNG PNG1 PNG2 PNG3 expected_rev index_PNG
+gl co_PNG PNG2 PNG3_w expected_rev_w
 
 *** Strata dummies - No interaction
 ** Co-op vars
@@ -166,7 +202,7 @@ tokenize $co_PNG
 
 forv i = 1/`listsize' {
 
-	reg ``i'' r_treat i.strata
+	reg ``i'' r_treat i.strata, robust
 	
 	quietly {
 		ereturn list
@@ -191,7 +227,7 @@ forv i = 2/`listsize' { // appends into single matrix
 * Table
 frmttable using MDE_1.doc, statmat(A) sdec(4) title("Planning and Goals") ///
 ctitle("","MDE","% of mean","# of sd's.") ///
-rtitle("Business Plan"\"Planning Time Horizon"\"Expected Goats Sold"\"Expected Rev."\"PNG Index") addtable replace
+rtitle("Planning Time Horizon"\"Expected Goats Sold"\"Expected Rev.") addtable replace
 
 
 

@@ -1,16 +1,16 @@
 {smcl}
 {com}{sf}{ul off}{txt}{.-}
       name:  {res}<unnamed>
-       {txt}log:  {res}/Users/scottmiller/GitHub/LSIL_PAP/lsilPAP4.smcl
+       {txt}log:  {res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/PAP Master Replication/Stata Files/lsilPAP4.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}17 May 2019, 14:44:51
-{txt}
-{com}. 
-. cd "$d3" 
-{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline clean
+ {txt}opened on:  {res}11 Jun 2019, 12:32:08
 {txt}
 {com}. 
 . 
+. cd "$d3" 
+{res}/Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/PAP Master Replication/Data/Clean Data
+{txt}
+{com}. 
 . ** co-op dataset **
 . clear
 {txt}
@@ -39,183 +39,286 @@
 {txt}
 {com}. 
 . 
-. ** Winsorize LS9
+. ** Communication **
+. 
+. * factors that limit communication
+. /* Variables
+> Mobile Network : COMM8b
+> Distance : COMM8d
+> */
+. 
+. 
+. * transparency
+. /* Variables
+> Mandate : CO_TRN1
+> Annual Report : CO_TRN2
+> Annual Budget : CO_TRN3
+> Financial Report: CO_TRN4
+> Meeting minutes : CO_TRN5
+> Election Results : CO_TRN6
+> Sale Records : CO_TRN7
+> */
+. 
+. 
+. ** Planning and Goals **
+. 
+. /* Variables 
+> 
+> Time Horizon : PNG2
+> Expected Goats Sold : PNG3
+> Expected Rev. : PNG4
+> */
+. 
+. replace PNG2 =. if PNG2 == 99
+{txt}(1 real change made, 1 to missing)
+
+{com}. 
+. * replace missing values with median
+. * ----------------------------------
+. forvalues i=2/4 {c -(}
+{txt}  2{com}.         quietly sum PNG`i', d
+{txt}  3{com}.         replace PNG`i' = `r(p50)' if PNG`i' ==. 
+{txt}  4{com}. {c )-}
+{txt}(3 real changes made)
+(2 real changes made)
+(2 real changes made)
+
+{com}. * ----------------------------------
+. 
+. * convert to USD
+. gen expected_rev = PNG4*(0.0099)
+{txt}
+{com}. 
+. ** Winsorize PNG3
 . * -----------------------------------------------
-. gen LS9_w = LS9
+. gen PNG3_w = PNG3
 {txt}
 {com}. 
 . * treatment
-. sum LS9_w if r_treat == 1, d
+. sum PNG3_w if r_treat == 1, d
 
-                            {txt}LS9_w
+                           {txt}PNG3_w
 {hline 61}
       Percentiles      Smallest
- 1%    {res} 4865.857       4865.857
-{txt} 5%    {res} 9594.595           5885
-{txt}10%    {res} 9975.609       9594.595       {txt}Obs         {res}         46
-{txt}25%    {res} 11251.85       9857.143       {txt}Sum of Wgt. {res}         46
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}         46
+{txt}25%    {res}       70              0       {txt}Sum of Wgt. {res}         46
 
-{txt}50%    {res} 16779.13                      {txt}Mean          {res} 16889.71
-                        {txt}Largest       Std. Dev.     {res}  6298.32
-{txt}75%    {res}  22689.6          26250
-{txt}90%    {res} 24371.43          26300       {txt}Variance      {res} 3.97e+07
-{txt}95%    {res}    26300       27681.82       {txt}Skewness      {res} .2687124
-{txt}99%    {res} 32828.79       32828.79       {txt}Kurtosis      {res} 2.418001
+{txt}50%    {res} 158.3333                      {txt}Mean          {res} 287.8841
+                        {txt}Largest       Std. Dev.     {res} 433.1713
+{txt}75%    {res}      350            800
+{txt}90%    {res}      530            900       {txt}Variance      {res} 187637.4
+{txt}95%    {res}      900           1500       {txt}Skewness      {res} 3.514736
+{txt}99%    {res}     2500           2500       {txt}Kurtosis      {res} 17.03185
 {txt}
 {com}. scalar t_99 = r(p99)
 {txt}
 {com}. 
-. replace LS9_w = t_99 if LS9_w > t_99 & !missing(LS9_w) & r_treat == 1
+. replace PNG3_w = t_99 if PNG3_w > t_99 & !missing(PNG3_w) & r_treat == 1
 {txt}(0 real changes made)
 
 {com}. 
-. *control
-. sum LS9_w if r_treat == 0, d
+. sum PNG3_w if r_treat == 1, d
 
-                            {txt}LS9_w
+                           {txt}PNG3_w
 {hline 61}
       Percentiles      Smallest
- 1%    {res}  8730.77        8730.77
-{txt} 5%    {res} 10828.57       9808.333
-{txt}10%    {res} 11509.38       10828.57       {txt}Obs         {res}         46
-{txt}25%    {res} 12773.68       10992.68       {txt}Sum of Wgt. {res}         46
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}         46
+{txt}25%    {res}       70              0       {txt}Sum of Wgt. {res}         46
 
-{txt}50%    {res} 14784.64                      {txt}Mean          {res} 17610.12
-                        {txt}Largest       Std. Dev.     {res} 9146.532
-{txt}75%    {res}    18850       27211.87
-{txt}90%    {res} 26539.14          35955       {txt}Variance      {res} 8.37e+07
-{txt}95%    {res}    35955       44044.45       {txt}Skewness      {res} 2.927083
-{txt}99%    {res} 60121.95       60121.95       {txt}Kurtosis      {res} 12.68691
+{txt}50%    {res} 158.3333                      {txt}Mean          {res} 287.8841
+                        {txt}Largest       Std. Dev.     {res} 433.1713
+{txt}75%    {res}      350            800
+{txt}90%    {res}      530            900       {txt}Variance      {res} 187637.4
+{txt}95%    {res}      900           1500       {txt}Skewness      {res} 3.514736
+{txt}99%    {res}     2500           2500       {txt}Kurtosis      {res} 17.03185
+{txt}
+{com}. scalar t_1= r(p1)
+{txt}
+{com}. 
+. replace PNG3_w = t_1 if PNG3_w < t_1 & !missing(PNG3_w) & r_treat == 1
+{txt}(0 real changes made)
+
+{com}. 
+. 
+. *control
+. sum PNG3_w if r_treat == 0, d
+
+                           {txt}PNG3_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}       15              0       {txt}Obs         {res}         46
+{txt}25%    {res}       90              0       {txt}Sum of Wgt. {res}         46
+
+{txt}50%    {res}      150                      {txt}Mean          {res} 250.2971
+                        {txt}Largest       Std. Dev.     {res} 270.6903
+{txt}75%    {res}      400            500
+{txt}90%    {res}      500            800       {txt}Variance      {res} 73273.23
+{txt}95%    {res}      800           1000       {txt}Skewness      {res}  1.92486
+{txt}99%    {res}     1300           1300       {txt}Kurtosis      {res} 7.132633
 {txt}
 {com}. scalar c_99 = r(p99)
 {txt}
 {com}. 
-. replace LS9_w = c_99 if LS9_w > c_99 & !missing(LS9_w) & r_treat == 0
+. replace PNG3_w = c_99 if PNG3_w > c_99 & !missing(PNG3_w) & r_treat == 0
 {txt}(0 real changes made)
 
 {com}. 
-. 
-. ** Replace Missing values with zero 
-. * LS9 , 
-. replace LS9_w = 0 if LS9_w ==.
-{txt}(0 real changes made)
+. sum PNG3_w if r_treat == 0, d
 
-{com}. replace co_opsalevalue = 0 if co_opsalevalue ==.
+                           {txt}PNG3_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}       15              0       {txt}Obs         {res}         46
+{txt}25%    {res}       90              0       {txt}Sum of Wgt. {res}         46
+
+{txt}50%    {res}      150                      {txt}Mean          {res} 250.2971
+                        {txt}Largest       Std. Dev.     {res} 270.6903
+{txt}75%    {res}      400            500
+{txt}90%    {res}      500            800       {txt}Variance      {res} 73273.23
+{txt}95%    {res}      800           1000       {txt}Skewness      {res}  1.92486
+{txt}99%    {res}     1300           1300       {txt}Kurtosis      {res} 7.132633
+{txt}
+{com}. scalar t_1= r(p1)
+{txt}
+{com}. 
+. replace PNG3_w = t_1 if PNG3_w < t_1 & !missing(PNG3_w) & r_treat == 0
 {txt}(0 real changes made)
 
 {com}. * -----------------------------------------------
-. */
 . 
 . 
-. ** Communication **
+. ** Winsorize expected_rev
+. * -----------------------------------------------
+. gen expected_rev_w = expected_rev
+{txt}
+{com}. 
+. * treatment
+. sum expected_rev_w if r_treat == 1, d
+
+                       {txt}expected_rev_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}         46
+{txt}25%    {res}    .9801              0       {txt}Sum of Wgt. {res}         46
+
+{txt}50%    {res}    247.5                      {txt}Mean          {res} 944.3766
+                        {txt}Largest       Std. Dev.     {res} 2318.663
+{txt}75%    {res} 717.9133           2970
+{txt}90%    {res}   2227.5         3207.6       {txt}Variance      {res}  5376200
+{txt}95%    {res}   3207.6         4702.5       {txt}Skewness      {res} 4.953379
+{txt}99%    {res}    14850          14850       {txt}Kurtosis      {res} 29.59339
+{txt}
+{com}. scalar t_99 = r(p99)
+{txt}
+{com}. 
+. replace expected_rev_w = t_99 if expected_rev_w > t_99 & !missing(expected_rev_w) & r_treat == 1
+{txt}(0 real changes made)
+
+{com}. 
+. sum expected_rev_w if r_treat == 1, d
+
+                       {txt}expected_rev_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}         46
+{txt}25%    {res}    .9801              0       {txt}Sum of Wgt. {res}         46
+
+{txt}50%    {res}    247.5                      {txt}Mean          {res} 944.3766
+                        {txt}Largest       Std. Dev.     {res} 2318.663
+{txt}75%    {res} 717.9133           2970
+{txt}90%    {res}   2227.5         3207.6       {txt}Variance      {res}  5376200
+{txt}95%    {res}   3207.6         4702.5       {txt}Skewness      {res} 4.953379
+{txt}99%    {res}    14850          14850       {txt}Kurtosis      {res} 29.59339
+{txt}
+{com}. scalar t_1= r(p1)
+{txt}
+{com}. 
+. replace expected_rev_w = t_1 if expected_rev_w < t_1 & !missing(expected_rev_w) & r_treat == 1
+{txt}(0 real changes made)
+
+{com}. 
+. 
+. *control
+. sum expected_rev_w if r_treat == 0, d
+
+                       {txt}expected_rev_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}         46
+{txt}25%    {res}       99              0       {txt}Sum of Wgt. {res}         46
+
+{txt}50%    {res}      396                      {txt}Mean          {res} 1079.293
+                        {txt}Largest       Std. Dev.     {res}  1961.87
+{txt}75%    {res}      594           3960
+{txt}90%    {res}     2970           6930       {txt}Variance      {res}  3848935
+{txt}95%    {res}     6930           7920       {txt}Skewness      {res} 2.557149
+{txt}99%    {res}     7920           7920       {txt}Kurtosis      {res} 8.704253
+{txt}
+{com}. scalar c_99 = r(p99)
+{txt}
+{com}. 
+. replace expected_rev_w = c_99 if expected_rev_w > c_99 & !missing(expected_rev_w) & r_treat == 0
+{txt}(0 real changes made)
+
+{com}. 
+. sum expected_rev_w if r_treat == 0, d
+
+                       {txt}expected_rev_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}         46
+{txt}25%    {res}       99              0       {txt}Sum of Wgt. {res}         46
+
+{txt}50%    {res}      396                      {txt}Mean          {res} 1079.293
+                        {txt}Largest       Std. Dev.     {res}  1961.87
+{txt}75%    {res}      594           3960
+{txt}90%    {res}     2970           6930       {txt}Variance      {res}  3848935
+{txt}95%    {res}     6930           7920       {txt}Skewness      {res} 2.557149
+{txt}99%    {res}     7920           7920       {txt}Kurtosis      {res} 8.704253
+{txt}
+{com}. scalar t_1= r(p1)
+{txt}
+{com}. 
+. replace expected_rev_w = t_1 if expected_rev_w < t_1 & !missing(expected_rev_w) & r_treat == 0
+{txt}(0 real changes made)
+
+{com}. * -----------------------------------------------
+. 
+. 
+. 
+. ** Cooperative Characteristics **
 . 
 . /* Variables 
-> # of times initiated contact with SHG : comm1
-> # of times SHG initiated contact : comm2
-> Factors that limit communication : (not in index - used as control vars)
+> Members : MAN3
+> Revenue from all activities : REV4
+> # of computers owned : EQP1_2
+> # of phones owned : EQP2_2
+> # of printers owned : EQP2_2X
+> # of weighing scales owned : EQP4_2
+> # of trucks or vans : EQP5_2
+> # of covered collection centers : EQP6_2
 > */
 . 
-.         * # of times initiated contact with SHG : comm1
-.         gen comm1 = COMM1a + COMM1b ///
->         + COMM1c + COMM1d
-{txt}(2 missing values generated)
-
-{com}.         * # of times SHG initiated contact : comm2
-.         gen comm2 = COMM2a + COMM2b ///
->         + COMM2c + COMM2d
-{txt}(2 missing values generated)
-
-{com}.         ** Total # of times initiated contact
-.         gen contact = comm1 + comm2
-{txt}(2 missing values generated)
-
-{com}.         
-.         * Total # of times HH is contacted
-.         gen HHcontact = COM3 + COM8
-{txt}(14 missing values generated)
-
-{com}.         
-. 
-. * co-op comm index
-. local local_CO_comm_full contact COM3 COM8
-{txt}
-{com}. make_index_gr CO_comm_full wgt stdgroup `local_CO_comm_full' 
-{res}  935
-{txt}
-{com}. 
-. * factors that limit communication
-.         * principal components index
-. 
-. 
-. ** Transparency **
-. 
-. /* Variables
-> Mandate : Co_opTransparencyTRN1
-> Annual Report : Co_opTransparencyTRN2
-> Annual Budget : Co_opTransparencyTRN3
-> Financial Report: Co_opTransparencyTRN4 
-> Meeting minutes : Co_opTransparencyTRN5
-> Election Results : Co_opTransparencyTRN6
-> Sale Records : Co_opTransparencyTRN7
-> Evaluations : Co_opTransparencyTRN8
-> */
-.         
-. ** Co-op Transparency   
-. local local_CO_TRN CO_TRN1 CO_TRN2 ///
->         CO_TRN3 CO_TRN4 CO_TRN5 ///
->         CO_TRN6 CO_TRN7
-{txt}
-{com}. make_index_gr CO_TRN wgt stdgroup `local_CO_TRN' 
-{res}  936
-{txt}
-{com}. 
-. 
-. ** Household Awareness
-. local local_HH_TRN HH_TRN1 HH_TRN2 ///
->         HH_TRN3 HH_TRN4 HH_TRN5 ///
->         HH_TRN6 HH_TRN7
-{txt}
-{com}. make_index_gr HH_TRN wgt stdgroup `local_HH_TRN' 
-{res}  937
-{txt}
-{com}. 
-. 
-. ** Discrepancy
-.         forvalues i=1/7 {c -(} 
-{txt}  2{com}.                 gen dTRN`i' = -(CO_TRN`i' - HH_TRN`i')^2
-{txt}  3{com}.                 {c )-}
-{txt}(2 missing values generated)
-(2 missing values generated)
-(2 missing values generated)
-(2 missing values generated)
-(2 missing values generated)
-(2 missing values generated)
-(2 missing values generated)
-
-{com}.                 
-. local local_dTRN dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7
-{txt}
-{com}. make_index_gr dTRN wgt stdgroup `local_dTRN' 
-{res}  945
-{txt}
-{com}. 
-. * average discrepancy
-. egen avg_dTRN = rowmean(dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7)
+. gen goats_sold = REC1
 {txt}(2 missing values generated)
 
 {com}. 
-. 
-. ** Cooperative Finances **
-. 
-. /* Variables 
-> Revenue from all activities : role_GMrevenuandcostREV4
-> Costs from all activities : role_GMrevenuandcostcalc_REC7
-> Assets : role_GMFinLiabiliteisFAL1
-> Liabilities : role_GMFinLiabiliteisFAL2
-> Goat Rev : role_GMrevenuandcostREC4_1
-> Members : role_CPMgt_and_membershi1
-> */
-. 
 . * Convert to USD as of 1/1/18
 . 
 . gen revenue = REV4*(0.0099)
@@ -237,8 +340,7 @@
 . gen net_rev = revenue - costs
 {txt}(2 missing values generated)
 
-{com}. gen net_finances = (revenue - costs) ///
->                                         + (assets - liabilities)
+{com}. gen net_finances = (revenue - costs) + (assets - liabilities)
 {txt}(2 missing values generated)
 
 {com}. 
@@ -266,11 +368,24 @@
 
 {com}. 
 . ** Replace Missing values with zero 
-. *  , 
-. replace revenue = 0 if revenue ==.
+. foreach v of varlist EQP1_2 EQP2_2 EQP2_2X EQP4_2 EQP5_2 EQP6_2 {c -(}
+{txt}  2{com}.         replace `v' = 0 if `v' ==.
+{txt}  3{com}. {c )-}
+{txt}(50 real changes made)
+(86 real changes made)
+(60 real changes made)
+(17 real changes made)
+(92 real changes made)
+(53 real changes made)
+
+{com}. replace goats_sold = 0 if goats_sold ==.
 {txt}(2 real changes made)
 
-{com}. replace rev_member = 0 if rev_member ==.
+{com}. replace revenue = 0 if revenue ==.
+{txt}(2 real changes made)
+
+{com}. 
+. replace rev_member = 0 if rev_member ==.
 {txt}(2 real changes made)
 
 {com}. replace costs = 0 if costs ==.
@@ -281,146 +396,16 @@
 
 {com}. 
 . 
-. ** Goat Sales ** 
-. 
-. /* Variables 
-> # of goats sold : REC1
-> goat revenue : REC4_1
-> # of organized sales at collection points : GTT1
-> Members : MAN3
-> Goat revenue per member : goatrev_member
-> Trader visits per sale
-> Time passed
-> Transportation costs
-> */
-. 
-. ** co-op level vars
-. gen goats_sold = REC1
-{txt}(2 missing values generated)
-
-{com}. gen goats_sold_member = REC1 / MAN3
-{txt}(2 missing values generated)
-
-{com}. * goatrev
-. * revenue per goat sold
-. gen goatrev_sold = goatrev / REC1
-{txt}(22 missing values generated)
-
-{com}. gen col_points = GTT1
+. * ICT and non-ICT assets
+. gen ICTassets = EQP1_2 + EQP2_2
 {txt}
-{com}. 
-. local local_CO_goatsales goats_sold goatrev col_points
+{com}. gen Otherassets = EQP2_2X + EQP4_2 + EQP5_2 + EQP6_2
 {txt}
-{com}. make_index_gr CO_goatsales wgt stdgroup `local_CO_goatsales' 
-{res}  965
-{txt}
-{com}. 
-. 
-. ** household level vars
-. gen co_opshare = 0
-{txt}
-{com}. replace co_opshare = co_opgoatno / LS8 if LS8 != 0
-{txt}(59 real changes made)
-
-{com}. gen visits_sale = -1*(LS40 / LS_n_sales)
-{txt}
-{com}. gen time_passed = -1*(LS41)
-{txt}
-{com}. gen transp_cost = -1*(LS42*(0.0099))
-{txt}
-{com}. 
-. * replace obvious outlier with sample median (median = 0)
-. replace visits_sale = 0 if visits_sale <= -5000
-{txt}(0 real changes made)
-
-{com}. 
-. * replace missing values with zero
-. foreach v of varlist LSE12 LSE15 LSE16 LSE17a LSE17b LSE18 {c -(}
-{txt}  2{com}.         replace `v' = 0 if `v'==.
-{txt}  3{com}.         {c )-}
-{txt}(16 real changes made)
-(0 real changes made)
-(0 real changes made)
-(0 real changes made)
-(0 real changes made)
-(0 real changes made)
-
-{com}. 
-. 
-. local local_HH_goatsales LS8 LS9_w co_opgoatno co_opsalevalue
-{txt}
-{com}. make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
-{res}  970
-{txt}
-{com}. 
-. local local_salecost visits_sale time_passed transp_cost
-{txt}
-{com}. make_index_gr salecost wgt stdgroup `local_salecost' 
-{res}  971
-{txt}
-{com}. 
-. 
-. * Gross margin -- Net rev. per goat
-. 
-. /* Costs
-> Amount spent purchasing goats: LSE12
-> Amount spent on feed/fodder : LSE15
-> Amount spent on vet care : LSE16
-> Amount spent on breeding fees : LSE17a * LSE17b
-> Amount spent on shelters : LSE18
-> */
-. 
-. 
-. 
-. gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
-{txt}
-{com}. gen net_goat_income = LS9_w*(0.0099) - goat_costs
-{txt}
-{com}. gen netincome_goat = net_goat_income / LS8
-{txt}
-{com}. 
-. 
-. 
-. 
-. ** Planning and Goals **
-. 
-. /* Variables 
-> Business Plan : PNG1
-> Time Horizon : PNG2
-> Expected Goats Sold : PNG3
-> Expected Rev. : PNG4
-> */
-. 
-. gen expected_rev = PNG4*(0.0099)
-{txt}(2 missing values generated)
-
-{com}. replace PNG2 =. if PNG2 == 99
-{txt}(1 real change made, 1 to missing)
-
-{com}. 
-. 
-. local local_PNG PNG1 PNG2 PNG3 expected_rev
-{txt}
-{com}. make_index_gr PNG wgt stdgroup `local_PNG'
-{res}  976
-{txt}
-{com}. 
-. 
-. 
-. 
-. ** IHS transformations **
-. 
-. gen PNG3_ln = log(PNG3 + sqrt(PNG3^2 + 1))
-{txt}(2 missing values generated)
-
-{com}. gen expected_rev_ln = log(expected_rev + sqrt(expected_rev^2 + 1))
-{txt}(2 missing values generated)
-
 {com}. 
 . 
 . 
 . save "$d3/r_CO_Merged_Ind.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline clean/r_CO_Merged_Ind.dta saved
+{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/PAP Master Replication/Data/Clean Data/r_CO_Merged_Ind.dta saved
 
 {com}. 
 . 
@@ -453,144 +438,35 @@
 {txt}
 {com}. 
 . 
-. ** Winsorize LS9
-. * -----------------------------------------------
-. gen LS9_w = LS9
-{txt}(1,172 missing values generated)
-
-{com}. 
-. * treatment
-. sum LS9_w if r_treat == 1, d
-
-                            {txt}LS9_w
-{hline 61}
-      Percentiles      Smallest
- 1%    {res}        0              0
-{txt} 5%    {res}        0              0
-{txt}10%    {res}     4000              0       {txt}Obs         {res}        677
-{txt}25%    {res}     8000              0       {txt}Sum of Wgt. {res}        677
-
-{txt}50%    {res}    13000                      {txt}Mean          {res} 18980.29
-                        {txt}Largest       Std. Dev.     {res} 22068.73
-{txt}75%    {res}    24000         131420
-{txt}90%    {res}    37000         144000       {txt}Variance      {res} 4.87e+08
-{txt}95%    {res}    50000         145000       {txt}Skewness      {res} 6.746726
-{txt}99%    {res}   113300       353191.3       {txt}Kurtosis      {res}  85.4021
-{txt}
-{com}. scalar t_99 = r(p99)
-{txt}
-{com}. 
-. replace LS9_w = t_99 if LS9_w > t_99 & !missing(LS9_w) & r_treat == 1
-{txt}(6 real changes made)
-
-{com}. 
-. *control
-. sum LS9_w if r_treat == 0, d
-
-                            {txt}LS9_w
-{hline 61}
-      Percentiles      Smallest
- 1%    {res}        0              0
-{txt} 5%    {res}     1800              0
-{txt}10%    {res}     4000              0       {txt}Obs         {res}        599
-{txt}25%    {res}     8000              0       {txt}Sum of Wgt. {res}        599
-
-{txt}50%    {res}    13000                      {txt}Mean          {res}  18286.3
-                        {txt}Largest       Std. Dev.     {res} 20265.42
-{txt}75%    {res}    23000         135000
-{txt}90%    {res}    36000         155600       {txt}Variance      {res} 4.11e+08
-{txt}95%    {res}    50000         195000       {txt}Skewness      {res} 4.583672
-{txt}99%    {res}   110000         220500       {txt}Kurtosis      {res} 35.34747
-{txt}
-{com}. scalar c_99 = r(p99)
-{txt}
-{com}. 
-. replace LS9_w = c_99 if LS9_w > c_99 & !missing(LS9_w) & r_treat == 0
-{txt}(5 real changes made)
-
-{com}. * -----------------------------------------------
-. 
-. 
-. ** Replace Missing values with zero
-. * ----------------------------------------------- 
-. * LS9 , 
-. replace LS9_w = 0 if LS9_w ==.
-{txt}(1,172 real changes made)
-
-{com}. replace LS8 = 0 if LS8 ==.
-{txt}(1,172 real changes made)
-
-{com}. replace co_opsalevalue = 0 if co_opsalevalue ==.
-{txt}(1,172 real changes made)
-
-{com}. replace co_opgoatno = 0 if co_opgoatno ==.
-{txt}(1,172 real changes made)
-
-{com}. * -----------------------------------------------
-. */
 . 
 . ** Communication **
 . 
-. * Variables 
-. 
-.         * Total # of times HH is contacted
-.         gen HHcontact = COM3 + COM8
-{txt}(1,241 missing values generated)
-
-{com}. 
-. 
-. * HH comm index
-. local local_HH_comm COM3 COM8
-{txt}
-{com}. make_index_gr HH_comm wgt stdgroup `local_HH_comm' 
-{res}  933
-{txt}
-{com}. 
-. * factors that limit communication
-.         * principal components index
-. 
-. 
-. 
-. ** Transparency **
-. 
-. /* Variables
-> Mandate : Co_opTransparencyTRN1
-> Annual Report : Co_opTransparencyTRN2
-> Annual Budget : Co_opTransparencyTRN3
-> Financial Report: Co_opTransparencyTRN4 
-> Meeting minutes : Co_opTransparencyTRN5
-> Election Results : Co_opTransparencyTRN6
-> Sale Records : Co_opTransparencyTRN7
-> Evaluations : Co_opTransparencyTRN8
+. /* Variables 
+> Total times contacted about livestock sales : COM3
 > */
 . 
-.         /*
->         forvalues i=1/7 {c -(} 
->                 destring role_GMtransTRN`i', replace
->                 replace role_GMtransTRN`i' = 0 if role_GMtransTRN`i' == 2
->                 replace role_GMtransTRN`i' = . if role_GMtransTRN`i' == 97
->                 {c )-}
->         */
-.         
-. ** Co-op Transparency   
-. local local_CO_TRN CO_TRN1 CO_TRN2 ///
->         CO_TRN3 CO_TRN4 CO_TRN5 ///
->         CO_TRN6 CO_TRN7
-{txt}
-{com}. make_index_gr CO_TRN wgt stdgroup `local_CO_TRN'                
-{res}  934
-{txt}
+. replace COM3 = 0 if COM3 ==.
+{txt}(1,187 real changes made)
+
+{com}. gen bCOM3 = 1 if COM3 > 0
+{txt}(1,742 missing values generated)
+
+{com}. replace bCOM3 = 0 if bCOM3 ==.
+{txt}(1,742 real changes made)
+
 {com}. 
-. ** Household Awareness
-. local local_HH_TRN HH_TRN1 HH_TRN2 ///
->         HH_TRN3 HH_TRN4 HH_TRN5 ///
->         HH_TRN6 HH_TRN7
-{txt}
-{com}. make_index_gr HH_TRN wgt stdgroup `local_HH_TRN' 
-{res}  935
-{txt}
-{com}. 
-.         
+. * transparency
+. /* Variables
+> Mandate : HH_TRN1
+> Annual Report : HH_TRN2
+> Annual Budget : HH_TRN3
+> Financial Report: HH_TRN4 
+> Meeting minutes : HH_TRN5
+> Election Results : HH_TRN6
+> Sale Records : HH_TRN7
+> Evaluations : HH_TRN8
+> */
+. 
 . ** Transparency Discrepancy index
 .         forvalues i=1/7 {c -(} 
 {txt}  2{com}.                 gen dTRN`i' = 1 if CO_TRN`i' == HH_TRN`i' ///
@@ -617,66 +493,512 @@
 . local local_dTRN dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7
 {txt}
 {com}. make_index_gr dTRN wgt stdgroup `local_dTRN' 
-{res}  943
+{res}  939
 {txt}
-{com}. 
-. * average discrepancy
-. egen avg_dTRN = rowmean(dTRN1 dTRN2 dTRN3 dTRN4 dTRN5 dTRN6 dTRN7)
-{txt}(356 missing values generated)
-
 {com}. 
 . 
 . ** Goat Sales ** 
 . 
 . /* Variables 
-> # of goats sold : Livestock_SalesLS8
-> goat revenue : Livestock_SalesLS9
 > goats sold through co-op : co_opgoatno
-> goat revenue through co-op : co_opsalevalue
-> share through co-op : co_opshare
-> trader visits home : Livestock_SalesLS40
-> time passed before sale : Livestock_SalesLS41
-> transportation cost : Livestock_SalesLS42
+> # of goats sold : LS8
 > */
-. /* Costs
+. 
+. 
+. ** Replace Missing values with zero
+. * ----------------------------------------------- 
+. replace LS8 = 0 if LS8 ==.
+{txt}(1,172 real changes made)
+
+{com}. replace co_opgoatno = 0 if co_opgoatno ==.
+{txt}(1,172 real changes made)
+
+{com}. * -----------------------------------------------
+. 
+. 
+. ** Winsorize LS8
+. * -----------------------------------------------
+. gen LS8_w = LS8
+{txt}
+{com}. 
+. * treatment
+. sum LS8_w if r_treat == 1, d
+
+                            {txt}LS8_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}      1,296
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}      1,296
+
+{txt}50%    {res}        0                      {txt}Mean          {res} 1.151235
+                        {txt}Largest       Std. Dev.     {res} 1.833274
+{txt}75%    {res}        2             15
+{txt}90%    {res}        3             15       {txt}Variance      {res} 3.360894
+{txt}95%    {res}        4             16       {txt}Skewness      {res} 3.427894
+{txt}99%    {res}        9             18       {txt}Kurtosis      {res} 22.10022
+{txt}
+{com}. scalar t_99 = r(p99)
+{txt}
+{com}. 
+. replace LS8_w = t_99 if LS8_w > t_99 & !missing(LS8_w) & r_treat == 1
+{txt}(11 real changes made)
+
+{com}. 
+. sum LS8_w if r_treat == 1, d
+
+                            {txt}LS8_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}      1,296
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}      1,296
+
+{txt}50%    {res}        0                      {txt}Mean          {res} 1.118827
+                        {txt}Largest       Std. Dev.     {res} 1.629767
+{txt}75%    {res}        2              9
+{txt}90%    {res}        3              9       {txt}Variance      {res} 2.656139
+{txt}95%    {res}        4              9       {txt}Skewness      {res} 2.182047
+{txt}99%    {res}        9              9       {txt}Kurtosis      {res} 9.012592
+{txt}
+{com}. scalar t_1= r(p1)
+{txt}
+{com}. 
+. replace LS8_w = t_1 if LS8_w < t_1 & !missing(LS8_w) & r_treat == 1
+{txt}(0 real changes made)
+
+{com}. 
+. 
+. *control
+. sum LS8_w if r_treat == 0, d
+
+                            {txt}LS8_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}      1,152
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}      1,152
+
+{txt}50%    {res}        0                      {txt}Mean          {res}    1.125
+                        {txt}Largest       Std. Dev.     {res} 1.919763
+{txt}75%    {res}        2             19
+{txt}90%    {res}        3             20       {txt}Variance      {res} 3.685491
+{txt}95%    {res}        4             20       {txt}Skewness      {res} 4.977948
+{txt}99%    {res}        8             24       {txt}Kurtosis      {res} 45.17393
+{txt}
+{com}. scalar c_99 = r(p99)
+{txt}
+{com}. 
+. replace LS8_w = c_99 if LS8_w > c_99 & !missing(LS8_w) & r_treat == 0
+{txt}(10 real changes made)
+
+{com}. 
+. sum LS8_w if r_treat == 0, d
+
+                            {txt}LS8_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}      1,152
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}      1,152
+
+{txt}50%    {res}        0                      {txt}Mean          {res} 1.069444
+                        {txt}Largest       Std. Dev.     {res}  1.51633
+{txt}75%    {res}        2              8
+{txt}90%    {res}        3              8       {txt}Variance      {res} 2.299257
+{txt}95%    {res}        4              8       {txt}Skewness      {res} 2.015454
+{txt}99%    {res}        8              8       {txt}Kurtosis      {res} 7.985062
+{txt}
+{com}. scalar t_1= r(p1)
+{txt}
+{com}. 
+. replace LS8_w = t_1 if LS8_w < t_1 & !missing(LS8_w) & r_treat == 0
+{txt}(0 real changes made)
+
+{com}. * -----------------------------------------------
+. 
+. 
+. ** Winsorize co_opgoatno
+. * -----------------------------------------------
+. gen co_opgoatno_w = co_opgoatno
+{txt}
+{com}. 
+. * treatment
+. sum co_opgoatno_w if r_treat == 1, d
+
+                        {txt}co_opgoatno_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}      1,296
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}      1,296
+
+{txt}50%    {res}        0                      {txt}Mean          {res} .2739198
+                        {txt}Largest       Std. Dev.     {res} 1.050743
+{txt}75%    {res}        0             10
+{txt}90%    {res}        1             10       {txt}Variance      {res} 1.104061
+{txt}95%    {res}        2             12       {txt}Skewness      {res} 6.767831
+{txt}99%    {res}        5             15       {txt}Kurtosis      {res} 66.37082
+{txt}
+{com}. scalar t_99 = r(p99)
+{txt}
+{com}. 
+. replace co_opgoatno_w = t_99 if co_opgoatno_w > t_99 & !missing(co_opgoatno_w) & r_treat == 1
+{txt}(9 real changes made)
+
+{com}. 
+. sum co_opgoatno_w if r_treat == 1, d
+
+                        {txt}co_opgoatno_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}      1,296
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}      1,296
+
+{txt}50%    {res}        0                      {txt}Mean          {res} .2438272
+                        {txt}Largest       Std. Dev.     {res} .7971719
+{txt}75%    {res}        0              5
+{txt}90%    {res}        1              5       {txt}Variance      {res} .6354831
+{txt}95%    {res}        2              5       {txt}Skewness      {res} 3.862942
+{txt}99%    {res}        5              5       {txt}Kurtosis      {res} 18.85913
+{txt}
+{com}. scalar t_1= r(p1)
+{txt}
+{com}. 
+. replace co_opgoatno_w = t_1 if co_opgoatno_w < t_1 & !missing(co_opgoatno_w) & r_treat == 1
+{txt}(0 real changes made)
+
+{com}. 
+. 
+. *control
+. sum co_opgoatno_w if r_treat == 0, d
+
+                        {txt}co_opgoatno_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}      1,152
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}      1,152
+
+{txt}50%    {res}        0                      {txt}Mean          {res} .2126736
+                        {txt}Largest       Std. Dev.     {res} .7702635
+{txt}75%    {res}        0              5
+{txt}90%    {res}        0              6       {txt}Variance      {res} .5933058
+{txt}95%    {res}        2              7       {txt}Skewness      {res} 4.728621
+{txt}99%    {res}        4              8       {txt}Kurtosis      {res} 30.15783
+{txt}
+{com}. scalar c_99 = r(p99)
+{txt}
+{com}. 
+. replace co_opgoatno_w = c_99 if co_opgoatno_w > c_99 & !missing(co_opgoatno_w) & r_treat == 0
+{txt}(6 real changes made)
+
+{com}. 
+. sum co_opgoatno_w if r_treat == 0, d
+
+                        {txt}co_opgoatno_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}      1,152
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}      1,152
+
+{txt}50%    {res}        0                      {txt}Mean          {res} .2022569
+                        {txt}Largest       Std. Dev.     {res} .6974411
+{txt}75%    {res}        0              4
+{txt}90%    {res}        0              4       {txt}Variance      {res} .4864241
+{txt}95%    {res}        2              4       {txt}Skewness      {res} 3.898835
+{txt}99%    {res}        4              4       {txt}Kurtosis      {res} 18.40689
+{txt}
+{com}. scalar t_1= r(p1)
+{txt}
+{com}. 
+. replace co_opgoatno_w = t_1 if co_opgoatno_w < t_1 & !missing(co_opgoatno_w) & r_treat == 0
+{txt}(0 real changes made)
+
+{com}. * -----------------------------------------------
+. 
+. 
+. ** Goat Prices ** 
+. 
+. /* Variables 
+> Revenue per goat sold : LS9 / LS8
+> Revenue per goat sold through co-op : co_opsalevalue / co_opgoatno
+> */
+. 
+. *drop rev_goat
+. gen rev_goat = LS9 / LS8 if LS8 != 0
+{txt}(1,234 missing values generated)
+
+{com}. gen rev_co_opgoat = co_opsalevalue / co_opgoatno if co_opgoatno != 0
+{txt}(2,187 missing values generated)
+
+{com}. 
+. 
+. ** Replace Missing values with zero
+. * ----------------------------------------------- 
+. replace rev_goat = 0 if rev_goat ==.
+{txt}(1,234 real changes made)
+
+{com}. replace rev_co_opgoat = 0 if rev_co_opgoat ==.
+{txt}(2,187 real changes made)
+
+{com}. * -----------------------------------------------
+. 
+. * covert to USD
+. * ----------------------------------------------- 
+. replace rev_goat = rev_goat*(0.0099)
+{txt}(1,212 real changes made)
+
+{com}. replace rev_co_opgoat = rev_co_opgoat*(0.0099)
+{txt}(260 real changes made)
+
+{com}. * ----------------------------------------------- 
+. 
+. 
+. ** Winsorize rev_goat
+. * -----------------------------------------------
+. gen rev_goat_w = rev_goat
+{txt}
+{com}. 
+. * treatment
+. sum rev_goat_w if r_treat == 1, d
+
+                         {txt}rev_goat_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}      1,296
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}      1,296
+
+{txt}50%    {res}        0                      {txt}Mean          {res} 43.66487
+                        {txt}Largest       Std. Dev.     {res} 69.11565
+{txt}75%    {res}   79.695          237.6
+{txt}90%    {res}    118.8          247.5       {txt}Variance      {res} 4776.974
+{txt}95%    {res}   133.65          247.5       {txt}Skewness      {res} 11.89578
+{txt}99%    {res}   173.25       1748.297       {txt}Kurtosis      {res} 286.7247
+{txt}
+{com}. scalar t_99 = r(p99)
+{txt}
+{com}. 
+. replace rev_goat_w = t_99 if rev_goat_w > t_99 & !missing(rev_goat_w) & r_treat == 1
+{txt}(11 real changes made)
+
+{com}. 
+. sum rev_goat_w if r_treat == 1, d
+
+                         {txt}rev_goat_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}      1,296
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}      1,296
+
+{txt}50%    {res}        0                      {txt}Mean          {res} 42.18311
+                        {txt}Largest       Std. Dev.     {res} 49.60623
+{txt}75%    {res}   79.695         173.25
+{txt}90%    {res}    118.8         173.25       {txt}Variance      {res} 2460.778
+{txt}95%    {res}   133.65         173.25       {txt}Skewness      {res} .7700653
+{txt}99%    {res}   173.25         173.25       {txt}Kurtosis      {res} 2.358177
+{txt}
+{com}. scalar t_1= r(p1)
+{txt}
+{com}. 
+. replace rev_goat_w = t_1 if rev_goat_w < t_1 & !missing(rev_goat_w) & r_treat == 1
+{txt}(0 real changes made)
+
+{com}. 
+. 
+. *control
+. sum rev_goat_w if r_treat == 0, d
+
+                         {txt}rev_goat_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}      1,152
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}      1,152
+
+{txt}50%    {res}        0                      {txt}Mean          {res} 42.33383
+                        {txt}Largest       Std. Dev.     {res} 51.28073
+{txt}75%    {res}     79.2          237.6
+{txt}90%    {res}   116.82          247.5       {txt}Variance      {res} 2629.713
+{txt}95%    {res}   134.64          247.5       {txt}Skewness      {res} 1.015388
+{txt}99%    {res}   193.05          257.4       {txt}Kurtosis      {res} 3.496013
+{txt}
+{com}. scalar c_99 = r(p99)
+{txt}
+{com}. 
+. replace rev_goat_w = c_99 if rev_goat_w > c_99 & !missing(rev_goat_w) & r_treat == 0
+{txt}(11 real changes made)
+
+{com}. 
+. sum rev_goat_w if r_treat == 0, d
+
+                         {txt}rev_goat_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}      1,152
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}      1,152
+
+{txt}50%    {res}        0                      {txt}Mean          {res} 41.99742
+                        {txt}Largest       Std. Dev.     {res} 50.13027
+{txt}75%    {res}     79.2         193.05
+{txt}90%    {res}   116.82         193.05       {txt}Variance      {res} 2513.044
+{txt}95%    {res}   134.64         193.05       {txt}Skewness      {res} .8648767
+{txt}99%    {res}   193.05         193.05       {txt}Kurtosis      {res} 2.718104
+{txt}
+{com}. scalar t_1= r(p1)
+{txt}
+{com}. 
+. replace rev_goat_w = t_1 if rev_goat_w < t_1 & !missing(rev_goat_w) & r_treat == 0
+{txt}(0 real changes made)
+
+{com}. * -----------------------------------------------
+. 
+. 
+. ** Winsorize rev_co_opgoat
+. * -----------------------------------------------
+. gen rev_co_opgoat_w = rev_co_opgoat
+{txt}
+{com}. 
+. * treatment
+. sum rev_co_opgoat_w if r_treat == 1, d
+
+                       {txt}rev_co_opgoat_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}      1,296
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}      1,296
+
+{txt}50%    {res}        0                      {txt}Mean          {res} 10.34669
+                        {txt}Largest       Std. Dev.     {res} 31.23076
+{txt}75%    {res}        0         163.35
+{txt}90%    {res}     49.5       169.7355       {txt}Variance      {res} 975.3604
+{txt}95%    {res}       99          171.6       {txt}Skewness      {res} 3.027535
+{txt}99%    {res}      132         173.25       {txt}Kurtosis      {res}  11.1785
+{txt}
+{com}. scalar t_99 = r(p99)
+{txt}
+{com}. 
+. replace rev_co_opgoat_w = t_99 if rev_co_opgoat_w > t_99 & !missing(rev_co_opgoat_w) & r_treat == 1
+{txt}(11 real changes made)
+
+{com}. 
+. sum rev_co_opgoat_w if r_treat == 1, d
+
+                       {txt}rev_co_opgoat_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}      1,296
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}      1,296
+
+{txt}50%    {res}        0                      {txt}Mean          {res} 10.13233
+                        {txt}Largest       Std. Dev.     {res} 30.27671
+{txt}75%    {res}        0            132
+{txt}90%    {res}     49.5            132       {txt}Variance      {res}  916.679
+{txt}95%    {res}       99            132       {txt}Skewness      {res} 2.908345
+{txt}99%    {res}      132            132       {txt}Kurtosis      {res}  10.0833
+{txt}
+{com}. scalar t_1= r(p1)
+{txt}
+{com}. 
+. replace rev_co_opgoat_w = t_1 if rev_co_opgoat_w < t_1 & !missing(rev_co_opgoat_w) & r_treat == 1
+{txt}(0 real changes made)
+
+{com}. 
+. 
+. *control
+. sum rev_co_opgoat_w if r_treat == 0, d
+
+                       {txt}rev_co_opgoat_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}      1,152
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}      1,152
+
+{txt}50%    {res}        0                      {txt}Mean          {res} 8.907887
+                        {txt}Largest       Std. Dev.     {res} 29.02898
+{txt}75%    {res}        0         156.42
+{txt}90%    {res}        0         173.25       {txt}Variance      {res} 842.6815
+{txt}95%    {res}     85.8         173.25       {txt}Skewness      {res}  3.42351
+{txt}99%    {res}   134.64        232.452       {txt}Kurtosis      {res} 14.77929
+{txt}
+{com}. scalar c_99 = r(p99)
+{txt}
+{com}. 
+. replace rev_co_opgoat_w = c_99 if rev_co_opgoat_w > c_99 & !missing(rev_co_opgoat_w) & r_treat == 0
+{txt}(11 real changes made)
+
+{com}. 
+. sum rev_co_opgoat_w if r_treat == 0, d
+
+                       {txt}rev_co_opgoat_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}        0              0
+{txt} 5%    {res}        0              0
+{txt}10%    {res}        0              0       {txt}Obs         {res}      1,152
+{txt}25%    {res}        0              0       {txt}Sum of Wgt. {res}      1,152
+
+{txt}50%    {res}        0                      {txt}Mean          {res} 8.696223
+                        {txt}Largest       Std. Dev.     {res} 27.88577
+{txt}75%    {res}        0         134.64
+{txt}90%    {res}        0         134.64       {txt}Variance      {res} 777.6163
+{txt}95%    {res}     85.8         134.64       {txt}Skewness      {res} 3.174078
+{txt}99%    {res}   134.64         134.64       {txt}Kurtosis      {res} 11.90937
+{txt}
+{com}. scalar t_1= r(p1)
+{txt}
+{com}. 
+. replace rev_co_opgoat_w = t_1 if rev_co_opgoat_w < t_1 & !missing(rev_co_opgoat_w) & r_treat == 0
+{txt}(0 real changes made)
+
+{com}. * -----------------------------------------------
+. 
+. 
+. ** Goat Income ** 
+. 
+. /* Variables 
+> Revenue per goat sold : rev_goat
+> # of goats: LS8
+> 
 > Amount spent purchasing goats: LSE12
 > Amount spent on feed/fodder : LSE15
 > Amount spent on vet care : LSE16
 > Amount spent on breeding fees : LSE17a * LSE17b
 > Amount spent on shelters : LSE18
+> Net goat income
 > */
 . 
 . 
-. ** household level vars
-. gen co_opshare = 0
-{txt}
-{com}. replace co_opshare = co_opgoatno / LS8 if LS8 != 0
-{txt}(261 real changes made)
-
-{com}. gen visits_sale = -1*(LS40 / LS_n_sales)
-{txt}(1,172 missing values generated)
-
-{com}. gen time_passed = -1*(LS41)
-{txt}(1,172 missing values generated)
-
-{com}. gen transp_cost = -1*(LS42*(0.0099))
-{txt}(1,172 missing values generated)
-
-{com}. replace LS9_w = LS9_w*(0.0099)
-{txt}(1,218 real changes made)
-
-{com}. replace co_opsalevalue = co_opsalevalue*(0.0099)
-{txt}(262 real changes made)
-
-{com}. 
 . 
-. * replace obvious outlier with sample median (median = 0)
-. replace visits_sale = 0 if visits_sale <= -5000
-{txt}(1 real change made)
+. ** Replace Missing values with zero
+. * ----------------------------------------------- 
+. replace LS9 = 0 if LS9 ==.
+{txt}(1,172 real changes made)
 
-{com}. 
-. * replace missing values with zero
-. foreach v of varlist LSE12 LSE15 LSE16 LSE17a LSE17b LSE18 {c -(}
+{com}. foreach v of varlist LSE12 LSE15 LSE16 LSE17a LSE17b LSE18 {c -(}
 {txt}  2{com}.         replace `v' = 0 if `v'==.
 {txt}  3{com}.         {c )-}
 {txt}(2,191 real changes made)
@@ -686,44 +1008,241 @@
 (539 real changes made)
 (0 real changes made)
 
-{com}. 
+{com}. * -----------------------------------------------
+. 
+. 
+. * generate net income
 . gen goat_costs = LSE12*(0.0099) + LSE15*(0.0099) + LSE16*(0.0099) + (LSE17a*LSE17b)*(0.0099) + LSE18*(0.0099)
 {txt}
-{com}. gen net_goat_income = LS9_w - goat_costs
+{com}. gen net_goat_income = LS9*(0.0099) - goat_costs
 {txt}
-{com}. gen netincome_goat = net_goat_income / LS8
-{txt}(1,234 missing values generated)
+{com}. 
+. 
+. ** Winsorize net goat income
+. * -----------------------------------------------
+. gen net_goat_income_w = net_goat_income
+{txt}
+{com}. 
+. * treatment
+. sum net_goat_income_w if r_treat == 1, d
+
+                      {txt}net_goat_income_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}  -276.21       -9867.33
+{txt} 5%    {res}   -88.11        -7474.5
+{txt}10%    {res}    -49.5       -1236.51       {txt}Obs         {res}      1,296
+{txt}25%    {res}   -12.87         -643.5       {txt}Sum of Wgt. {res}      1,296
+
+{txt}50%    {res}        0                      {txt}Mean          {res} 47.58021
+                        {txt}Largest       Std. Dev.     {res} 382.0157
+{txt}75%    {res} 111.2513       1109.493
+{txt}90%    {res}   240.57        1146.42       {txt}Variance      {res}   145936
+{txt}95%    {res}   330.66        1398.87       {txt}Skewness      {res}-19.22766
+{txt}99%    {res}   688.05         1425.6       {txt}Kurtosis      {res} 467.4979
+{txt}
+{com}. scalar t_99 = r(p99)
+{txt}
+{com}. 
+. replace net_goat_income_w = t_99 if net_goat_income_w > t_99 & !missing(net_goat_income_w) & r_treat == 1
+{txt}(12 real changes made)
 
 {com}. 
-. 
-. local local_HH_goatsales LS8 LS9_w co_opgoatno co_opsalevalue net_goat_income
+. sum net_goat_income_w if r_treat == 1, d
+
+                      {txt}net_goat_income_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}  -276.21       -9867.33
+{txt} 5%    {res}   -88.11        -7474.5
+{txt}10%    {res}    -49.5       -1236.51       {txt}Obs         {res}      1,296
+{txt}25%    {res}   -12.87         -643.5       {txt}Sum of Wgt. {res}      1,296
+
+{txt}50%    {res}        0                      {txt}Mean          {res} 44.82557
+                        {txt}Largest       Std. Dev.     {res} 375.6035
+{txt}75%    {res} 111.2513         688.05
+{txt}90%    {res}   240.57         688.05       {txt}Variance      {res}   141078
+{txt}95%    {res}   330.66         688.05       {txt}Skewness      {res}-20.33383
+{txt}99%    {res}   688.05         688.05       {txt}Kurtosis      {res} 499.2178
 {txt}
-{com}. make_index_gr HH_goatsales wgt stdgroup `local_HH_goatsales' 
-{res}  952
-{txt}
-{com}. 
-. local local_salecost visits_sale time_passed transp_cost
-{txt}
-{com}. make_index_gr salecost wgt stdgroup `local_salecost' 
-{res}  953
-{txt}
-{com}. 
-. 
-. 
-. ** IHS transformations **
-. 
-. gen LS9_w_ln = log(LS9_w + sqrt(LS9_w^2 + 1))
-{txt}
-{com}. gen co_opsalevalue_ln = log(co_opsalevalue + sqrt(co_opsalevalue^2 + 1))
-{txt}
-{com}. gen net_goat_income_ln = log(net_goat_income + sqrt(net_goat_income^2 + 1))
+{com}. scalar t_1= r(p1)
 {txt}
 {com}. 
+. replace net_goat_income_w = t_1 if net_goat_income_w < t_1 & !missing(net_goat_income_w) & r_treat == 1
+{txt}(12 real changes made)
+
+{com}. 
+. *control
+. sum net_goat_income_w if r_treat == 0, d
+
+                      {txt}net_goat_income_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}  -201.96       -1090.98
+{txt} 5%    {res}   -80.19        -945.45
+{txt}10%    {res}  -46.926        -500.94       {txt}Obs         {res}      1,152
+{txt}25%    {res}     -9.9        -342.54       {txt}Sum of Wgt. {res}      1,152
+
+{txt}50%    {res}        0                      {txt}Mean          {res} 60.30026
+                        {txt}Largest       Std. Dev.     {res} 170.9597
+{txt}75%    {res}   103.95        1015.74
+{txt}90%    {res}   220.77       1016.235       {txt}Variance      {res} 29227.21
+{txt}95%    {res}   338.58        1836.45       {txt}Skewness      {res} 3.517486
+{txt}99%    {res}   696.96        2182.95       {txt}Kurtosis      {res} 39.75322
+{txt}
+{com}. scalar c_99 = r(p99)
+{txt}
+{com}. 
+. replace net_goat_income_w = c_99 if net_goat_income_w > c_99 & !missing(net_goat_income_w) & r_treat == 0
+{txt}(11 real changes made)
+
+{com}. 
+. sum net_goat_income_w if r_treat == 0, d
+
+                      {txt}net_goat_income_w
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}  -201.96       -1090.98
+{txt} 5%    {res}   -80.19        -945.45
+{txt}10%    {res}  -46.926        -500.94       {txt}Obs         {res}      1,152
+{txt}25%    {res}     -9.9        -342.54       {txt}Sum of Wgt. {res}      1,152
+
+{txt}50%    {res}        0                      {txt}Mean          {res} 56.76127
+                        {txt}Largest       Std. Dev.     {res} 146.0835
+{txt}75%    {res}   103.95         696.96
+{txt}90%    {res}   220.77         696.96       {txt}Variance      {res} 21340.39
+{txt}95%    {res}   338.58         696.96       {txt}Skewness      {res} .9098506
+{txt}99%    {res}   696.96         696.96       {txt}Kurtosis      {res}  12.3886
+{txt}
+{com}. scalar t_1= r(p1)
+{txt}
+{com}. 
+. replace net_goat_income_w = t_1 if net_goat_income_w < t_1 & !missing(net_goat_income_w) & r_treat == 0
+{txt}(11 real changes made)
+
+{com}. * -----------------------------------------------
 . 
 . 
+. 
+. ** Characteristics ** 
+. 
+. /* Variables 
+> Age : HHR4
+> Literacy : HHR14
+> Total # of SHG meetings attended in past 6 months : MEM11
+> Dirt floors: HSE6
+> More than 1 floor: HSE5
+> goat management index
+> */
+. 
+. * number of SHG meetings
+. replace MEM11 = 0 if MEM11 ==.
+{txt}(970 real changes made)
+
+{com}. 
+. * literacy
+. replace HHR14 = . if HHR4 < 18
+{txt}(2 real changes made, 2 to missing)
+
+{com}. 
+. * binary dirt floor variable
+. gen dirt_floor = 1 if HSE6 == 1
+{txt}(1,085 missing values generated)
+
+{com}. replace dirt_floor = 0 if HSE6 != 1
+{txt}(1,085 real changes made)
+
+{com}. 
+. * binary number of floors
+. gen nfloors = 1 if HSE5 > 1
+{txt}(1,039 missing values generated)
+
+{com}. replace nfloors = 0 if HSE5 <= 1
+{txt}(1,039 real changes made)
+
+{com}. 
+. ** goat management index
+. * management system
+. gen GP2_1 = 1 if GP2 == 1
+{txt}(2,383 missing values generated)
+
+{com}. replace GP2_1 = 0 if GP2 != 1
+{txt}(2,383 real changes made)
+
+{com}. * breeds
+. gen GP3_b = 1 if GP3_1 == 1 | GP3_3 == 1
+{txt}(1,334 missing values generated)
+
+{com}. replace GP3_b = 0 if GP3_b ==.
+{txt}(1,334 real changes made)
+
+{com}. * pen
+. gen GP5_2 = 1 if GP5 == 2
+{txt}(1,511 missing values generated)
+
+{com}. replace GP5_2 = 0 if GP5 != 2
+{txt}(1,511 real changes made)
+
+{com}. * manure
+. gen GP6_1 = 1 if GP6 == 1
+{txt}(507 missing values generated)
+
+{com}. replace GP6_1 = 0 if GP6 != 1
+{txt}(507 real changes made)
+
+{com}. * mating
+. gen GP8_b = 1 if GP8 == 2 | GP8 == 3 | GP8 == 4 | GP8 == 5 
+{txt}(204 missing values generated)
+
+{com}. replace GP8_b = 0 if GP8_b ==.
+{txt}(204 real changes made)
+
+{com}. * kidding
+. gen GP10_b = 1 if GP10 >= 1
+{txt}(725 missing values generated)
+
+{com}. replace GP10_b = 0 if GP10_b ==.
+{txt}(725 real changes made)
+
+{com}. * feed
+. gen GP12_b = 1 if GP12B == 1 | GP12C == 1 | GP12D == 1
+{txt}(82 missing values generated)
+
+{com}. replace GP12_b = 0 if GP12_b ==.
+{txt}(82 real changes made)
+
+{com}. * concentrate
+. gen GP14_2 = 1 if GP14 == 2
+{txt}(2,357 missing values generated)
+
+{com}. replace GP14_2 = 0 if GP14_2 ==.
+{txt}(2,357 real changes made)
+
+{com}. * drench
+. * GP19
+. * medication
+. * GP21
+. * CAVE 
+. gen GP24_b = 1 if GP24 == 1 | GP24 == 2 | GP24 == 3 | GP24 == 4
+{txt}(256 missing values generated)
+
+{com}. replace GP24_b = 0 if GP24_b ==. 
+{txt}(256 real changes made)
+
+{com}. 
+. * Goat management index
+. gen index_mgt = GP2_1 + GP3_b + GP5_2 + GP6_1 + GP8_b + GP10_b + GP12_b + GP14_2 + GP19 + GP21 + GP24_b
+{txt}
+{com}. 
+. ** goat empowerment index
+. gen index_emp = EMP1A + EMP2A + EMP3A + EMP4A + EMP5A + EMP6A + EMP7A + EMP8A + EMP9A + EMP10A + EMP11A + EMP12A
+{txt}
+{com}. 
+. * loan
+. * BR1
 . 
 . save "$d3/r_HH_Merged_Ind.dta", replace
-{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/Stata Files/PAP Data/LSIL-DATA_scott/VCC baseline clean/r_HH_Merged_Ind.dta saved
+{txt}file /Users/scottmiller/Dropbox (UFL)/LSIL/Pre-Analysis Plan/PAP Master Replication/Data/Clean Data/r_HH_Merged_Ind.dta saved
 
 {com}. 
 . 
@@ -731,9 +1250,18 @@
 . 
 {txt}end of do-file
 
-{com}. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD01875.000000"
+{com}. do "/var/folders/_d/jk4yrpt11pbc34dyw8cg5kjm0000gn/T//SD04596.000000"
 {txt}
-{com}. clear all
+{com}. 
+. /*******************************************************************************
+> lsilPAP5.d0             
+>                                         
+> - Calculates MDEs for each indicator
+>         
+> *******************************************************************************/
+. 
+. 
+. clear all
 {res}{txt}
 {com}. set more off, perm
 {txt}({cmd:set more} preference recorded)
