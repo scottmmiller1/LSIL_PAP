@@ -733,6 +733,28 @@ lab var goatssold_mem "Co-op goats sold per member"
 
 save "$d4/Merged/Baseline_Merged.dta", replace
  
+ 
+*------------------------------------------------------------------------------  
+** Remove intermediary datasets
+* co-op
+erase "$d4/Co-op/role_CP_Collectionpoint_collapsed.dta" 
+erase "$d4/Co-op/Cooperative1.dta"
+erase "$d4/Co-op/co-op_merged.dta"
+forvalues i=1/3 {
+	erase "$d4/Co-op/role`i'.dta"
+}
+* household 
+erase "$d4/Household/Borrowing1.dta"
+erase "$d4/Household/Household_Collapsed.dta"
+erase "$d4/Household/Household_Merged_Edit.dta"
+erase "$d4/Household/Household_Merged.dta"
+erase "$d4/Household/Household1.dta"
+erase "$d4/Household/Livestock_sales_collapse.dta"
+erase "$d4/Household/modules_merged.dta"
+erase "$d4/Household/Number of Children1.dta"
+erase "$d4/Household/Rooster1.dta"
+*
+
  *********************************************
  
 log close

@@ -28,8 +28,7 @@ lsilPAP_rand2:
 	** Cleans data, creates indicator variables, summary statistics, 
 		power calulations, and balance tables **
 	** This section uses the clean data that was sent 
-		after the data collection firm had time to clean the
-		datasets used above **
+		after the above datasets were cleaned **
 	
 lsilPAP0:
 	creates collapsed co-op and HH datasets
@@ -40,18 +39,15 @@ lsilPAP1:
 	
 lsilPAP2: 
 	Generates a merged dataset at the HH level
-	Collapses HH data from ind. level to HH level
-	Saves respective datasets as r_CO_Merged_PAP.dta
-	and r_HH_Merged_PAP.dta
+	Collapses HH data from individual level to HH level
 	
 lsilPAP3:
 	Creates command for ICW Summary Indices
 	(published by Cyrus Samii, NYU, December 2017) 
 	
 lsilPAP4: 
-	Creates indicator variables & ICW Summary Indices from
-	r_CO_Merged_PAP.dta (co-op level dataset)
-	and r_HH_Merged_PAP.dta (HH level dataset)
+	Creates indicator variables & ICW Summary Indices
+	at the co-op and household levels
 	Saves new datasets respectively as: 
 	r_CO_Merged_Ind.dta
 	r_HH_Merged_Ind.dta
@@ -80,19 +76,15 @@ gl d2 = "$d0/Output" // used to store output
 gl d3 = "$d0/Data/Clean Data" // clean data folder
 gl d4 = "$d0/Data/Original Data" // original data
 
-/*
+
 * To run all do files
+/*
 forv i = 0/2 {
 	do "$d1/lsilPAP_rand`i'.do"
 }
 
-forv i = 0/7 {
+forv i = 0/3 {
 	do "$d1/lsilPAP`i'.do"
 }
-*/
-/*
-forv i = 0/4 {
-	do "$d1/lsilPAP`i'.do"
-}
-*/
+
 

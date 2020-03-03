@@ -79,68 +79,77 @@ replace region = "Terai" if district=="Banke" | district =="Bardiya" | district 
 	
 
 ** save labels and value labels in macros
-foreach v of var * {
-	cap local vv = subinstr("`v'", "GMequipment", "GMeqpmt",.) // names too long for macros
-	if _rc == 0 {
-		rename `v' `vv'
-		local v `vv'
-	}
-	cap local vv = subinstr("`v'", "GMFinancial", "GMFin",.) // names too long for macros
-	if _rc == 0 {
-		rename `v' `vv'
-		local v `vv'
-	}
-	cap local vv = subinstr("`v'", "planning", "plan",.) // names too long for macros
-	if _rc == 0 {
-		rename `v' `vv'
-		local v `vv'
-	}	
-	cap local vv = subinstr("`v'", "evalassment", "eval",.) // names too long for macros
-	if _rc == 0 {
-		rename `v' `vv'
-		local v `vv'
-	}
-	cap local vv = subinstr("`v'", "transpernacy", "trans",.) // names too long for macros
-	if _rc == 0 {
-		rename `v' `vv'
-		local v `vv'
-	}	
-	cap local vv = subinstr("`v'", "intro", "in",.) // names too long for macros
-	if _rc == 0 {
-		rename `v' `vv'
-		local v `vv'
-	}
-	cap local vv = subinstr("`v'", "transactions", "trans",.) // names too long for macros
-	if _rc == 0 {
-		rename `v' `vv'
-		local v `vv'
-	}
-	cap local vv = subinstr("`v'", "Planning", "plan",.) // names too long for macros
-	if _rc == 0 {
-		rename `v' `vv'
-		local v `vv'
-	}
-	local l`v' : variable label `v'
-	local ll`v': val lab `v'
-	if `"`l`v''"' == "" {
-		local l`v' "`v'"
+quietly  {
+	foreach v of var * {
+		cap local vv = subinstr("`v'", "GMequipment", "GMeqpmt",.) // names too long for macros
+		if _rc == 0 {
+			rename `v' `vv'
+			local v `vv'
+		}
+		cap local vv = subinstr("`v'", "GMFinancial", "GMFin",.) // names too long for macros
+		if _rc == 0 {
+			rename `v' `vv'
+			local v `vv'
+		}
+		cap local vv = subinstr("`v'", "planning", "plan",.) // names too long for macros
+		if _rc == 0 {
+			rename `v' `vv'
+			local v `vv'
+		}	
+		cap local vv = subinstr("`v'", "evalassment", "eval",.) // names too long for macros
+		if _rc == 0 {
+			rename `v' `vv'
+			local v `vv'
+		}
+		cap local vv = subinstr("`v'", "transpernacy", "trans",.) // names too long for macros
+		if _rc == 0 {
+			rename `v' `vv'
+			local v `vv'
+		}	
+		cap local vv = subinstr("`v'", "intro", "in",.) // names too long for macros
+		if _rc == 0 {
+			rename `v' `vv'
+			local v `vv'
+		}
+		cap local vv = subinstr("`v'", "transactions", "trans",.) // names too long for macros
+		if _rc == 0 {
+			rename `v' `vv'
+			local v `vv'
+		}
+		cap local vv = subinstr("`v'", "Planning", "plan",.) // names too long for macros
+		if _rc == 0 {
+			rename `v' `vv'
+			local v `vv'
+		}
+		local l`v' : variable label `v'
+		local ll`v': val lab `v'
+		if `"`l`v''"' == "" {
+			local l`v' "`v'"
+		}
 	}
 }
 
 * Change Yes / No variables to binary
-foreach v of varlist TRN1 TRN2 TRN3 TRN4 TRN5 TRN6 TRN6a TRN7 TRN14 TRN15 MAN1 MAN11 MAN15 MAN17 ///
-		SER1 SER2 SER3 SER4 SER5 SER6 SER7 SER8 SER9 SER10 SER1* SERV2 SERV3 SERV4 SERV8 IND5 ///
-		REC8 EQP1_1 EQP2_1* EQP3_1 EQP4_1 EQP5_1 EQP6_1 EQP7_1 EQP8_1 EQP9_1 EQP10_1 EQP11_1 ///
-		EQP12_1 EQP13_1 EQP14_1 EQP15_1 EQP16 EQP17 EQP18 EQP19 FAL3 FAL4 PNG1 EAA1 EAA3  {
+foreach v of varlist MAN1 MAN11 MAN15 MAN17 REC8 {
 	quietly replace `v'=. if `v'==99
 	quietly replace `v'=. if `v'==97
 	quietly replace `v'=0 if `v'==2
-	}
+}
 
-* rename TRN vars with Co-op indicator (have same name as HH data)
-foreach v of varlist TRN* {
+* Change 'I don't know' to 'No' for awareness variables	
+foreach v of varlist TRN* EQP1_1 EQP2_1 EQP3_1 EQP4_1 EQP5_1 EQP6_1 EQP7_1 EQP8_1 ///
+		EQP9_1 EQP10_1 EQP11_1 EQP12_1 EQP13_1 EQP14_1 EQP15_1 EQP16 EQP17 EQP18 EQP19 ///
+		FAL3 FAL4 EAA1 EAA3 PNG1 SER1 SER2 SER3 SER4 SER5 SER6 SER7 SER8 SER9 SER10 ///
+		SER1* SERV2 SERV3 SERV4 SERV8  {
+	quietly replace `v'=0 if `v'==99
+	quietly replace `v'=0 if `v'==97
+	quietly replace `v'=0 if `v'==2
+}	
+
+* rename vars with Co-op indicator (have same name as HH data)
+foreach v of varlist TRN* SER* *GTT* {
 	rename `v' CO_`v'
-	}	
+}	
 	
 
 * Change COMM8 to string
@@ -180,9 +189,11 @@ collapse (mean) `Co_opnumeric' (firstnm) `Co_opstrings', by(idx)
 
 
 * re-assign labels post-collapse
-foreach v of var * {
-	label var `v' "`l`v''"
-	cap label val `v' "`ll`v''"
+quietly {
+	foreach v of var * {
+		label var `v' "`l`v''"
+		cap label val `v' "`ll`v''"
+	}
 }
 
 * save collapsed dataset
@@ -231,9 +242,7 @@ local numeric = "`r(varlist)'"
 recode `numeric' (99=.) (98=.) (97=.)
 
 * make 1-2 variables binary
-foreach v of varlist LS3 ///
-		LS39 LS44 ///
-		LS45 {
+foreach v of varlist LS3 LS39 LS44 LS45 {
 	quietly replace `v'=. if `v'==99
 	quietly replace `v'=. if `v'==97
 	quietly replace `v'=0 if `v'==2
@@ -246,7 +255,7 @@ bysort ___parent_index: egen LS_n_sales=count(___parent_index)
 ** Collapse to 1-row per HH
 
 ** save labels and value labels in macros 
-foreach v of var * {
+quietly foreach v of var * {
 	cap local vv = subinstr("`v'", "Livestock_Sales", "Livestock_Sales",.) // names too long for macros
 	if _rc == 0 {
 		rename `v' `vv'
@@ -266,7 +275,7 @@ collapse (firstnm) LS_n_sales (mean) LS3 *LS6* LS7 (sum) LS8 LS9 LS10 LS12 LS13 
 		LS47 co_opsalevalue co_opgoatno , by(___parent_index)
 
 ** re-assign labels post-collapse
-foreach v of var * {
+quietly foreach v of var * {
 	label var `v' "`l`v''"
 	cap label val `v' "`ll`v''"
 }
@@ -344,7 +353,7 @@ replace region = "Terai" if district=="Banke" | district =="Bardiya" | district 
 
 	
 * rename TRN vars with HH indicator (have same name as Co-op data)
-foreach v of varlist TRN* {
+foreach v of varlist TRN* GTT* {
 	rename `v' HH_`v'
 	}		
 	
@@ -414,7 +423,7 @@ drop start end *Note* HH_IDstartHHID HH_IDendHHID end_rooster Number_children_co
 	Land_and_homestart_land Land_and_homeLand_and_home_note Land_and_homeEnd_land ///
 	Co_opstart_coop MEM4_1 MEM9_1 Co_opMembershipMEM10MEM10_Header MEM13_1 ///
 	Co_opServiceService_note MGT1_1 COM1_1 COM2_1 COM6_1 ///
-	COM11_1 GTT4_1 Co_opGoat_transactionsGTT4_1 Co_opFollow_up_transparency_ques ///
+	COM11_1 Co_opGoat_transactionsGTT4_1 Co_opFollow_up_transparency_ques ///
 	Savingsstart_savings SavingsSavings_Note ///
 	SV2_1 Savingsend_savings Borrowingstart_borrowing Borrowingend_borrowing ///
 	Food_Consumptionstart_food Food_ConsumptionGrainsGrains_N Food_ConsumptionPulsesPulses_n ///
@@ -434,21 +443,18 @@ quietly foreach v in `r(varlist)' {
 	}
 	
 *drop multi-choice vars with individual dummys already created
-drop COM1 COM2 COM6 COM7 GTT4 SV2 LSE22 GP4 GP12 GP18 GP22 ///
+drop COM1 COM2 COM6 COM7 SV2 LSE22 GP4 GP12 GP18 GP22 ///
 		GP25 LS48 PQ2 BR5 GP3 BR56 HHR10_1
 
 * Change 1-2 vars to binary
- foreach v of varlist HSE6 HSE7 HSE10 MEM3 MEM6 MEM8 MEM12 ///
-		MEM14 MEM16 SER1 SER2 SER3 SER4 SER6 SER7 ///
-		SER8 SER9 SER10 SER11 SER12 SER13 SER14 SER15 ///
-		SER16 SER17 SER18 SER19 MGT5 COM5 HH_TRN1 ///
-		HH_TRN2 HH_TRN3 HH_TRN4 HH_TRN5 HH_TRN6 HH_TRN7 HH_TRN8 ///
+ foreach v of varlist MGT5 COM5 ///
 		SV3 SV4 SV7 BR1 FC1A FC1B FC1E FC1F FC1H GP7 ///
 		GP13 GP16 GP19 GP21 {
 	quietly replace `v'=. if `v'==99
 	quietly replace `v'=. if `v'==97
 	quietly replace `v'=0 if `v'==2
 }
+
 * Change 1-2 vars to binary
 foreach v of varlist HHR3 HHR5 HHR11 HHR13 HHR14 ///
 		HHR15 HHR17 HHR18 HHR19 {
@@ -456,8 +462,18 @@ foreach v of varlist HHR3 HHR5 HHR11 HHR13 HHR14 ///
 	quietly replace `v'=. if `v'==99
 	quietly replace `v'=. if `v'==97
 	quietly replace `v'=0 if `v'==2
-	
 }
+
+* Change 'I don't know' to 'No' for awareness variables
+foreach v of varlist MEM3 MEM6 MEM8 MEM12 MEM14 MEM16 SER* HH_TRN1 ///
+		HH_TRN2 HH_TRN3 HH_TRN4 HH_TRN5 HH_TRN6 HH_TRN7 HH_TRN8 {
+	quietly replace `v'=0 if `v'==99
+	quietly replace `v'=0 if `v'==98
+	quietly replace `v'=0 if `v'==97
+	quietly replace `v'=0 if `v'==3
+	quietly replace `v'=0 if `v'==2
+}
+
 
 * destring relevant vars
 quietly {
@@ -541,7 +557,6 @@ save "$d3/Household_Collapsed.dta", replace
 
 
 *------------------------------------------------------------------------------ 
- 
 ** Merge collapse HH and Co-op datasets
 
 clear 
@@ -569,6 +584,19 @@ lab var goatssold_mem "Co-op goats sold per member"
 
 save "$d3/Baseline_Merged.dta", replace
 
+
+*------------------------------------------------------------------------------ 
+** Remove intermediary datasets
+erase "$d3/Borrowing_edit.dta"
+erase "$d3/Children_edit.dta"
+erase "$d3/Cooperative_collapse.dta"
+erase "$d3/Household_Collapsed.dta"
+erase "$d3/Household_edit.dta"
+erase "$d3/Household_Merged.dta"
+erase "$d3/Livestocksales_collapse_edit.dta"
+erase "$d3/Livestocksales_collapse.dta"
+erase "$d3/modules_merged.dta"
+erase "$d3/Roster_edit.dta"
  
  *********************************************
 
